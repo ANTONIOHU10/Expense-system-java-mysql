@@ -1,57 +1,45 @@
 package NetWork;
 
-import Model.Expense;
-
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class Server {
+    private final int PORT = 8080;
+    private ServerSocket serverSocket;
+    private Connection dbConnection;
 
-    private Expense expense;
-    private int porta;
-
-    public Server(Expense model, int porta) {
-        this.expense = model;
-        this.porta = porta;
+    public static void main(String[] args) {
+        Server server = new Server();
+        server.start();
     }
 
     public void start() {
-        new Thread(() -> {
-            try {
-                ServerSocket serverSocket = new ServerSocket(porta);
-                while (true) {
-                    Socket socket = serverSocket.accept();
-                    ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream());
-                    Expense expense = (Expense) inputStream.readObject();
-                    aggiungiSpesa(expense);
-                    inputStream.close();
-                    socket.close();
-                }
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-        }).start();
-    }
+        try {
+            // Inizializza la connessione al database
+            dbConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "825310894");
 
-    private void aggiungiSpesa(Expense spesa) {
-        model.aggiungiSpesa(spesa);
-        inviaAggiornamentoBilanci();
-    }
+            // Crea una nuova socket del server
+            serverSocket = new ServerSocket(PORT);
+            System.out.println("Server avviato sulla porta " + PORT);
 
-    private void inviaAggiornamentoBilanci() {
-        new Thread(() -> {
-            try {
-                Socket socket = new Socket("localhost", porta);
-                ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
-                outputStream.writeObject(model.getBilanci());
-                outputStream.close();
-                socket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+            // Loop infinito per accettare le connessioni dei client
+            while (true) {
+                Socket clientSocket = serverSocket.accept();
+                System.out.println("Nuova connessione da " + clientSocket.getInetAddress());
+
+                // Crea un nuovo thread per gestire la connessione del client
+                ClientHandler clientHandler = new ClientHandler(clientSocket, dbConnection);
+                clientHandler.start();
             }
-        }).start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
+
