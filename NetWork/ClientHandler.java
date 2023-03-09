@@ -16,9 +16,12 @@ public class ClientHandler extends Thread {
     private ObjectInputStream in;
     private ObjectOutputStream out;
 
-    public ClientHandler(Socket clientSocket, Connection dbConnection) {
+    //Serve l'oggetto server per fare delle operazioni sulla lista
+    private Server server;
+    public ClientHandler(Socket clientSocket, Connection dbConnection, Server server) {
         this.clientSocket = clientSocket;
         this.dbConnection = dbConnection;
+        this.server = server;
     }
 
     public void run() {
@@ -52,10 +55,13 @@ public class ClientHandler extends Thread {
             try {
                 in.close();
                 out.close();
+                server.removeClientHandler(this);
                 clientSocket.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
+
 }
+
