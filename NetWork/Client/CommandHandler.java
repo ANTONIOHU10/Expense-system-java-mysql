@@ -1,7 +1,8 @@
 package NetWork.Client;
 
 import NetWork.Message.DataRequestMessage;
-import NetWork.Message.LoginMessage;
+import NetWork.Message.LoginRequestMessage;
+import NetWork.Message.RegisterRequestMessage;
 
 import java.io.IOException;
 
@@ -16,8 +17,14 @@ public class CommandHandler {
     //opearazioni da fare
 
     //operazione login ->
-    public void login(String username, String password) throws IOException {
-        LoginMessage message = new LoginMessage(username, password);
+    public void loginRequest(String username, String password) throws IOException {
+        LoginRequestMessage message = new LoginRequestMessage(username, password);
+        messageHandler.send(message);
+    }
+
+    //operazione register ->
+    public void registerRequest(String username, String password) throws IOException {
+        RegisterRequestMessage message = new RegisterRequestMessage(username, password);
         messageHandler.send(message);
     }
 

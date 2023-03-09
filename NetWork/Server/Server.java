@@ -11,7 +11,7 @@ import java.util.List;
 
 
 /**
- * Server + ClientHandler = part Server
+ * Server + ClientHandler(socket) + ServerMessageHandler(invia + riceve) = part Server
  */
 
 public class Server {

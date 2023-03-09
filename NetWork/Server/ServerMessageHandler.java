@@ -1,6 +1,6 @@
-package NetWork.Client;
+package NetWork.Server;
 
-import NetWork.Message.LoginResponseMessage;
+import NetWork.Message.DataResponseMessage;
 import NetWork.Message.Message;
 import NetWork.Message.MessageType;
 
@@ -9,12 +9,12 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class MessageHandler {
+public class ServerMessageHandler {
     private ObjectOutputStream output;
     private ObjectInputStream input;
     private Socket socket;
     //costruttore
-    public MessageHandler(Socket socket) throws IOException {
+    public ServerMessageHandler(Socket socket) throws IOException {
         output = new ObjectOutputStream(socket.getOutputStream());
         input = new ObjectInputStream(socket.getInputStream());
         this.socket = socket;
@@ -35,16 +35,15 @@ public class MessageHandler {
         MessageType type = message.getType();
         switch (type) {
 
-            case LOGIN_RESPONSE:
-                handleLoginResponse((LoginResponseMessage) message);
+            case LOGIN_REQUEST:
+                handleLoginRequest((DataResponseMessage) message);
                 break;
 
             // handle other message types here
         }
     }
 
-    private void handleLoginResponse(LoginResponseMessage message) {
-        System.out.println("Hai ricevuto un messaggio:"+ message.getMessage());
+    private void handleLoginRequest(DataResponseMessage message) {
         // handle data reply message
     }
 
@@ -60,4 +59,11 @@ public class MessageHandler {
         return socket;
     }
     // add other handler methods here
+    public void closeSocket() throws IOException {
+        output.close();
+        if(input != null){
+            input.close();
+        }
+        socket.close();
+    }
 }

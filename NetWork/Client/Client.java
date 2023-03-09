@@ -1,11 +1,13 @@
 package NetWork.Client;
 
+import NetWork.Message.Message;
+
 import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 
 /**
- * Client + MessageHandler + CommandHandler = part Client
+ * Client + MessageHandler(riceve messaggio) + CommandHandler(invia messaggi) = part Client
  */
 public class Client {
     public static void main(String[] args) {
@@ -33,19 +35,38 @@ public class Client {
 
             while (true) {
                 System.out.println("Cosa vuoi fare?");
-                System.out.println("1. Inserire una nuova spesa");
-                System.out.println("2. Visualizzare il saldo corrente");
+                System.out.println("1. Login");
+                System.out.println("2. Registrazione");
                 System.out.println("3. Uscire");
 
                 int scelta = scanner.nextInt();
 
                 switch (scelta) {
                     case 1:
+                        System.out.println("Please insert your username:");
+                        Scanner usernameScannerLogin = new Scanner(System.in);
+                        String usernameLogin = usernameScannerLogin.nextLine();
 
+                        System.out.println("Please insert your password");
+                        Scanner passwordScannerLogin = new Scanner(System.in);
+                        String passwordLogin = passwordScannerLogin.nextLine();
+
+                        commandHandler.loginRequest(usernameLogin,passwordLogin);
                         break;
                     case 2:
+                        //TODO completare il caso di registrazione
+                        System.out.println("Please choose an username");
+                        Scanner usernameScannerRegister = new Scanner(System.in);
+                        String usernameRegister = usernameScannerRegister.nextLine();
 
+                        System.out.println("Please choose a password");
+                        Scanner passwordScannerRegister = new Scanner(System.in);
+                        String passwordRegister = passwordScannerRegister.nextLine();
+
+                        commandHandler.registerRequest(usernameRegister,passwordRegister);
                         break;
+
+
                     case 3:
                         System.out.println("Grazie per aver usato il sistema di gestione delle spese. Arrivederci!");
                         commandHandler.closeClient();
@@ -54,10 +75,15 @@ public class Client {
                         System.out.println("Scelta non valida.");
                         break;
                 }
+
+                //elabora il messaggio ricevuto dal Server
+
+                Message replyFromServer = messageHandler.receive();
+                messageHandler.handle(replyFromServer);
             }
 
 
-        } catch (IOException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }

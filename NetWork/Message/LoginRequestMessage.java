@@ -1,10 +1,10 @@
 package NetWork.Message;
 
-public class LoginMessage extends Message{
+public class LoginRequestMessage extends Message{
     private String username;
     private String password;
 
-    public LoginMessage(String username, String password) {
+    public LoginRequestMessage(String username, String password) {
         super(MessageType.LOGIN_REQUEST);
         this.username = username;
         this.password = password;
@@ -14,7 +14,8 @@ public class LoginMessage extends Message{
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public String getUsername() {
+        return username;
     }
+
 }
