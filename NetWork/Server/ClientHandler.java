@@ -59,6 +59,7 @@ public class ClientHandler extends Thread {
                         case ERROR:
                             System.out.println("esegue operazione del caso ERROR");
                             break;
+
                         case LOGIN_REQUEST:
                             System.out.println("esegue operazione del caso LOGIN");
                             //casting il message base -> loginRequestMessage
@@ -67,15 +68,19 @@ public class ClientHandler extends Thread {
                             String passwordLogin = loginMessage.getPassword();
 
                             //verifico se l'account esiste
-                            boolean loginSuccess = false;
+                            boolean loginSuccess = databaseController.login(usernameLogin,passwordLogin);
 
                             //invio della risposta la client
                             if(loginSuccess){
+                                //se esiste
+                                System.out.println("Account e password sono corretti");
                                 serverMessageHandler.send(new LoginResponseMessage(true,"Login successful!"));
                             } else {
+                                System.out.println("Username o password incorretto");
                                 serverMessageHandler.send(new LoginResponseMessage(false,"invalid username or password"));
                             }
                             break;
+
                         case REGISTER_REQUEST:
                             System.out.println("esegue operazione del caso REGISTER_REQUEST");
                             //casting il message base -> loginRequestMessage
@@ -85,11 +90,15 @@ public class ClientHandler extends Thread {
 
                             //verifico se l'account esiste
                             boolean registerSuccess=databaseController.usernameExists(usernameRegister);
+                            System.out.println("Server: risultato della verifica è "+registerSuccess);
                             //invio della risposta la client
                             if(registerSuccess){
-                                serverMessageHandler.send(new RegisterResponseMessage(true,"Register successful"));
+                                //se esiste il nome cercato-> non va bene
+                                serverMessageHandler.send(new RegisterResponseMessage(false,"Username already taken"));
                             } else {
-                                serverMessageHandler.send(new RegisterResponseMessage(false,"username already taken"));
+                                //se non esiste il nome cercato-> va bene
+                                databaseController.registerAccount(usernameRegister,passwordRegister);
+                                serverMessageHandler.send(new RegisterResponseMessage(false,"Register successful"));
                             }
 
                             break;

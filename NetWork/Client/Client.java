@@ -4,6 +4,7 @@ import NetWork.Message.Message;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
@@ -39,51 +40,104 @@ public class Client {
                 System.out.println("2. Registrazione");
                 System.out.println("3. Uscire");
 
-                int scelta = scanner.nextInt();
+                //TODO :  ----------------------------- prima di login --------------------------
+                //dichiaro int scelta da usare
+                int scelta;
+                while(true){
+                    System.out.println("Inserisci un intero:");
+                    if(scanner.hasNextInt()){
+                        scelta = scanner.nextInt();
+                        System.out.println("Hai inserito: "+ scelta);
+                        break;
+                    } else {
+                        System.out.println("Input non valido, riprova,");
+                        scanner.next();
+                    }
+                }
+
+                    switch (scelta) {
+                        case 1:
+                            System.out.println("Please insert your username:");
+                            Scanner usernameScannerLogin = new Scanner(System.in);
+                            String usernameLogin = usernameScannerLogin.nextLine();
+
+                            System.out.println("Please insert your password");
+                            Scanner passwordScannerLogin = new Scanner(System.in);
+                            String passwordLogin = passwordScannerLogin.nextLine();
+
+                            commandHandler.loginRequest(usernameLogin, passwordLogin);
+                            break;
+                        case 2:
+                            //TODO completare il caso di registrazione
+                            System.out.println("Please choose an username");
+                            Scanner usernameScannerRegister = new Scanner(System.in);
+                            String usernameRegister = usernameScannerRegister.nextLine();
+
+                            System.out.println("Please choose a password");
+                            Scanner passwordScannerRegister = new Scanner(System.in);
+                            String passwordRegister = passwordScannerRegister.nextLine();
+
+                            commandHandler.registerRequest(usernameRegister, passwordRegister);
+                            break;
+
+
+                        case 3:
+                            System.out.println("Grazie per aver usato il sistema di gestione delle spese. Arrivederci!");
+                            commandHandler.closeClient();
+                            return;
+                        default:
+                            System.out.println("Scelta non valida.");
+                            break;
+                    }
+
+                    //elabora il messaggio ricevuto dal Server
+                /*
+                Message replyFromServer = messageHandler.receive();
+                messageHandler.handle(replyFromServer);
+
+                 */
+
+
+            }
+
+            //TODO  ------------------------ dopo login -------------------------
+            // esegui il login e salva le credenziali in username e password
+            /*
+            Scanner scannerAfterLogin = new Scanner(System.in);
+            int scelta = -1;
+
+            while (scelta != 0) {
+                System.out.println("Scegli un'opzione:");
+                System.out.println("1. Visualizza elenco prodotti");
+                System.out.println("2. Aggiungi prodotto al carrello");
+                System.out.println("3. Visualizza carrello");
+                System.out.println("0. Esci");
+
+                scelta = scannerAfterLogin.nextInt();
+                scanner.nextLine(); // consuma il carattere newline rimanente dopo nextInt()
 
                 switch (scelta) {
                     case 1:
-                        System.out.println("Please insert your username:");
-                        Scanner usernameScannerLogin = new Scanner(System.in);
-                        String usernameLogin = usernameScannerLogin.nextLine();
-
-                        System.out.println("Please insert your password");
-                        Scanner passwordScannerLogin = new Scanner(System.in);
-                        String passwordLogin = passwordScannerLogin.nextLine();
-
-                        commandHandler.loginRequest(usernameLogin,passwordLogin);
+                        // visualizza elenco prodotti
                         break;
                     case 2:
-                        //TODO completare il caso di registrazione
-                        System.out.println("Please choose an username");
-                        Scanner usernameScannerRegister = new Scanner(System.in);
-                        String usernameRegister = usernameScannerRegister.nextLine();
-
-                        System.out.println("Please choose a password");
-                        Scanner passwordScannerRegister = new Scanner(System.in);
-                        String passwordRegister = passwordScannerRegister.nextLine();
-
-                        commandHandler.registerRequest(usernameRegister,passwordRegister);
+                        // aggiungi prodotto al carrello
                         break;
-
-
                     case 3:
-                        System.out.println("Grazie per aver usato il sistema di gestione delle spese. Arrivederci!");
-                        commandHandler.closeClient();
-                        return;
+                        // visualizza carrello
+                        break;
+                    case 0:
+                        // esci dal loop e chiudi la connessione al server
+                        break;
                     default:
-                        System.out.println("Scelta non valida.");
+                        System.out.println("Opzione non valida. Riprova.");
                         break;
                 }
-
-                //elabora il messaggio ricevuto dal Server
-
-                Message replyFromServer = messageHandler.receive();
-                messageHandler.handle(replyFromServer);
             }
+            */
 
 
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

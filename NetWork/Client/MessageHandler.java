@@ -44,7 +44,7 @@ public class MessageHandler {
     }
 
     private void handleLoginResponse(LoginResponseMessage message) {
-        System.out.println("Hai ricevuto un messaggio:"+ message.getMessage());
+        System.out.println("Hai ricevuto un messaggio:  >>>"+ message.getMessage());
         // handle data reply message
     }
 

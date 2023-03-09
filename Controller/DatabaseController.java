@@ -44,4 +44,12 @@ public class DatabaseController {
         ResultSet resultSet = preparedStatement.executeQuery();
         return resultSet.next();
     }
+    public boolean login(String username, String password) throws SQLException {
+        PreparedStatement preparedStatement = dbConnection.prepareStatement("SELECT * FROM test.users WHERE username = ? AND password = ?");
+        preparedStatement.setString(1, username);
+        preparedStatement.setString(2, password);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        return resultSet.next();
+    }
+
 }
