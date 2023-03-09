@@ -1,10 +1,10 @@
 package NetWork.Message;
 
-public class DataReplyMessage extends Message{
+public class DataResponseMessage extends Message{
     private Object data;
 
-    public DataReplyMessage(Object data) {
-        super(MessageType.DATA_REPLY_MESSAGE);
+    public DataResponseMessage(Object data) {
+        super(MessageType.DATA_RESPONSE);
         this.data = data;
     }
 

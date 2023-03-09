@@ -1,4 +1,4 @@
-package NetWork;
+package NetWork.Server;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -8,6 +8,11 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+
+/**
+ * Server + ClientHandler = part Server
+ */
 
 public class Server {
     private final int PORT = 8080;
@@ -28,6 +33,7 @@ public class Server {
 
             // Crea una nuova socket del server
             serverSocket = new ServerSocket(PORT);
+            System.out.println("                                                     ");
             System.out.println("Server avviato sulla porta " + PORT);
 
             //Lista dei client che sono connessi
@@ -42,6 +48,7 @@ public class Server {
 
                 // Aggiungere un ClientHandler nella lista
                 activeClientHandlers.add(clientHandler);
+                //System.out.println("Ci sono " + activeClientHandlers.size()+" client connessi");
                 clientHandler.start();
             }
         } catch (IOException e) {

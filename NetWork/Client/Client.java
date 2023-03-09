@@ -1,26 +1,36 @@
-package NetWork;
+package NetWork.Client;
 
 import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 
+/**
+ * Client + MessageHandler + CommandHandler = part Client
+ */
 public class Client {
     public static void main(String[] args) {
         String host = "localhost"; // IP o nome del server
         int port = 8080; // porta su cui il server ascolta le connessioni
 
-        try (Socket socket = new Socket(host, port);
+        try (
+                Socket socket = new Socket(host, port);
 
-             //comunicazione basata su oggetti
+             /*
+             //comunicazione basata su oggetti, non uso più queste due
              ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
              ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
+              */
 
              //legge un carattere dalla tastiera -> è necessario
-             Scanner scanner = new Scanner(System.in)) {
-
+             Scanner scanner = new Scanner(System.in)
+        ) {
+            //istanziare handler di message + command
+            MessageHandler messageHandler = new MessageHandler(socket);
+            CommandHandler commandHandler = new CommandHandler(messageHandler);
             System.out.println("Benvenuto nel sistema di gestione delle spese.");
 
             // Loop principale del client
+
             while (true) {
                 System.out.println("Cosa vuoi fare?");
                 System.out.println("1. Inserire una nuova spesa");
@@ -31,24 +41,22 @@ public class Client {
 
                 switch (scelta) {
                     case 1:
-                        inserisciSpesa(scanner, output, input);
+
                         break;
                     case 2:
-                        visualizzaSaldo(output, input);
+
                         break;
                     case 3:
                         System.out.println("Grazie per aver usato il sistema di gestione delle spese. Arrivederci!");
-                        output.close();
-                        if (input != null) {
-                            input.close();
-                        }
-                        socket.close();
+                        commandHandler.closeClient();
                         return;
                     default:
                         System.out.println("Scelta non valida.");
                         break;
                 }
             }
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -4,7 +4,7 @@ public class DataRequestMessage extends Message{
     private String dataId;
 
     public DataRequestMessage(String dataId) {
-        super(MessageType.DATA_REQUEST_MESSAGE);
+        super(MessageType.DATA_REQUEST);
         this.dataId = dataId;
     }
 
