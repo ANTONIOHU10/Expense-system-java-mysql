@@ -28,8 +28,11 @@ public class Server {
 
     public void start() {
         try {
-            // Inizializza la connessione al database
+            // prova sull'inizializzazione della connessione al database
+            /*
             dbConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "825310894");
+
+             */
 
             // Crea una nuova socket del server
             serverSocket = new ServerSocket(PORT);
@@ -38,6 +41,8 @@ public class Server {
 
             //Lista dei client che sono connessi
             activeClientHandlers= new ArrayList<ClientHandler>();
+
+
             // Loop infinito per accettare le connessioni dei client
             while (true) {
                 Socket clientSocket = serverSocket.accept();
@@ -52,8 +57,6 @@ public class Server {
                 clientHandler.start();
             }
         } catch (IOException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
