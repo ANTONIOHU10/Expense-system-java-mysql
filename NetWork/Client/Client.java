@@ -91,13 +91,9 @@ public class Client {
                     }
 
                     //elabora il messaggio ricevuto dal Server
-                /*
+
                 Message replyFromServer = messageHandler.receive();
                 messageHandler.handle(replyFromServer);
-
-                 */
-
-
             }
 
             //TODO  ------------------------ dopo login -------------------------
@@ -137,7 +133,7 @@ public class Client {
             */
 
 
-        } catch (IOException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }

@@ -21,7 +21,8 @@ public class ClientHandler extends Thread {
     private ObjectInputStream in;
     private ObjectOutputStream out;
     private DatabaseController databaseController;
-
+    //per identificare l'utente nella database e dagli altri
+    private int idUser;
     //Serve l'oggetto server per fare delle operazioni sulla lista
     private Server server;
 
@@ -74,7 +75,14 @@ public class ClientHandler extends Thread {
                             if(loginSuccess){
                                 //se esiste
                                 System.out.println("Account e password sono corretti");
+                                //TODO aggiungere nella MAP  primary key di questo socket
+                                idUser = databaseController.getUserId(usernameLogin);
+                                server.activeClientHandlers.put(this,idUser);
+                                System.out.println("####numero di utenti attivi:"+ server.activeClientHandlers.size()+"" +
+                                        "            ID di questo client = "+ idUser);
+                                //messaggio inviato al client
                                 serverMessageHandler.send(new LoginResponseMessage(true,"Login successful!"));
+
                             } else {
                                 System.out.println("Username o password incorretto");
                                 serverMessageHandler.send(new LoginResponseMessage(false,"invalid username or password"));
@@ -98,7 +106,7 @@ public class ClientHandler extends Thread {
                             } else {
                                 //se non esiste il nome cercato-> va bene
                                 databaseController.registerAccount(usernameRegister,passwordRegister);
-                                serverMessageHandler.send(new RegisterResponseMessage(false,"Register successful"));
+                                serverMessageHandler.send(new RegisterResponseMessage(true,"Register successful"));
                             }
 
                             break;
@@ -135,11 +143,16 @@ public class ClientHandler extends Thread {
                     // Eccezione sollevata quando il client si disconnette, quando chiudo il client direttamente
                     System.out.println("Il client "+ clientSocket.getInetAddress()+"si è disconnesso");
                     server.removeClientHandler(this);
+                    //TODO togliere dalla MAP il socket che ha questo primary key
+                    server.activeClientHandlers.remove(idUser);
                     serverMessageHandler.closeSocket();
                     break;
                     //per evitare quando termino il client il Server va in shout down
                 } catch (EOFException e) {
                     System.out.println("Il client"+ clientSocket.getInetAddress()+ " si è disconnesso(terminato)");
+                    //TODO togliere dalla MAP il socket che ha questo primary key
+                    server.activeClientHandlers.remove(idUser);
+                    serverMessageHandler.closeSocket();
                     break;
                 } catch (SQLException e) {
                     e.printStackTrace();

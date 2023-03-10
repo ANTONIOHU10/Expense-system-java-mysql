@@ -3,6 +3,7 @@ package NetWork.Client;
 import NetWork.Message.LoginResponseMessage;
 import NetWork.Message.Message;
 import NetWork.Message.MessageType;
+import NetWork.Message.RegisterResponseMessage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -38,14 +39,20 @@ public class MessageHandler {
             case LOGIN_RESPONSE:
                 handleLoginResponse((LoginResponseMessage) message);
                 break;
+            case REGISTER_RESPONSE:
+                handleRegisterResponse((RegisterResponseMessage) message);
+                break;
 
             // handle other message types here
         }
     }
 
     private void handleLoginResponse(LoginResponseMessage message) {
-        System.out.println("Hai ricevuto un messaggio:  >>>"+ message.getMessage());
+        System.out.println("Hai ricevuto un messaggio:  >>>   "+ message.getMessage());
         // handle data reply message
+    }
+    private void handleRegisterResponse(RegisterResponseMessage message){
+        System.out.println("Hai ricevuto un messaggio: >>>    "+ message.getMessage());
     }
 
     public ObjectInputStream getInput() {

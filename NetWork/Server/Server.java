@@ -4,10 +4,9 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -18,7 +17,7 @@ public class Server {
     private final int PORT = 8080;
     private ServerSocket serverSocket;
     private Connection dbConnection;
-    public List<ClientHandler> activeClientHandlers;
+    public Map<ClientHandler, Integer> activeClientHandlers= new HashMap<>();
 
 
     public static void main(String[] args) {
@@ -39,9 +38,6 @@ public class Server {
             System.out.println("                                                     ");
             System.out.println("Server avviato sulla porta " + PORT);
 
-            //Lista dei client che sono connessi
-            activeClientHandlers= new ArrayList<ClientHandler>();
-
 
             // Loop infinito per accettare le connessioni dei client
             while (true) {
@@ -51,8 +47,7 @@ public class Server {
                 // Crea un nuovo thread per gestire la connessione del client
                 ClientHandler clientHandler = new ClientHandler(clientSocket, dbConnection,this);
 
-                // Aggiungere un ClientHandler nella lista
-                activeClientHandlers.add(clientHandler);
+
                 //System.out.println("Ci sono " + activeClientHandlers.size()+" client connessi");
                 clientHandler.start();
             }

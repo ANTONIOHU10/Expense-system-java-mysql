@@ -51,5 +51,14 @@ public class DatabaseController {
         ResultSet resultSet = preparedStatement.executeQuery();
         return resultSet.next();
     }
-
+    public int getUserId(String username) throws SQLException {
+        PreparedStatement preparedStatement = dbConnection.prepareStatement("SELECT id FROM test.users WHERE username = ?");
+        preparedStatement.setString(1, username);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        if (resultSet.next()) {
+            return resultSet.getInt("id");
+        } else {
+            throw new SQLException("Username non trovato");
+        }
+    }
 }
