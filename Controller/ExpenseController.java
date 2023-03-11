@@ -44,7 +44,8 @@ public class ExpenseController {
                 // payee record
                 //fixme -> se voglio utilizzare username, basta manipolare sui metodi getIdByUsername e getUsernameById
                 insertExpenseRecord(expenseId, idUser, getIdByUsername(username), amount, payeeAmount, day, month, year, description);
-
+                //fixme -> aggiornamento della tabella Balance
+                updateBalanceFromExpense(expenseId);
 
                 // payer record
                 //insertExpenseRecord(expenseId, idUser, idUser, amount, 0, day, month, year, description);
@@ -122,6 +123,99 @@ public class ExpenseController {
 
         return usernames;
     }
+
+
+
+    //TODO Aggiorna la tabella balance
+
+    public void updateBalanceFromExpense(int expenseId) throws SQLException {
+        // Ottieni i payee_id per la spesa con l'id specificato
+        List<Integer> payeeIds = new ArrayList<>();
+        String query = "SELECT DISTINCT payee_id FROM expense WHERE expense_id = ?";
+        try (PreparedStatement statement = dbConnection.prepareStatement(query)) {
+            statement.setInt(1, expenseId);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                payeeIds.add(resultSet.getInt("payee_id"));
+            }
+        }
+
+        // Verifica se gli id dei payee sono presenti nella tabella balance
+        for (int payeeId : payeeIds) {
+            query = "SELECT * FROM balance WHERE id = ?";
+            try (PreparedStatement statement = dbConnection.prepareStatement(query)) {
+                statement.setInt(1, payeeId);
+                ResultSet resultSet = statement.executeQuery();
+                if (!resultSet.next()) {
+                    // Il payee non è presente nella tabella balance, lo aggiungi
+                    query = "INSERT INTO balance (id, amount_paid) VALUES (?, ?)";
+                    try (PreparedStatement insertStatement = dbConnection.prepareStatement(query)) {
+                        insertStatement.setInt(1, payeeId);
+                        insertStatement.setDouble(2, 0.0);
+                        insertStatement.executeUpdate();
+                    }
+                }
+            }
+        }
+
+        // Aggiorna la quantità "amount_paid" per ogni payee nella tabella balance
+        query = "UPDATE balance SET amount_paid = amount_paid + ? WHERE id = ?";
+        try (PreparedStatement statement = dbConnection.prepareStatement(query)) {
+            statement.setDouble(1, getPayeeAmountForExpense(expenseId));
+            for (int payeeId : payeeIds) {
+                statement.setInt(2, payeeId);
+                statement.executeUpdate();
+            }
+        }
+
+        // Aggiorna la quantità "amount_owed" per il payer nella tabella balance
+        query = "UPDATE balance SET amount_owed = amount_owed + ? WHERE id = ?";
+        try (PreparedStatement statement = dbConnection.prepareStatement(query)) {
+            statement.setDouble(1, getPayerAmountForExpense(expenseId));
+            statement.setInt(2, getPayerIdForExpense(expenseId));
+            statement.executeUpdate();
+        }
+    }
+
+    private double getPayeeAmountForExpense(int expenseId) throws SQLException {
+        String query = "SELECT SUM(payee_amount) AS total FROM expense WHERE expense_id = ?";
+        try (PreparedStatement statement = dbConnection.prepareStatement(query)) {
+            statement.setInt(1, expenseId);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getDouble("total");
+            } else {
+                return 0.0;
+            }
+        }
+    }
+
+    private double getPayerAmountForExpense(int expenseId) throws SQLException {
+        String query = "SELECT payer_amount FROM expense WHERE expense_id = ? LIMIT 1";
+        try (PreparedStatement statement = dbConnection.prepareStatement(query)) {
+            statement.setInt(1, expenseId);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getDouble("payer_amount");
+            } else {
+                return 0.0;
+            }
+        }
+    }
+
+    private int getPayerIdForExpense(int expenseId) throws SQLException {
+        String query = "SELECT payer_id FROM expense WHERE expense_id = ? LIMIT 1";
+        try (PreparedStatement statement = dbConnection.prepareStatement(query)) {
+            statement.setInt(1, expenseId);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt("payer_id");
+            } else {
+                return 0;
+            }
+        }
+    }
+
 
 
 
