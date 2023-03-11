@@ -14,6 +14,8 @@ public class MessageHandler {
     private ObjectOutputStream output;
     private ObjectInputStream input;
     private Socket socket;
+    private Client client;
+
     //costruttore
     public MessageHandler(Socket socket) throws IOException {
         output = new ObjectOutputStream(socket.getOutputStream());
@@ -50,6 +52,13 @@ public class MessageHandler {
     private void handleLoginResponse(LoginResponseMessage message) {
         System.out.println("Hai ricevuto un messaggio:  >>>   "+ message.getMessage());
         // handle data reply message
+        if(message.getIfSuccess()){
+            Client.setLoggedIn(true);
+            Client.setId_client(message.getClientId());
+        }
+        else {
+            Client.setLoggedIn(false);
+        }
     }
     private void handleRegisterResponse(RegisterResponseMessage message){
         System.out.println("Hai ricevuto un messaggio: >>>    "+ message.getMessage());

@@ -1,8 +1,7 @@
 package NetWork.Client;
 
-import NetWork.Message.DataRequestMessage;
-import NetWork.Message.LoginRequestMessage;
-import NetWork.Message.RegisterRequestMessage;
+import Model.Expense;
+import NetWork.Message.*;
 
 import java.io.IOException;
 
@@ -25,6 +24,18 @@ public class CommandHandler {
     //operazione register ->
     public void registerRequest(String username, String password) throws IOException {
         RegisterRequestMessage message = new RegisterRequestMessage(username, password);
+        messageHandler.send(message);
+    }
+
+    //operazione loggout
+    public void logoutMessage() throws IOException {
+        LogoutMessage message = new LogoutMessage();
+        messageHandler.send(message);
+    }
+
+    //operazione inserimento spesa
+    public void espenseMessage(int id_payer, double amount, int day, int month , int year, String description) throws IOException {
+        ExpenseMessage message = new ExpenseMessage(new Expense(id_payer, amount, day, month, year, description));
         messageHandler.send(message);
     }
 

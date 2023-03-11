@@ -2,74 +2,127 @@ package Controller;
 
 import Model.Expense;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.sql.*;
+import java.util.*;
 
 public class ExpenseController {
-    //es: ogni persona viene associata con tutte le spese
-    private Map<String, List<Expense>> expensesPerPerson;
+    private Connection dbConnection;
 
-    public ExpenseController() {
-        this.expensesPerPerson = new HashMap<>();
+    /**
+     *
+     * @param url "jdbc:mysql//localhost:3306/test"
+     * @param username "root"
+     * @param password "825310894"
+     */
+    public ExpenseController(String url, String username, String password) throws SQLException {
+        dbConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "825310894");
+
     }
-
     /*
-    * "Davide" presenta una spesa da pagare in equa distribuzione per tutte le altre persone
-    * quindi devo calcolare l'importo da pagare per tutte le altre persone a Davide
+    * In questa tabella, per ogni spesa puoi avere più righe, una per ogni pagamento effettuato da un utente al beneficiario della spesa. Ad esempio, se Alice paga $20 per una spesa e Bob e Charlie devono ancora pagare la loro parte ($15 ciascuno), nella tabella "payments" ci sarebbero tre righe:
+
+        id	expense_id	payer_id	payee_id	amount
+        1	1	Alice	Bob	15
+        2	1	Alice	Charlie	15
+        3	1	Bob	Charlie	15
+
+        In questo modo puoi tenere traccia di tutti i pagamenti effettuati
+        * e di quelli ancora da effettuare, e calcolare facilmente il saldo di ogni utente per ogni spesa.
     * */
-    public void addExpense(Expense expense) {
-        String payer = expense.getPayerID();
-        //computeIfAbsent-> if the key does not exist, add this key, cioè se non "Davide" ha ancora la lista, ne crea una
-        //le spese di una persona, cioè la lista che viene associata al nome del pagante
-        List<Expense> allExpenses = expensesPerPerson.computeIfAbsent(payer, k -> new ArrayList<>());
-        //aggiungere la spesa che ha pagato Davide
-        allExpenses.add(expense);
-        //calcolare il rimborso da effettuare a Davide dagli altri
-        double value = expense.getValue();
-        //nella mappa>
-            //Davide -  lista
-            //Luigi - lista
-            //...
-        int numberPersons = expensesPerPerson.size();
+    public void insertExpense(int idUser, double amount, int day, int month, int year, String description) throws SQLException {
+        // Get the list of usernames from the users table
+        List<String> usernames = getUsernames();
 
-        //importo da pagare per le altre persone
-        double valuePerPersona = value / numberPersons;
+        // Calculate the payee amount per user
+        int numUsers = usernames.size() - 1; // exclude payer from count
+        double payeeAmount = amount / numUsers;
 
-        //.keySet = restituisce l'insieme (implementato come un oggetto Set) di tutte le chiavi della mappa
-        //ovvero i nomi di tutte le persone coinquiline dell'appartamento
-        for (String person : expensesPerPerson.keySet()) {
-            //(value)= nome della persona
-            if (!person.equals(value)) {
-                List<Expense> expenseOfAPerson = expensesPerPerson.get(person);
-                expenseOfAPerson.add(new Expense(expense.getDescription(), value, payer));
+        // Insert new expense record for each user
+        int expenseId = getNextExpenseId();
+        for (String username : usernames) {
+            if (!username.equals(getUsernameById(idUser))) {
+                // payee record
+                //fixme -> se voglio utilizzare username, basta manipolare sui metodi getIdByUsername e getUsernameById
+                insertExpenseRecord(expenseId, idUser, getIdByUsername(username), amount, payeeAmount, day, month, year, description);
+
+
+                // payer record
+                //insertExpenseRecord(expenseId, idUser, idUser, amount, 0, day, month, year, description);
             }
         }
     }
 
-    //calcola la differenza tra: l'importo da pagare- spesa che ha effettuato
-    public double saldo(String person) {
-
-        //ottenere la lista dei pagamenti di una persona
-        List<Expense> expensePerson = expensesPerPerson.getOrDefault(person, new ArrayList<>());
-
-        //il totale delle spese sostenute dal gruppo
-        double totalExpense = expensePerson.stream().mapToDouble(Expense::getValue).sum();
-
-        //l'importo che ogni persona dovrebbe aver pagato se tutte le spese fossero state equamente divise tra i partecipanti.
-        //cioè la spesa pagata dagli altri, quindi Davide deve rimborsare queste spese
-        double totalValuePerPerson = totalExpense / expensesPerPerson.size();
-
-        //totale di spese che ha pagato, quindi è da togliere dal pagamento totale da effettuare
-        //rappresenta il totale delle spese sostenute da ogni singola persona all'interno del gruppo.
-        double totalExpensePerPerson = expensesPerPerson.values().stream()
-                .flatMap(List::stream)
-                .filter(spesa -> !spesa.getPayerID().equals(person))
-                .mapToDouble(Expense::getValue)
-                .sum();
-
-        //
-        return totalValuePerPerson * expensesPerPerson.size() - totalExpensePerPerson;
+    //metodo ausiliare:
+    private void insertExpenseRecord(int expenseId, int payerId, int payeeId, double payerAmount, double payeeAmount, int day, int month, int year, String description) throws SQLException {
+        String insertSql = "INSERT INTO expense (expense_id, payer_id, payee_id, payer_amount, payee_amount, day, month, year, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        PreparedStatement insertStatement = dbConnection.prepareStatement(insertSql);
+        insertStatement.setInt(1, expenseId);
+        insertStatement.setInt(2, payerId);
+        insertStatement.setInt(3, payeeId);
+        insertStatement.setDouble(4, payerAmount);
+        insertStatement.setDouble(5, payeeAmount);
+        insertStatement.setInt(6, day);
+        insertStatement.setInt(7, month);
+        insertStatement.setInt(8, year);
+        insertStatement.setString(9, description);
+        insertStatement.executeUpdate();
     }
+
+    //metodo ausiliare
+    private int getNextExpenseId() throws SQLException {
+        String querySql = "SELECT MAX(expense_id) FROM expense";
+        Statement queryStatement = dbConnection.createStatement();
+        ResultSet resultSet = queryStatement.executeQuery(querySql);
+        if (resultSet.next()) {
+            return resultSet.getInt(1) + 1;
+        } else {
+            return 1;
+        }
+    }
+
+    //metodo ausiliare
+    private int getIdByUsername(String username) throws SQLException {
+        String querySql = "SELECT id FROM users WHERE username = ?";
+        PreparedStatement queryStatement = dbConnection.prepareStatement(querySql);
+        queryStatement.setString(1, username);
+        ResultSet resultSet = queryStatement.executeQuery();
+        if (resultSet.next()) {
+            return resultSet.getInt(1);
+        } else {
+            throw new SQLException("User with username " + username + " not found.");
+        }
+    }
+
+    //metodo ausiliare
+    private String getUsernameById(int id) throws SQLException {
+        String querySql = "SELECT username FROM users WHERE id = ?";
+        PreparedStatement queryStatement = dbConnection.prepareStatement(querySql);
+        queryStatement.setInt(1, id);
+        ResultSet resultSet = queryStatement.executeQuery();
+        if (resultSet.next()) {
+            return resultSet.getString(1);
+        } else {
+            throw new SQLException("User with ID " + id + " not found.");
+        }
+    }
+
+    //metodo ausiliare
+    //questo metodo recupera una lista di tutti gli username presenti nella tabella "users".
+    public List<String> getUsernames() throws SQLException {
+        List<String> usernames = new ArrayList<>();
+
+        String selectSql = "SELECT username FROM users";
+        Statement selectStatement = dbConnection.createStatement();
+        ResultSet resultSet = selectStatement.executeQuery(selectSql);
+
+        while (resultSet.next()) {
+            String username = resultSet.getString("username");
+            usernames.add(username);
+        }
+
+        return usernames;
+    }
+
+
+
 }

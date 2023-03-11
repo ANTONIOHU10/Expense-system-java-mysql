@@ -1,6 +1,8 @@
 package NetWork.Server;
 
-import Controller.DatabaseController;
+import Controller.ExpenseController;
+import Controller.UsersController;
+import Model.Expense;
 import NetWork.Message.*;
 
 import java.io.EOFException;
@@ -10,7 +12,6 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 
 
@@ -20,7 +21,8 @@ public class ClientHandler extends Thread {
     private Connection dbConnection;
     private ObjectInputStream in;
     private ObjectOutputStream out;
-    private DatabaseController databaseController;
+    private UsersController usersController;
+    private ExpenseController expenseController;
     //per identificare l'utente nella database e dagli altri
     private int idUser;
     //Serve l'oggetto server per fare delle operazioni sulla lista
@@ -41,6 +43,7 @@ public class ClientHandler extends Thread {
             try {
                 //dbConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/test","root","825310894");
                 connectToDatabase("jdbc:mysql://localhost:3306/test","root","825310894");
+                expenseController = new ExpenseController("jdbc:mysql://localhost:3306/test","root","825310894");
             } catch (SQLException e) {
                 e.printStackTrace();
                 System.out.println("Connessione al database fallita");
@@ -69,23 +72,23 @@ public class ClientHandler extends Thread {
                             String passwordLogin = loginMessage.getPassword();
 
                             //verifico se l'account esiste
-                            boolean loginSuccess = databaseController.login(usernameLogin,passwordLogin);
+                            boolean loginSuccess = usersController.login(usernameLogin,passwordLogin);
 
                             //invio della risposta la client
                             if(loginSuccess){
                                 //se esiste
                                 System.out.println("Account e password sono corretti");
                                 //TODO aggiungere nella MAP  primary key di questo socket
-                                idUser = databaseController.getUserId(usernameLogin);
+                                idUser = usersController.getUserId(usernameLogin);
                                 server.activeClientHandlers.put(this,idUser);
                                 System.out.println("####numero di utenti attivi:"+ server.activeClientHandlers.size()+"" +
                                         "            ID di questo client = "+ idUser);
                                 //messaggio inviato al client
-                                serverMessageHandler.send(new LoginResponseMessage(true,"Login successful!"));
+                                serverMessageHandler.send(new LoginResponseMessage(true,idUser,"Login successful!"));
 
                             } else {
                                 System.out.println("Username o password incorretto");
-                                serverMessageHandler.send(new LoginResponseMessage(false,"invalid username or password"));
+                                serverMessageHandler.send(new LoginResponseMessage(false,idUser,"invalid username or password"));
                             }
                             break;
 
@@ -97,7 +100,7 @@ public class ClientHandler extends Thread {
                             String passwordRegister = registerMessage.getPassword();
 
                             //verifico se l'account esiste
-                            boolean registerSuccess=databaseController.usernameExists(usernameRegister);
+                            boolean registerSuccess=usersController.usernameExists(usernameRegister);
                             System.out.println("Server: risultato della verifica è "+registerSuccess);
                             //invio della risposta la client
                             if(registerSuccess){
@@ -105,22 +108,30 @@ public class ClientHandler extends Thread {
                                 serverMessageHandler.send(new RegisterResponseMessage(false,"Username already taken"));
                             } else {
                                 //se non esiste il nome cercato-> va bene
-                                databaseController.registerAccount(usernameRegister,passwordRegister);
+                                usersController.registerAccount(usernameRegister,passwordRegister);
                                 serverMessageHandler.send(new RegisterResponseMessage(true,"Register successful"));
                             }
 
                             break;
                         case LOGIN_RESPONSE:
-                            System.out.println("esegue operazione del caso LOGIN_RESPONSE");
+                            System.out.println("un client ha effettuato il log in");
                             break;
                         case EXPENSE:
                             System.out.println("esegue operazione del caso EXPENSE");
+                            ExpenseMessage expenseMessage = (ExpenseMessage) request;
+                            double amount = expenseMessage.getExpense().getAmount();
+                            int day = expenseMessage.getExpense().getDay();
+                            int month = expenseMessage.getExpense().getMonth();
+                            int year = expenseMessage.getExpense().getYear();
+                            String description = expenseMessage.getExpense().getDescription();
+                            expenseController.insertExpense(idUser,amount, day, month,year,description);
                             break;
                         case DISCONNECT:
                             System.out.println("esegue operazione del caso DISCONNECT");
                             break;
                         case LOGOUT:
-                            System.out.println("esegue operazione del caso LOGOUT");
+                            System.out.println("un client ha effettuato il logout");
+                            server.activeClientHandlers.remove(idUser);
                             break;
                         case MESSAGE:
                             System.out.println("esegue operazione del caso MESSAGE");
@@ -166,7 +177,7 @@ public class ClientHandler extends Thread {
     }
 
     private void connectToDatabase(String url, String username, String password) throws SQLException {
-        databaseController= new DatabaseController(url,username,password);
+        usersController= new UsersController(url,username,password);
     }
 
 }

@@ -3,7 +3,7 @@ package Controller;
 
 import java.sql.*;
 
-public class DatabaseController {
+public class UsersController {
     private Connection dbConnection;
 
     /**
@@ -12,7 +12,7 @@ public class DatabaseController {
      * @param username "root"
      * @param password "825310894"
      */
-    public DatabaseController(String url, String username, String password) throws SQLException {
+    public UsersController(String url, String username, String password) throws SQLException {
         dbConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "825310894");
 
     }

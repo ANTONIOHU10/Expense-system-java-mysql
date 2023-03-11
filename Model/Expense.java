@@ -1,51 +1,77 @@
 package Model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Objects;
 
 public class Expense implements Serializable {
     private static final long serialVersionUID = 1L;
+    private int id_payer;
+    private double amount;
+    private int day;
+    private int month;
+    private int year;
     private String description;
-    private double value;
-    private String payerID;
 
-
-    public Expense(String description, double value, String payerID){
-        this.description= description;
-        this.value= value;
-        this.payerID= payerID;
+    public Expense(int id_payer, double amount,int day, int month, int year, String description){
+        this.id_payer = id_payer;
+        this.amount = amount;
+        this.day = day;
+        this.month = month;
+        this.year = year;
+        this.description = description;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public double getValue() {
-        return value;
+    public double getAmount() {
+        return amount;
     }
 
-    public String getPayerID() {
-        return payerID;
-    }
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Expense expense = (Expense) o;
-        return Double.compare(expense.value, value) == 0 && Objects.equals(description, expense.description) && Objects.equals(payerID, expense.payerID);
+    public int getDay() {
+        return day;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(description, value, payerID);
+    public int getMonth() {
+        return month;
     }
 
-    @Override
-    public String toString(){
-        return "Expense{" +
-                "description='" + description + '\'' +
-                ", value=" + value +
-                ", payer='" + payerID + '\'' +
-                '}';
+    public int getId_payer() {
+        return id_payer;
     }
+
+    public int getYear() {
+        return year;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
+    public void setDay(int day) {
+        this.day = day;
+    }
+
+    public void setMonth(int month) {
+        this.month = month;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setId_payer(int id_payer) {
+        this.id_payer = id_payer;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
 }
