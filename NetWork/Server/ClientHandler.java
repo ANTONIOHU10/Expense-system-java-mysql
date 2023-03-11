@@ -126,6 +126,13 @@ public class ClientHandler extends Thread {
                             String description = expenseMessage.getExpense().getDescription();
                             expenseController.insertExpense(idUser,amount, day, month,year,description);
                             break;
+                        case VIEW_USERNAMES_REQUEST:
+                            System.out.println("preparando i nomi dei coinquilini da inviare.....");
+                            for(int i=0; i<usersController.getUsernames().size();i++){
+                                System.out.println(usersController.getUsernames().get(i));
+                            }
+                            serverMessageHandler.send(new ViewUsernamesResponse(usersController.getUsernames()));
+                            break;
                         case DISCONNECT:
                             System.out.println("esegue operazione del caso DISCONNECT");
                             break;

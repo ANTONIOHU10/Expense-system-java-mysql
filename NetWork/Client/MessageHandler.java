@@ -1,9 +1,6 @@
 package NetWork.Client;
 
-import NetWork.Message.LoginResponseMessage;
-import NetWork.Message.Message;
-import NetWork.Message.MessageType;
-import NetWork.Message.RegisterResponseMessage;
+import NetWork.Message.*;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -36,6 +33,7 @@ public class MessageHandler {
     //elabora il messaggio ricevuto
     public void handle(Message message) {
         MessageType type = message.getType();
+        System.out.println(">>>>il messaggio ricevuto è tipo"+type);
         switch (type) {
 
             case LOGIN_RESPONSE:
@@ -44,7 +42,8 @@ public class MessageHandler {
             case REGISTER_RESPONSE:
                 handleRegisterResponse((RegisterResponseMessage) message);
                 break;
-
+            case VIEW_USERNAMES_RESPONSE:
+                handlerViewUsernamesResponse((ViewUsernamesResponse) message);
             // handle other message types here
         }
     }
@@ -63,7 +62,12 @@ public class MessageHandler {
     private void handleRegisterResponse(RegisterResponseMessage message){
         System.out.println("Hai ricevuto un messaggio: >>>    "+ message.getMessage());
     }
-
+    private void handlerViewUsernamesResponse(ViewUsernamesResponse message){
+        System.out.println("Questi sono i tuoi coinquilini:");
+        for(int i=0; i<message.getUsernames().size();i++){
+            System.out.println(message.getUsernames().get(i));
+        }
+    }
     public ObjectInputStream getInput() {
         return input;
     }

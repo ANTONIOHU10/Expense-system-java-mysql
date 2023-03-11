@@ -2,6 +2,8 @@ package Controller;
 
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UsersController {
     private Connection dbConnection;
@@ -61,4 +63,17 @@ public class UsersController {
             throw new SQLException("Username non trovato");
         }
     }
+
+    public List<String> getUsernames() throws SQLException {
+        List<String> usernames = new ArrayList<>();
+        String selectSql = "SELECT username FROM test.users";
+        Statement selectStatement = dbConnection.createStatement();
+        ResultSet resultSet = selectStatement.executeQuery(selectSql);
+        while (resultSet.next()) {
+            String username = resultSet.getString("username");
+            usernames.add(username);
+        }
+        return usernames;
+    }
+
 }

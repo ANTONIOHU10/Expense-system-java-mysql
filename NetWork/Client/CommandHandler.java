@@ -34,8 +34,14 @@ public class CommandHandler {
     }
 
     //operazione inserimento spesa
-    public void espenseMessage(int id_payer, double amount, int day, int month , int year, String description) throws IOException {
+    public void expenseMessage(int id_payer, double amount, int day, int month , int year, String description) throws IOException {
         ExpenseMessage message = new ExpenseMessage(new Expense(id_payer, amount, day, month, year, description));
+        messageHandler.send(message);
+    }
+
+    //operazione visualizzazione coinquilini
+    public void viewRoomates() throws IOException {
+        ViewUsernamesRequest message = new ViewUsernamesRequest();
         messageHandler.send(message);
     }
 

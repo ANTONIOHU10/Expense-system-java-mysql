@@ -104,12 +104,12 @@ public class Client {
                         System.out.println("                  ");
                         System.out.println("Scegli un'opzione:");
                         System.out.println("1. Inserisci una spesa");
-                        System.out.println("2. Da fare");
+                        System.out.println("2. Visualizzare tutti i coinquilini");
                         System.out.println("3. Da fare");
                         System.out.println("0. Esci");
 
                         scelta = scannerAfterLogin.nextInt();
-                        scanner.nextLine(); // consuma il carattere newline rimanente dopo nextInt()
+                        //scanner.nextLine(); // consuma il carattere newline rimanente dopo nextInt()
 
                         switch (scelta) {
                             case 1:
@@ -185,11 +185,17 @@ public class Client {
                                     }
                                 }
                                 //-------------------------...preparazione messaggio...------------------------
-                                commandHandler.espenseMessage(id_client,amountExpense,dayExpense,monthExpense,yearExpense,descriptionExpense);
+                                commandHandler.expenseMessage(id_client,amountExpense,dayExpense,monthExpense,yearExpense,descriptionExpense);
 
                                 break;
                             case 2:
-                                // aggiungi prodotto al carrello
+                                // visualizzare i coinquilini
+                                commandHandler.viewRoomates();
+
+                                //elabora il messaggio ricevuto dal Server
+                                Message replyFromServer = messageHandler.receive();
+                                messageHandler.handle(replyFromServer);
+
                                 break;
                             case 3:
                                 // visualizza carrello
@@ -204,6 +210,8 @@ public class Client {
                                 break;
                         }
                     }
+
+
                 }
             }
 
