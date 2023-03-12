@@ -56,6 +56,8 @@ public class Client {
 
                     switch (scelta) {
                         case 1:
+                            //TODO quando effettua login, dovrebbe riceve una risposta del suo ruolo
+                            // e inizializza variabile role= admin/ user
                             System.out.println("Please insert your username:");
                             Scanner usernameScannerLogin = new Scanner(System.in);
                             String usernameLogin = usernameScannerLogin.nextLine();
@@ -68,6 +70,7 @@ public class Client {
                             break;
                         case 2:
                             //TODO completare il caso di registrazione
+                            //TODO chiede se è un admin o user
                             System.out.println("Please choose an username");
                             Scanner usernameScannerRegister = new Scanner(System.in);
                             String usernameRegister = usernameScannerRegister.nextLine();
@@ -95,7 +98,8 @@ public class Client {
                     messageHandler.handle(replyFromServer);
                 } else {
 
-                    //TODO  ------------------------ dopo login -------------------------
+                    //  ------------------------ dopo login -------------------------
+                    //TODO: role = if admin  else user
                     // esegui il login e salva le credenziali in username e password
                     Scanner scannerAfterLogin = new Scanner(System.in);
                     int scelta = -1;
@@ -108,7 +112,7 @@ public class Client {
                         System.out.println("3. Pagare una spesa");
                         System.out.println("4. Consultazione lista delle spese da pagare");
                         System.out.println("5. Consultazione lista delle spese pagate");
-                        System.out.println("6. Cerca spese specifiche -> da realizzare");
+                        System.out.println("6. Consultazione lista delle spese inserite");
                         System.out.println("0. Esci");
 
                         scelta = scannerAfterLogin.nextInt();
