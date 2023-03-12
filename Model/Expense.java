@@ -1,8 +1,7 @@
 package Model;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.Objects;
+
 
 public class Expense implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -13,9 +12,10 @@ public class Expense implements Serializable {
     private int day;
     private int month;
     private int year;
+    private int ifPaid;
     private String description;
 
-    public Expense(int expense_id,int id_payer, double payer_amount,double payee_amount,int day, int month, int year, String description){
+    public Expense(int expense_id,int id_payer, double payer_amount,double payee_amount,int day, int month, int year, String description,int ifPaid){
         this.expense_id = expense_id;
         this.id_payer = id_payer;
         this.payer_amount = payer_amount;
@@ -24,6 +24,7 @@ public class Expense implements Serializable {
         this.month = month;
         this.year = year;
         this.description = description;
+        this.ifPaid = ifPaid;
     }
 
     public String getDescription() {
@@ -56,6 +57,10 @@ public class Expense implements Serializable {
 
     public int getYear() {
         return year;
+    }
+
+    public int getIfPaid() {
+        return ifPaid;
     }
 
     public static long getSerialVersionUID() {

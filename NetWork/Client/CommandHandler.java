@@ -35,7 +35,7 @@ public class CommandHandler {
 
     //operazione inserimento spesa
     public void expenseMessage(int id_payer, double amount, int day, int month , int year, String description) throws IOException {
-        ExpenseMessage message = new ExpenseMessage(new Expense(0,id_payer,amount ,0, day, month, year, description));
+        ExpenseMessage message = new ExpenseMessage(new Expense(0,id_payer,amount ,0, day, month, year, description,0));
         messageHandler.send(message);
     }
 
@@ -60,6 +60,16 @@ public class CommandHandler {
     //richietsa di consultare le spese pagate
     public void consultationExpensesPaidRequest() throws IOException {
         ConsultExpensesPaidRequest message = new ConsultExpensesPaidRequest();
+        messageHandler.send(message);
+    }
+
+    public void consultationAllExpenses() throws IOException {
+        ConsultAllExpensesRequest message = new ConsultAllExpensesRequest();
+        messageHandler.send(message);
+    }
+
+    public void consultationAllBalance() throws IOException {
+        ConsultBalanceRequest message = new ConsultBalanceRequest();
         messageHandler.send(message);
     }
 

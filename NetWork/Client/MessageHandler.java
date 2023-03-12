@@ -53,6 +53,13 @@ public class MessageHandler {
                 break;
             case CONSULTATION_EXPENSES_PAID_RESPONSE:
                 handlerExpensePaidResponse((ConsultExpensesPaidResponse) message);
+                break;
+            case CONSULTATION_ALL_EXPENSES_INFORMATION_RESPONSE:
+                handlerAllExpensesConsultationResponse((ConsultAllExpensesResponse) message);
+                break;
+            case CONSULTATION_BALANCE_INFORMATION_RESPONSE:
+                handlerAllBalanceConsultationResponse((ConsultBalanceResponse) message);
+                break;
             // handle other message types here
         }
     }
@@ -73,7 +80,7 @@ public class MessageHandler {
     }
     private void handleRegisterResponse(RegisterResponseMessage message){
         System.out.println("Hai ricevuto un messaggio: >>>    "+ message.getMessage());
-        System.out.println("Sei un: "+message.getIfAdmin() +"1= Admin, 0= User");
+        //System.out.println("Sei un: "+message.getIfAdmin() +     "1= Admin, 0= User");
     }
 
     private void handlerViewUsernamesResponse(ViewUsernamesResponse message){
@@ -92,13 +99,13 @@ public class MessageHandler {
         System.out.println("Elenco delle spese da pagare:    "+"ci sono "+message.getListOfExpense().size()+" spese");
         for(int i=0; i<message.getListOfExpense().size();i++){
             System.out.println("Codice spesa: "+ message.getListOfExpense().get(i).getExpense_id()
-                    + "Codice pagante: "+ message.getListOfExpense().get(i).getId_payer()
-                    + "Totale: "+message.getListOfExpense().get(i).getPayer_amount()
-                    + "Da pagare: "+message.getListOfExpense().get(i).getPayee_amount()
-                    + "Giorno: "+message.getListOfExpense().get(i).getDay()
-                    + "Mese: "+message.getListOfExpense().get(i).getMonth()
-                    + "Anno: "+message.getListOfExpense().get(i).getYear()
-                    + "Descrizione: "+message.getListOfExpense().get(i).getDescription()
+                    + " Codice pagante: "+ message.getListOfExpense().get(i).getId_payer()
+                    + " Totale: "+message.getListOfExpense().get(i).getPayer_amount()
+                    + " Da pagare: "+message.getListOfExpense().get(i).getPayee_amount()
+                    + " Giorno: "+message.getListOfExpense().get(i).getDay()
+                    + " Mese: "+message.getListOfExpense().get(i).getMonth()
+                    + " Anno: "+message.getListOfExpense().get(i).getYear()
+                    + " Descrizione: "+message.getListOfExpense().get(i).getDescription()
             );
         }
     }
@@ -114,6 +121,34 @@ public class MessageHandler {
                     + " Mese: "+message.getListOfExpense().get(i).getMonth()
                     + " Anno: "+message.getListOfExpense().get(i).getYear()
                     + " Descrizione: "+message.getListOfExpense().get(i).getDescription()
+            );
+        }
+    }
+
+    private void handlerAllExpensesConsultationResponse(ConsultAllExpensesResponse message){
+        System.out.println("Tutte le informazioni: ");
+        System.out.println("Elenco delle spese :    "+"ci sono "+message.getListOfExpense().size()+" spese");
+        for(int i=0; i<message.getListOfExpense().size();i++){
+            System.out.println("Codice spesa: "+ message.getListOfExpense().get(i).getExpense_id()
+                    + " Codice pagante: "+ message.getListOfExpense().get(i).getId_payer()
+                    + " Totale: "+message.getListOfExpense().get(i).getPayer_amount()
+                    + " Pagata: "+message.getListOfExpense().get(i).getPayee_amount()
+                    + " Giorno: "+message.getListOfExpense().get(i).getDay()
+                    + " Mese: "+message.getListOfExpense().get(i).getMonth()
+                    + " Anno: "+message.getListOfExpense().get(i).getYear()
+                    + " Descrizione: "+message.getListOfExpense().get(i).getDescription()
+                    + " Se pagato: "+message.getListOfExpense().get(i).getIfPaid()
+            );
+        }
+    }
+
+    private void handlerAllBalanceConsultationResponse(ConsultBalanceResponse message){
+        System.out.println("Tabella Balance: ");
+        for(int i=0; i<message.getListOfBalance().size();i++){
+            System.out.println("Id: "+ message.getListOfBalance().get(i).getId()
+                    + " importo da pagare: "+ message.getListOfBalance().get(i).getAmount_owed()
+                    + " importo pagato: "+ message.getListOfBalance().get(i).getAmount_paid()
+                    + " bilancio: "+ message.getListOfBalance().get(i).getBalance()
             );
         }
     }

@@ -160,6 +160,16 @@ public class ClientHandler extends Thread {
                             ConsultExpensesToBePaidResponse consultExpensesToBePaidResponse = new ConsultExpensesToBePaidResponse(expenseController.consultListExpense(idUser,0));
                             serverMessageHandler.send(consultExpensesToBePaidResponse);
                             break;
+                        case CONSULTATION_ALL_EXPENSES_INFORMATION_REQUEST:
+                            System.out.println(">>>ricevuto una richiesta di consultazione tutte le spese");
+                            ConsultAllExpensesResponse consultAllExpensesResponse = new ConsultAllExpensesResponse(expenseController.consultAllExpenses());
+                            serverMessageHandler.send(consultAllExpensesResponse);
+                            break;
+                        case CONSULTATION_BALANCE_INFORMATION_REQUEST:
+                            System.out.println(">>>ricevuto una richiesta di consultazione tabella balance");
+                            ConsultBalanceResponse consultBalanceResponse = new ConsultBalanceResponse(expenseController.consultAllBalances());
+                            serverMessageHandler.send(consultBalanceResponse);
+                            break;
                         case DELETE_ALL_INFORMATION_REQUEST:
                             usersController.deleteAllData();
                             DeleteAllInformationResponse deleteAllInformationResponse = new DeleteAllInformationResponse("Tutti i dati sono cancellati");

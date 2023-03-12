@@ -120,6 +120,7 @@ public class Client {
 
                     //se l'utente è un amministratore
                     if(!isAdmin){
+                        //utente è un amministratore
                         while (scelta != 0) {
                             System.out.println("                  ");
                             System.out.println("Scegli un'opzione:");
@@ -128,7 +129,8 @@ public class Client {
                             System.out.println("3. Pagare una spesa");
                             System.out.println("4. Consultazione lista delle spese da pagare");
                             System.out.println("5. Consultazione lista delle spese pagate");
-                            System.out.println("6. Consultazione lista delle spese inserite");
+                            System.out.println("6. Consultazione tutta la cronologia");
+                            System.out.println("7. Consultazione la tabella bilancio");
                             System.out.println("0. Esci");
 
                             scelta = scannerAfterLogin.nextInt();
@@ -245,13 +247,32 @@ public class Client {
                                     //elabora il messaggio ricevuto dal Server
                                     Message replyFromServerForExpenseToBePaid = messageHandler.receive();
                                     messageHandler.handle(replyFromServerForExpenseToBePaid);
+
+                                    //elabora il messaggio ricevuto dal Server
+                                    Message replyFromServerAdminToPay = messageHandler.receive();
+                                    messageHandler.handle(replyFromServerAdminToPay);
                                     break;
                                 case 5:
                                     commandHandler.consultationExpensesPaidRequest();
                                     Message replyFromServerForExpensePaid = messageHandler.receive();
                                     messageHandler.handle(replyFromServerForExpensePaid);
+
+                                    //elabora il messaggio ricevuto dal Server
+                                    Message replyFromServerAdminPaid = messageHandler.receive();
+                                    messageHandler.handle(replyFromServerAdminPaid);
                                     break;
                                 case 6:
+                                    commandHandler.consultationAllExpenses();
+                                    //elabora il messaggio ricevuto dal Server
+                                    Message replyFromServerAdminAllExpenses = messageHandler.receive();
+                                    messageHandler.handle(replyFromServerAdminAllExpenses);
+                                    break;
+                                case 7:
+                                    commandHandler.consultationAllBalance();
+                                    //elabora il messaggio ricevuto dal Server
+                                    Message replyFromServerAdminAllBalance = messageHandler.receive();
+                                    messageHandler.handle(replyFromServerAdminAllBalance);
+                                    break;
                                 case 0:
                                     Client.setLoggedIn(false);
                                     commandHandler.logoutMessage();
@@ -264,7 +285,7 @@ public class Client {
                             }
                         }
                     } else {
-                    //l'utente è un amministratore
+                    //l'utente non è un amministratore
                         while (scelta != 0) {
                             System.out.println("                  ");
                             System.out.println("Scegli un'opzione:");
@@ -273,9 +294,10 @@ public class Client {
                             System.out.println("3. Pagare una spesa");
                             System.out.println("4. Consultazione lista delle spese da pagare");
                             System.out.println("5. Consultazione lista delle spese pagate");
-                            System.out.println("6. Consultazione lista delle spese inserite");
-                            System.out.println("7. Cancellare tutte le informazioni");
-                            System.out.println("8. Cancellare le spese e i conti");
+                            System.out.println("6. Consultazione tutta la cronologia");
+                            System.out.println("7. Consultazione la tabella bilancio");
+                            System.out.println("8. Cancellare tutte le informazioni");
+                            System.out.println("9. Cancellare le spese e i conti");
                             System.out.println("0. Esci");
 
                             scelta = scannerAfterLogin.nextInt();
@@ -392,17 +414,37 @@ public class Client {
                                     //elabora il messaggio ricevuto dal Server
                                     Message replyFromServerForExpenseToBePaid = messageHandler.receive();
                                     messageHandler.handle(replyFromServerForExpenseToBePaid);
+
+                                    //elabora il messaggio ricevuto dal Server
+                                    Message replyFromServerUserToPay = messageHandler.receive();
+                                    messageHandler.handle(replyFromServerUserToPay);
                                     break;
                                 case 5:
                                     commandHandler.consultationExpensesPaidRequest();
                                     Message replyFromServerForExpensePaid = messageHandler.receive();
                                     messageHandler.handle(replyFromServerForExpensePaid);
+
+                                    //elabora il messaggio ricevuto dal Server
+                                    Message replyFromServerUserPaid = messageHandler.receive();
+                                    messageHandler.handle(replyFromServerUserPaid);
                                     break;
                                 case 6:
+                                    commandHandler.consultationAllExpenses();
+                                    //elabora il messaggio ricevuto dal Server
+                                    Message replyFromServerUserAllExpenses = messageHandler.receive();
+                                    messageHandler.handle(replyFromServerUserAllExpenses);
+                                    break;
                                 case 7:
-                                    commandHandler.deleteAllInfoRequest();
+                                    commandHandler.consultationAllBalance();
+
+                                    //elabora il messaggio ricevuto dal Server
+                                    Message replyFromServerAdminAllBalance = messageHandler.receive();
+                                    messageHandler.handle(replyFromServerAdminAllBalance);
                                     break;
                                 case 8:
+                                    commandHandler.deleteAllInfoRequest();
+                                    break;
+                                case 9:
                                     commandHandler.deleteExpensesBalanceRequest();
                                     break;
                                 case 0:

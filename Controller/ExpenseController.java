@@ -1,5 +1,6 @@
 package Controller;
 
+import Model.Balance;
 import Model.Expense;
 
 import java.sql.*;
@@ -337,12 +338,54 @@ public class ExpenseController {
             int day = resultSet.getInt("day");
             int month = resultSet.getInt("month");
             int year = resultSet.getInt("year");
+            int ifPaid = resultSet.getInt("ifPaid");
             String description= resultSet.getString("description");
-            Expense expense = new Expense(expenseIdResult,payerId,payerAmount,payeeAmount,day,month,year,description);
+            Expense expense = new Expense(expenseIdResult,payerId,payerAmount,payeeAmount,day,month,year,description,ifPaid);
             expenses.add(expense);
         }
         return expenses;
     }
 
+    public List<Expense> consultAllExpenses() throws SQLException {
+        //lista da restituire
+        List<Expense> expenses = new ArrayList<>();
 
+        String querySql = "SELECT * FROM expense";
+        PreparedStatement queryStatement = dbConnection.prepareStatement(querySql);
+        ResultSet resultSet = queryStatement.executeQuery();
+        while (resultSet.next()) {
+
+            int expenseIdResult = resultSet.getInt("expense_id");
+            int payerId = resultSet.getInt("payer_id");
+            int payerAmount = resultSet.getInt("payer_amount");
+            int payeeAmount = resultSet.getInt("payee_amount");
+            int day = resultSet.getInt("day");
+            int month = resultSet.getInt("month");
+            int year = resultSet.getInt("year");
+            int ifPaid = resultSet.getInt("ifPaid");
+            String description= resultSet.getString("description");
+            Expense expense = new Expense(expenseIdResult,payerId,payerAmount,payeeAmount,day,month,year,description,ifPaid);
+            expenses.add(expense);
+        }
+        return expenses;
+    }
+    public List<Balance> consultAllBalances() throws SQLException {
+        //lista da restituire
+        List<Balance> balances = new ArrayList<>();
+
+        String querySql = "SELECT * FROM balance";
+        PreparedStatement queryStatement = dbConnection.prepareStatement(querySql);
+        ResultSet resultSet = queryStatement.executeQuery();
+        while (resultSet.next()) {
+
+            int expenseIdResult = resultSet.getInt("id");
+            double amount_owed = resultSet.getInt("amount_owed");
+            double amount_paid = resultSet.getInt("amount_paid");
+            double balanceNumber = resultSet.getInt("balance");
+            Balance balance = new Balance(expenseIdResult, amount_owed, amount_paid, balanceNumber);
+            balances.add(balance);
+        }
+        return balances;
+
+    }
 }
