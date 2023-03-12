@@ -35,7 +35,7 @@ public class ExpenseController {
 
         // Calcola il numero di persone che devono pagare
         // Calcola l'importo da pagare per ognuno
-        //fixme => se voglio che anche il payer paga un importo-> tolgo -1/ aggiungo -1, così tutti pagano un certo importo
+        //se voglio che anche il payer paga un importo-> tolgo -1/ aggiungo -1, così tutti pagano un certo importo
         int numUsers = usernames.size(); // exclude payer from count
         double payeeAmount = amount / numUsers;
 
@@ -46,13 +46,9 @@ public class ExpenseController {
             //quando non è l'utente che ha pagato la spesa
             if (!username.equals(getUsernameById(idUser))) {
                 // payee record
-                //fixme -> se voglio utilizzare username, basta manipolare sui metodi getIdByUsername e getUsernameById
+                //se voglio utilizzare username, basta manipolare sui metodi getIdByUsername e getUsernameById
                 insertExpenseRecord(expenseId, idUser, getIdByUsername(username), amount, payeeAmount, day, month, year, description);
-                //fixme -> aggiornamento della tabella Balance
 
-
-                // payer record
-                //insertExpenseRecord(expenseId, idUser, idUser, amount, 0, day, month, year, description);
             }
         }
         //! non metto dentro il for di sopra, crea problemi
@@ -144,10 +140,7 @@ public class ExpenseController {
         return usernames;
     }
 
-
-
-    //TODO Aggiorna la tabella balance
-
+    //---------------------------------------aggiornamento tabella balance--------------------------------------------------------
     public void updateBalanceFromExpense(int expenseId) throws SQLException {
         // Ottieni i payee_id per la spesa con l'id specificato
         List<Integer> payeeIds = new ArrayList<>();
@@ -183,13 +176,11 @@ public class ExpenseController {
                 }
             }
         }
-        //fixme: ottiene la somma di payee_amount = payer_amount
-        // Aggiorna la quantità "amount_paid" per ogni payee nella tabella balance
+
         query = "UPDATE balance SET amount_owed = amount_owed + ? WHERE id = ?";
         try (PreparedStatement statement = dbConnection.prepareStatement(query)) {
             //utilizzo del metodo ausiliare
             statement.setDouble(1, getPayeeAmountForExpense(expenseId));
-            //fixme: qui devo passare solo chi ha pagato, non quelli che devono pagare
             //versione originale di *
 
             for (int payeeId : payeeIds) {
@@ -197,8 +188,6 @@ public class ExpenseController {
                 statement.executeUpdate();
             }
 
-            //fixme: è una prova *
-            //statement.setDouble(2,getPayerIdForExpense(expenseId));
         }
 
         // Aggiorna la quantità "amount_owed" per il payer nella tabella balance

@@ -105,7 +105,10 @@ public class Client {
                         System.out.println("Scegli un'opzione:");
                         System.out.println("1. Inserisci una spesa");
                         System.out.println("2. Visualizzare tutti i coinquilini");
-                        System.out.println("3. Da fare");
+                        System.out.println("3. Pagare una spesa");
+                        System.out.println("4. Consultazione lista delle spese da pagare");
+                        System.out.println("5. Consultazione lista delle spese pagate");
+                        System.out.println("6. Cerca spese specifiche -> da realizzare");
                         System.out.println("0. Esci");
 
                         scelta = scannerAfterLogin.nextInt();
@@ -198,7 +201,28 @@ public class Client {
 
                                 break;
                             case 3:
-                                // visualizza carrello
+                                // pagamento di una spesa
+                                //TODO inserisce id di una spesa-> lo stato della spesa => pagata
+                                //quando uno paga la spesa ( importo payee_amount )-> nella tabella balance ha amount_owed - quello pagato?
+                                int idExpense;
+                                while(true){
+                                    System.out.println("Inserisci il codice della spesa:");
+                                    if(scanner.hasNextInt()){
+                                        idExpense = scanner.nextInt();
+                                        System.out.println("Hai inserito: "+ idExpense);
+                                        break;
+                                    } else {
+                                        System.out.println("Input non valido, riprova,");
+                                        scanner.next();
+                                    }
+                                }
+                                commandHandler.paymentRequset(idExpense);
+                                break;
+                            case 4:
+                                commandHandler.consultationExpensesToBePaidRequest();
+                                break;
+                            case 5:
+                                commandHandler.consultationExpensesPaidRequest();
                                 break;
                             case 0:
                                 Client.setLoggedIn(false);

@@ -6,15 +6,13 @@ public enum MessageType {
     REGISTER_REQUEST,//usato
     REGISTER_RESPONSE,//usato
     LOGOUT,//usato
-    //un messaggio generale da inviare, una frase
-    MESSAGE,
-    //un messaggio che chiede un certo oggetto da restituire, esempio una spesa
-    DATA_REQUEST,
-    //risposta di un oggetto generale
-    DATA_RESPONSE,
-    DISCONNECT,
     EXPENSE,//usato
-    ERROR,
     VIEW_USERNAMES_REQUEST,//usato
-    VIEW_USERNAMES_RESPONSE//usato
+    VIEW_USERNAMES_RESPONSE,//usato
+    PAYMENT_EXPENSE_REQUEST,//usato
+    PAYMENT_EXPENSE_RESPONSE,//usato
+    CONSULTATION_EXPENSES_PAID_REQUEST,
+    CONSULTATION_EXPENSES_PAID_RESPONSE,
+    CONSULTATION_EXPENSES_TO_BE_PAID_REQUEST,
+    CONSULTATION_EXPENSES_TO_BE_PAID_RESPONSE,
 }

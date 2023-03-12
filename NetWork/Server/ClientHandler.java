@@ -60,9 +60,6 @@ public class ClientHandler extends Thread {
                     //TODO,  lo switch che elabora i dati
                     System.out.println("ricevuto un messaggio di tipo >>>>"+ request.getType());
                     switch(request.getType()) {
-                        case ERROR:
-                            System.out.println("esegue operazione del caso ERROR");
-                            break;
 
                         case LOGIN_REQUEST:
                             System.out.println("esegue operazione del caso LOGIN");
@@ -128,26 +125,21 @@ public class ClientHandler extends Thread {
                             break;
                         case VIEW_USERNAMES_REQUEST:
                             System.out.println("preparando i nomi dei coinquilini da inviare.....");
-                            for(int i=0; i<usersController.getUsernames().size();i++){
-                                System.out.println(usersController.getUsernames().get(i));
-                            }
                             serverMessageHandler.send(new ViewUsernamesResponse(usersController.getUsernames()));
-                            break;
-                        case DISCONNECT:
-                            System.out.println("esegue operazione del caso DISCONNECT");
                             break;
                         case LOGOUT:
                             System.out.println("un client ha effettuato il logout");
                             server.activeClientHandlers.remove(idUser);
                             break;
-                        case MESSAGE:
-                            System.out.println("esegue operazione del caso MESSAGE");
+                        case PAYMENT_EXPENSE_REQUEST:
+                            PaymentRequestMessage paymentRequestMessage = (PaymentRequestMessage) request;
+                            System.out.println(">>>ricevuto una richiesta di pagamento della spesa:     "+paymentRequestMessage.getExpenseId());
                             break;
-                        case DATA_RESPONSE:
-                            System.out.println("esegue operazione del caso DATA_REPLY_MESSAGE");
+                        case CONSULTATION_EXPENSES_PAID_REQUEST:
+                            System.out.println(">>>ricevuto una richiesta di consultazione delle spese pagate");
                             break;
-                        case DATA_REQUEST:
-                            System.out.println("esegue operazione del caso DATA_REQUEST_MESSAGE");
+                        case CONSULTATION_EXPENSES_TO_BE_PAID_REQUEST:
+                            System.out.println(">>>ricevuto una richiesta di consultazione delle spese da pagare");
                             break;
                     }
 

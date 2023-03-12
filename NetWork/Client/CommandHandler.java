@@ -45,10 +45,24 @@ public class CommandHandler {
         messageHandler.send(message);
     }
 
-    public void fetchData() throws IOException {
-        DataRequestMessage message = new DataRequestMessage("Hello");
+    //richiesta di pagamento di una spesa
+    public void paymentRequset(int expense_id) throws IOException {
+        PaymentRequestMessage message = new PaymentRequestMessage(expense_id);
         messageHandler.send(message);
     }
+
+    //richeista di consultare le spese da pagare
+    public void consultationExpensesToBePaidRequest() throws IOException {
+        ConsultExpensesToBePaidRequest message = new ConsultExpensesToBePaidRequest();
+        messageHandler.send(message);
+    }
+
+    //richietsa di consultare le spese pagate
+    public void consultationExpensesPaidRequest() throws IOException {
+        ConsultExpensesPaidRequest message = new ConsultExpensesPaidRequest();
+        messageHandler.send(message);
+    }
+
 
     // add other command methods here
 

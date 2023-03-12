@@ -1,8 +1,7 @@
 package NetWork.Server;
 
-import NetWork.Message.DataResponseMessage;
+
 import NetWork.Message.Message;
-import NetWork.Message.MessageType;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -31,21 +30,25 @@ public class ServerMessageHandler {
     }
 
     //elabora il messaggio ricevuto
+    //TODO in futuro posso spostare lo switch qui
+    /*
     public void handle(Message message) {
         MessageType type = message.getType();
         switch (type) {
 
             case LOGIN_REQUEST:
-                handleLoginRequest((DataResponseMessage) message);
                 break;
 
             // handle other message types here
         }
     }
 
-    private void handleLoginRequest(DataResponseMessage message) {
+    private void handleLoginRequest(ataResponseMessage message) {
         // handle data reply message
     }
+    */
+
+
 
     public ObjectInputStream getInput() {
         return input;
