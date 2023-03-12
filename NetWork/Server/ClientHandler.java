@@ -81,11 +81,16 @@ public class ClientHandler extends Thread {
                                 System.out.println("####numero di utenti attivi:"+ server.activeClientHandlers.size()+"" +
                                         "            ID di questo client = "+ idUser);
                                 //messaggio inviato al client
-                                serverMessageHandler.send(new LoginResponseMessage(true,idUser,"Login successful!"));
+                                if(usersController.getUserRoleById(idUser).equals("Admin")) {
+                                    serverMessageHandler.send(new LoginResponseMessage(true,idUser,"Login successful!",1));
+                                } else {
+                                    serverMessageHandler.send(new LoginResponseMessage(true,idUser,"Login successful!",0));
+                                }
+
 
                             } else {
                                 System.out.println("Username o password incorretto");
-                                serverMessageHandler.send(new LoginResponseMessage(false,idUser,"invalid username or password"));
+                                serverMessageHandler.send(new LoginResponseMessage(false,idUser,"invalid username or password",0));
                             }
                             break;
 
@@ -95,18 +100,18 @@ public class ClientHandler extends Thread {
                             RegisterRequestMessage registerMessage = (RegisterRequestMessage) request;
                             String usernameRegister = registerMessage.getUsername();
                             String passwordRegister = registerMessage.getPassword();
-
+                            int ifAdmin = registerMessage.getAdminOrNot();
                             //verifico se l'account esiste
                             boolean registerSuccess=usersController.usernameExists(usernameRegister);
                             System.out.println("Server: risultato della verifica è "+registerSuccess);
                             //invio della risposta la client
                             if(registerSuccess){
                                 //se esiste il nome cercato-> non va bene
-                                serverMessageHandler.send(new RegisterResponseMessage(false,"Username already taken"));
+                                serverMessageHandler.send(new RegisterResponseMessage(false,"Username already taken",ifAdmin));
                             } else {
                                 //se non esiste il nome cercato-> va bene
-                                usersController.registerAccount(usernameRegister,passwordRegister);
-                                serverMessageHandler.send(new RegisterResponseMessage(true,"Register successful"));
+                                usersController.registerAccount(usernameRegister,passwordRegister,ifAdmin);
+                                serverMessageHandler.send(new RegisterResponseMessage(true,"Register successful",0));
                             }
 
                             break;
@@ -154,6 +159,16 @@ public class ClientHandler extends Thread {
                             //option 0= to be paid
                             ConsultExpensesToBePaidResponse consultExpensesToBePaidResponse = new ConsultExpensesToBePaidResponse(expenseController.consultListExpense(idUser,0));
                             serverMessageHandler.send(consultExpensesToBePaidResponse);
+                            break;
+                        case DELETE_ALL_INFORMATION_REQUEST:
+                            usersController.deleteAllData();
+                            DeleteAllInformationResponse deleteAllInformationResponse = new DeleteAllInformationResponse("Tutti i dati sono cancellati");
+                            serverMessageHandler.send(deleteAllInformationResponse);
+                            break;
+                        case DELTE_EXPENSES_BALANCE_INFORMATION_REQUEST:
+                            usersController.deleteExpensesBalance();
+                            DeleteExpensesBalanceResponse deleteExpensesBalanceResponse = new DeleteExpensesBalanceResponse("Tutte le spese e il conto sono cancellati");
+                            serverMessageHandler.send(deleteExpensesBalanceResponse);
                             break;
                     }
 

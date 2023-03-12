@@ -22,8 +22,8 @@ public class CommandHandler {
     }
 
     //operazione register ->
-    public void registerRequest(String username, String password) throws IOException {
-        RegisterRequestMessage message = new RegisterRequestMessage(username, password);
+    public void registerRequest(String username, String password,int adminOrNot) throws IOException {
+        RegisterRequestMessage message = new RegisterRequestMessage(username, password,adminOrNot);
         messageHandler.send(message);
     }
 
@@ -60,6 +60,15 @@ public class CommandHandler {
     //richietsa di consultare le spese pagate
     public void consultationExpensesPaidRequest() throws IOException {
         ConsultExpensesPaidRequest message = new ConsultExpensesPaidRequest();
+        messageHandler.send(message);
+    }
+
+    public void deleteAllInfoRequest() throws IOException {
+        DeleteAllInformationRequest message = new DeleteAllInformationRequest();
+        messageHandler.send(message);
+    }
+    public void deleteExpensesBalanceRequest() throws IOException {
+        DeleteExpensesBalanceRequest message = new DeleteExpensesBalanceRequest();
         messageHandler.send(message);
     }
 

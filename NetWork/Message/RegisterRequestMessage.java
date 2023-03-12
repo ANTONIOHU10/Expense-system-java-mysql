@@ -3,12 +3,14 @@ package NetWork.Message;
 public class RegisterRequestMessage extends Message{
     private String username;
     private String password;
+    private int adminOrNot;
 
 
-    public RegisterRequestMessage(String username, String password) {
+    public RegisterRequestMessage(String username, String password,int adminOrNot) {
         super(MessageType.REGISTER_REQUEST);
         this.username = username;
         this.password = password;
+        this.adminOrNot = adminOrNot;
     }
 
     public String getPassword() {
@@ -19,11 +21,7 @@ public class RegisterRequestMessage extends Message{
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    public int getAdminOrNot() {
+        return adminOrNot;
     }
 }

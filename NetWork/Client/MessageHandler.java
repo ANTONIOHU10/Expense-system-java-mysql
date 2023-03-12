@@ -63,6 +63,9 @@ public class MessageHandler {
         if(message.getIfSuccess()){
             Client.setLoggedIn(true);
             Client.setId_client(message.getClientId());
+            if(message.getIfAdmin()==1){
+                Client.setAdmin();
+            }
         }
         else {
             Client.setLoggedIn(false);
@@ -70,6 +73,7 @@ public class MessageHandler {
     }
     private void handleRegisterResponse(RegisterResponseMessage message){
         System.out.println("Hai ricevuto un messaggio: >>>    "+ message.getMessage());
+        System.out.println("Sei un: "+message.getIfAdmin() +"1= Admin, 0= User");
     }
 
     private void handlerViewUsernamesResponse(ViewUsernamesResponse message){
@@ -112,6 +116,12 @@ public class MessageHandler {
                     + " Descrizione: "+message.getListOfExpense().get(i).getDescription()
             );
         }
+    }
+    private void handlerDeleteAllInfoResponse(DeleteAllInformationResponse message){
+        System.out.println(message.getMessage());
+    }
+    private void handlerDeleteExpenseBalance(DeleteExpensesBalanceResponse message){
+        System.out.println(message.getMessage());
     }
     public ObjectInputStream getInput() {
         return input;

@@ -13,6 +13,7 @@ import java.util.Scanner;
 public class Client {
     private static boolean isLoggedIn = false;
     private static int id_client;
+    private static boolean isAdmin = false;
     public static void main(String[] args) {
         Client client = new Client();
         String host = "localhost"; // IP o nome del server
@@ -71,15 +72,27 @@ public class Client {
                         case 2:
                             //TODO completare il caso di registrazione
                             //TODO chiede se è un admin o user
-                            System.out.println("Please choose an username");
+                            int adminOrNot;
+                            while(true){
+                                System.out.println("Sei un admin o user: 1 = admin, 0 = user");
+                                if(scanner.hasNextInt()){
+                                    adminOrNot = scanner.nextInt();
+                                    System.out.println("Hai inserito: "+ adminOrNot);
+                                    break;
+                                } else {
+                                    System.out.println("Input non valido, riprova,");
+                                    scanner.next();
+                                }
+                            }
+                            System.out.println("Scegli il nome utente");
                             Scanner usernameScannerRegister = new Scanner(System.in);
                             String usernameRegister = usernameScannerRegister.nextLine();
 
-                            System.out.println("Please choose a password");
+                            System.out.println("Scegli il password");
                             Scanner passwordScannerRegister = new Scanner(System.in);
                             String passwordRegister = passwordScannerRegister.nextLine();
 
-                            commandHandler.registerRequest(usernameRegister, passwordRegister);
+                            commandHandler.registerRequest(usernameRegister, passwordRegister,adminOrNot);
                             break;
 
 
@@ -104,150 +117,310 @@ public class Client {
                     Scanner scannerAfterLogin = new Scanner(System.in);
                     int scelta = -1;
 
-                    while (scelta != 0) {
-                        System.out.println("                  ");
-                        System.out.println("Scegli un'opzione:");
-                        System.out.println("1. Inserisci una spesa");
-                        System.out.println("2. Visualizzare tutti i coinquilini");
-                        System.out.println("3. Pagare una spesa");
-                        System.out.println("4. Consultazione lista delle spese da pagare");
-                        System.out.println("5. Consultazione lista delle spese pagate");
-                        System.out.println("6. Consultazione lista delle spese inserite");
-                        System.out.println("0. Esci");
 
-                        scelta = scannerAfterLogin.nextInt();
-                        //scanner.nextLine(); // consuma il carattere newline rimanente dopo nextInt()
+                    //se l'utente è un amministratore
+                    if(!isAdmin){
+                        while (scelta != 0) {
+                            System.out.println("                  ");
+                            System.out.println("Scegli un'opzione:");
+                            System.out.println("1. Inserisci una spesa");
+                            System.out.println("2. Visualizzare tutti i coinquilini");
+                            System.out.println("3. Pagare una spesa");
+                            System.out.println("4. Consultazione lista delle spese da pagare");
+                            System.out.println("5. Consultazione lista delle spese pagate");
+                            System.out.println("6. Consultazione lista delle spese inserite");
+                            System.out.println("0. Esci");
 
-                        switch (scelta) {
-                            case 1:
-                                // inserisci una spesa
+                            scelta = scannerAfterLogin.nextInt();
+                            //scanner.nextLine(); // consuma il carattere newline rimanente dopo nextInt()
 
-                                //-----------------------------...importo...------------------------------
-                                //legge un double -> l'importo
-                                double amountExpense;
-                                while(true){
-                                    System.out.println("Inserisci l'importo della spesa:");
-                                    if(scanner.hasNextDouble()){
-                                        amountExpense = scanner.nextDouble();
-                                        System.out.println("Hai inserito: "+ amountExpense);
-                                        break;
-                                    } else {
-                                        System.out.println("Input non valido, riprova,");
-                                        scanner.next();
+                            switch (scelta) {
+                                case 1:
+                                    // inserisci una spesa
+
+                                    //-----------------------------...importo...------------------------------
+                                    //legge un double -> l'importo
+                                    double amountExpense;
+                                    while(true){
+                                        System.out.println("Inserisci l'importo della spesa:");
+                                        if(scanner.hasNextDouble()){
+                                            amountExpense = scanner.nextDouble();
+                                            System.out.println("Hai inserito: "+ amountExpense);
+                                            break;
+                                        } else {
+                                            System.out.println("Input non valido, riprova,");
+                                            scanner.next();
+                                        }
                                     }
-                                }
-                                //----------------------------...giorno...-------------------------------
-                                int dayExpense;
-                                while(true){
-                                    System.out.println("Inserisci il giorno:");
-                                    if(scanner.hasNextInt()){
-                                        dayExpense = scanner.nextInt();
-                                        System.out.println("Hai inserito: "+ dayExpense);
-                                        break;
-                                    } else {
-                                        System.out.println("Input non valido, riprova,");
-                                        scanner.next();
+                                    //----------------------------...giorno...-------------------------------
+                                    int dayExpense;
+                                    while(true){
+                                        System.out.println("Inserisci il giorno:");
+                                        if(scanner.hasNextInt()){
+                                            dayExpense = scanner.nextInt();
+                                            System.out.println("Hai inserito: "+ dayExpense);
+                                            break;
+                                        } else {
+                                            System.out.println("Input non valido, riprova,");
+                                            scanner.next();
+                                        }
                                     }
-                                }
-                                //----------------------------...month...--------------------------------
-                                int monthExpense;
-                                while(true){
-                                    System.out.println("Inserisci il mese:");
-                                    if(scanner.hasNextInt()){
-                                        monthExpense = scanner.nextInt();
-                                        System.out.println("Hai inserito: "+ monthExpense);
-                                        break;
-                                    } else {
-                                        System.out.println("Input non valido, riprova,");
-                                        scanner.next();
+                                    //----------------------------...month...--------------------------------
+                                    int monthExpense;
+                                    while(true){
+                                        System.out.println("Inserisci il mese:");
+                                        if(scanner.hasNextInt()){
+                                            monthExpense = scanner.nextInt();
+                                            System.out.println("Hai inserito: "+ monthExpense);
+                                            break;
+                                        } else {
+                                            System.out.println("Input non valido, riprova,");
+                                            scanner.next();
+                                        }
                                     }
-                                }
-                                //----------------------------...anno...-------------------------------
-                                int yearExpense;
-                                while(true){
-                                    System.out.println("Inserisci l'anno:");
-                                    if(scanner.hasNextInt()){
-                                        yearExpense = scanner.nextInt();
-                                        System.out.println("Hai inserito: "+ yearExpense);
-                                        break;
-                                    } else {
-                                        System.out.println("Input non valido, riprova,");
-                                        scanner.next();
+                                    //----------------------------...anno...-------------------------------
+                                    int yearExpense;
+                                    while(true){
+                                        System.out.println("Inserisci l'anno:");
+                                        if(scanner.hasNextInt()){
+                                            yearExpense = scanner.nextInt();
+                                            System.out.println("Hai inserito: "+ yearExpense);
+                                            break;
+                                        } else {
+                                            System.out.println("Input non valido, riprova,");
+                                            scanner.next();
+                                        }
                                     }
-                                }
 
-                                //----------------------------..descrizione...------------------------------
-                                String descriptionExpense;
-                                while(true){
-                                    System.out.println("Inserisci la descrizione:");
-                                    if(scanner.hasNextLine()){
-                                        //consuma un carattere del precedente input
-                                        scanner.nextLine();
-                                        descriptionExpense = scanner.nextLine();
-                                        System.out.println("Hai inserito: "+ descriptionExpense);
-                                        break;
-                                    } else {
-                                        System.out.println("Input non valido, riprova,");
-                                        scanner.next();
+                                    //----------------------------..descrizione...------------------------------
+                                    String descriptionExpense;
+                                    while(true){
+                                        System.out.println("Inserisci la descrizione:");
+                                        if(scanner.hasNextLine()){
+                                            //consuma un carattere del precedente input
+                                            scanner.nextLine();
+                                            descriptionExpense = scanner.nextLine();
+                                            System.out.println("Hai inserito: "+ descriptionExpense);
+                                            break;
+                                        } else {
+                                            System.out.println("Input non valido, riprova,");
+                                            scanner.next();
+                                        }
                                     }
-                                }
-                                //-------------------------...preparazione messaggio...------------------------
-                                commandHandler.expenseMessage(id_client,amountExpense,dayExpense,monthExpense,yearExpense,descriptionExpense);
+                                    //-------------------------...preparazione messaggio...------------------------
+                                    commandHandler.expenseMessage(id_client,amountExpense,dayExpense,monthExpense,yearExpense,descriptionExpense);
 
-                                break;
-                            case 2:
-                                // visualizzare i coinquilini
-                                commandHandler.viewRoomates();
+                                    break;
+                                case 2:
+                                    // visualizzare i coinquilini
+                                    commandHandler.viewRoomates();
 
-                                //elabora il messaggio ricevuto dal Server
-                                Message replyFromServer = messageHandler.receive();
-                                messageHandler.handle(replyFromServer);
+                                    //elabora il messaggio ricevuto dal Server
+                                    Message replyFromServer = messageHandler.receive();
+                                    messageHandler.handle(replyFromServer);
 
-                                break;
-                            case 3:
-                                // pagamento di una spesa
-                                //TODO inserisce id di una spesa-> lo stato della spesa => pagata
-                                //quando uno paga la spesa ( importo payee_amount )-> nella tabella balance ha amount_owed - quello pagato?
-                                int idExpense;
-                                while(true){
-                                    System.out.println("Inserisci il codice della spesa:");
-                                    if(scanner.hasNextInt()){
-                                        idExpense = scanner.nextInt();
-                                        System.out.println("Hai inserito: "+ idExpense);
-                                        break;
-                                    } else {
-                                        System.out.println("Input non valido, riprova,");
-                                        scanner.next();
+                                    break;
+                                case 3:
+                                    // pagamento di una spesa
+                                    //TODO inserisce id di una spesa-> lo stato della spesa => pagata
+                                    //quando uno paga la spesa ( importo payee_amount )-> nella tabella balance ha amount_owed - quello pagato?
+                                    int idExpense;
+                                    while(true){
+                                        System.out.println("Inserisci il codice della spesa:");
+                                        if(scanner.hasNextInt()){
+                                            idExpense = scanner.nextInt();
+                                            System.out.println("Hai inserito: "+ idExpense);
+                                            break;
+                                        } else {
+                                            System.out.println("Input non valido, riprova,");
+                                            scanner.next();
+                                        }
                                     }
-                                }
-                                commandHandler.paymentRequset(idExpense);
-                                Message paymentReplyFromServer = messageHandler.receive();
-                                messageHandler.handle(paymentReplyFromServer);
-                                break;
-                            case 4:
-                                commandHandler.consultationExpensesToBePaidRequest();
-                                //elabora il messaggio ricevuto dal Server
-                                Message replyFromServerForExpenseToBePaid = messageHandler.receive();
-                                messageHandler.handle(replyFromServerForExpenseToBePaid);
-                                break;
-                            case 5:
-                                commandHandler.consultationExpensesPaidRequest();
-                                Message replyFromServerForExpensePaid = messageHandler.receive();
-                                messageHandler.handle(replyFromServerForExpensePaid);
-                                break;
-                            case 0:
-                                Client.setLoggedIn(false);
-                                commandHandler.logoutMessage();
-                                // esci dalla condizione logged -> quindi torna all'interfaccia iniziale
-                                break;
-                            default:
-                                System.out.println("Opzione non valida. Riprova.");
-                                break;
+                                    commandHandler.paymentRequset(idExpense);
+                                    Message paymentReplyFromServer = messageHandler.receive();
+                                    messageHandler.handle(paymentReplyFromServer);
+                                    break;
+                                case 4:
+                                    commandHandler.consultationExpensesToBePaidRequest();
+                                    //elabora il messaggio ricevuto dal Server
+                                    Message replyFromServerForExpenseToBePaid = messageHandler.receive();
+                                    messageHandler.handle(replyFromServerForExpenseToBePaid);
+                                    break;
+                                case 5:
+                                    commandHandler.consultationExpensesPaidRequest();
+                                    Message replyFromServerForExpensePaid = messageHandler.receive();
+                                    messageHandler.handle(replyFromServerForExpensePaid);
+                                    break;
+                                case 6:
+                                case 0:
+                                    Client.setLoggedIn(false);
+                                    commandHandler.logoutMessage();
+                                    // esci dalla condizione logged -> quindi torna all'interfaccia iniziale
+                                    Client.isAdmin = false;
+                                    break;
+                                default:
+                                    System.out.println("Opzione non valida. Riprova.");
+                                    break;
+                            }
+                        }
+                    } else {
+                    //l'utente è un amministratore
+                        while (scelta != 0) {
+                            System.out.println("                  ");
+                            System.out.println("Scegli un'opzione:");
+                            System.out.println("1. Inserisci una spesa");
+                            System.out.println("2. Visualizzare tutti i coinquilini");
+                            System.out.println("3. Pagare una spesa");
+                            System.out.println("4. Consultazione lista delle spese da pagare");
+                            System.out.println("5. Consultazione lista delle spese pagate");
+                            System.out.println("6. Consultazione lista delle spese inserite");
+                            System.out.println("7. Cancellare tutte le informazioni");
+                            System.out.println("8. Cancellare le spese e i conti");
+                            System.out.println("0. Esci");
+
+                            scelta = scannerAfterLogin.nextInt();
+                            //scanner.nextLine(); // consuma il carattere newline rimanente dopo nextInt()
+
+                            switch (scelta) {
+                                case 1:
+                                    // inserisci una spesa
+
+                                    //-----------------------------...importo...------------------------------
+                                    //legge un double -> l'importo
+                                    double amountExpense;
+                                    while(true){
+                                        System.out.println("Inserisci l'importo della spesa:");
+                                        if(scanner.hasNextDouble()){
+                                            amountExpense = scanner.nextDouble();
+                                            System.out.println("Hai inserito: "+ amountExpense);
+                                            break;
+                                        } else {
+                                            System.out.println("Input non valido, riprova,");
+                                            scanner.next();
+                                        }
+                                    }
+                                    //----------------------------...giorno...-------------------------------
+                                    int dayExpense;
+                                    while(true){
+                                        System.out.println("Inserisci il giorno:");
+                                        if(scanner.hasNextInt()){
+                                            dayExpense = scanner.nextInt();
+                                            System.out.println("Hai inserito: "+ dayExpense);
+                                            break;
+                                        } else {
+                                            System.out.println("Input non valido, riprova,");
+                                            scanner.next();
+                                        }
+                                    }
+                                    //----------------------------...month...--------------------------------
+                                    int monthExpense;
+                                    while(true){
+                                        System.out.println("Inserisci il mese:");
+                                        if(scanner.hasNextInt()){
+                                            monthExpense = scanner.nextInt();
+                                            System.out.println("Hai inserito: "+ monthExpense);
+                                            break;
+                                        } else {
+                                            System.out.println("Input non valido, riprova,");
+                                            scanner.next();
+                                        }
+                                    }
+                                    //----------------------------...anno...-------------------------------
+                                    int yearExpense;
+                                    while(true){
+                                        System.out.println("Inserisci l'anno:");
+                                        if(scanner.hasNextInt()){
+                                            yearExpense = scanner.nextInt();
+                                            System.out.println("Hai inserito: "+ yearExpense);
+                                            break;
+                                        } else {
+                                            System.out.println("Input non valido, riprova,");
+                                            scanner.next();
+                                        }
+                                    }
+
+                                    //----------------------------..descrizione...------------------------------
+                                    String descriptionExpense;
+                                    while(true){
+                                        System.out.println("Inserisci la descrizione:");
+                                        if(scanner.hasNextLine()){
+                                            //consuma un carattere del precedente input
+                                            scanner.nextLine();
+                                            descriptionExpense = scanner.nextLine();
+                                            System.out.println("Hai inserito: "+ descriptionExpense);
+                                            break;
+                                        } else {
+                                            System.out.println("Input non valido, riprova,");
+                                            scanner.next();
+                                        }
+                                    }
+                                    //-------------------------...preparazione messaggio...------------------------
+                                    commandHandler.expenseMessage(id_client,amountExpense,dayExpense,monthExpense,yearExpense,descriptionExpense);
+
+                                    break;
+                                case 2:
+                                    // visualizzare i coinquilini
+                                    commandHandler.viewRoomates();
+
+                                    //elabora il messaggio ricevuto dal Server
+                                    Message replyFromServer = messageHandler.receive();
+                                    messageHandler.handle(replyFromServer);
+
+                                    break;
+                                case 3:
+                                    // pagamento di una spesa
+                                    //TODO inserisce id di una spesa-> lo stato della spesa => pagata
+                                    //quando uno paga la spesa ( importo payee_amount )-> nella tabella balance ha amount_owed - quello pagato?
+                                    int idExpense;
+                                    while(true){
+                                        System.out.println("Inserisci il codice della spesa:");
+                                        if(scanner.hasNextInt()){
+                                            idExpense = scanner.nextInt();
+                                            System.out.println("Hai inserito: "+ idExpense);
+                                            break;
+                                        } else {
+                                            System.out.println("Input non valido, riprova,");
+                                            scanner.next();
+                                        }
+                                    }
+                                    commandHandler.paymentRequset(idExpense);
+                                    Message paymentReplyFromServer = messageHandler.receive();
+                                    messageHandler.handle(paymentReplyFromServer);
+                                    break;
+                                case 4:
+                                    commandHandler.consultationExpensesToBePaidRequest();
+                                    //elabora il messaggio ricevuto dal Server
+                                    Message replyFromServerForExpenseToBePaid = messageHandler.receive();
+                                    messageHandler.handle(replyFromServerForExpenseToBePaid);
+                                    break;
+                                case 5:
+                                    commandHandler.consultationExpensesPaidRequest();
+                                    Message replyFromServerForExpensePaid = messageHandler.receive();
+                                    messageHandler.handle(replyFromServerForExpensePaid);
+                                    break;
+                                case 6:
+                                case 7:
+                                    commandHandler.deleteAllInfoRequest();
+                                    break;
+                                case 8:
+                                    commandHandler.deleteExpensesBalanceRequest();
+                                    break;
+                                case 0:
+                                    Client.setLoggedIn(false);
+                                    Client.isAdmin = false;
+                                    commandHandler.logoutMessage();
+                                    // esci dalla condizione logged -> quindi torna all'interfaccia iniziale
+                                    break;
+                                default:
+                                    System.out.println("Opzione non valida. Riprova.");
+                                    break;
+                            }
                         }
                     }
 
 
                 }
+
             }
 
 
@@ -270,6 +443,9 @@ public class Client {
         Client.id_client = id_client;
     }
 
+    public static void setAdmin(){
+        Client.isAdmin = true;
+    }
     private static void inserisciSpesa(Scanner scanner, ObjectOutputStream  output, ObjectInputStream input) throws IOException {
         System.out.println("Inserisci l'importo della spesa:");
         double importo = scanner.nextDouble();

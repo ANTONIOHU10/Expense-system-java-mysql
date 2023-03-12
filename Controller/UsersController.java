@@ -19,15 +19,20 @@ public class UsersController {
 
     }
 
-    public boolean registerAccount(String username, String password) throws SQLException {
+    public boolean registerAccount(String username, String password,int ifAdmin) throws SQLException {
 
         //Il PreparedStatement è utilizzato per inviare una query SQL al database.
             //Questa query inserisce una nuova riga nella tabella "users" del database "test", con i valori "username" e "password" passati come parametri.
-        PreparedStatement preparedStatement = dbConnection.prepareStatement("INSERT INTO test.users (username, password) VALUES (?, ?)");
+        PreparedStatement preparedStatement = dbConnection.prepareStatement("INSERT INTO test.users (username, password, role) VALUES (?, ?, ?)");
 
         //Il metodo "setString" imposta il valore del parametro specificato (in questo caso, "?") con il valore della stringa specificata.
         preparedStatement.setString(1, username);
         preparedStatement.setString(2, password);
+        if(ifAdmin==1){
+            preparedStatement.setString(3, "Admin");
+        } else {
+            preparedStatement.setString(3, "User");
+        }
         // Il valore restituito da questo metodo è il numero di righe modificate dalla query (in questo caso, il numero di righe inserite nella tabella "users").
         int rowsInserted = preparedStatement.executeUpdate();
         // Il metodo restituisce "true" se il numero di righe inserite è maggiore di zero, altrimenti restituisce "false". Ciò indica se l'inserimento nella tabella è riuscito o meno.
@@ -83,6 +88,45 @@ public class UsersController {
             usernames.add(username);
         }
         return usernames;
+    }
+    public String getUserRoleById(int id) throws SQLException {
+        String querySql = "SELECT role FROM test.users WHERE id = ?";
+        PreparedStatement queryStatement = dbConnection.prepareStatement(querySql);
+        queryStatement.setInt(1, id);
+        ResultSet resultSet = queryStatement.executeQuery();
+        if (resultSet.next()) {
+            String role = resultSet.getString("role");
+            if (role.equals("Admin") || role.equals("User")) {
+                return role;
+            } else {
+                throw new SQLException("Invalid user role.");
+            }
+        } else {
+            throw new SQLException("User with ID " + id + " not found.");
+        }
+    }
+
+    public void deleteAllData() throws SQLException {
+        String deleteUsersSql = "DELETE FROM test.users";
+        String deleteBalanceSql = "DELETE FROM test.balance";
+        String deleteExpenseSql = "DELETE FROM test.expense";
+        try (Statement statement = dbConnection.createStatement()) {
+            statement.executeUpdate(deleteUsersSql);
+            statement.executeUpdate(deleteBalanceSql);
+            statement.executeUpdate(deleteExpenseSql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public void deleteExpensesBalance() throws SQLException {
+        String deleteBalanceSqlNew = "DELETE FROM test.balance";
+        String deleteExpenseSqlNew = "DELETE FROM test.expense";
+        try (Statement statement = dbConnection.createStatement()) {
+            statement.executeUpdate(deleteBalanceSqlNew);
+            statement.executeUpdate(deleteExpenseSqlNew);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 }

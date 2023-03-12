@@ -4,11 +4,13 @@ public class LoginResponseMessage extends Message{
     private Boolean ifSuccess;
     private String message;
     private int clientId;
-    public LoginResponseMessage(Boolean result,int clientId, String message) {
+    private int ifAdmin;
+    public LoginResponseMessage(Boolean result,int clientId, String message,int ifAdmin) {
         super(MessageType.LOGIN_RESPONSE);
         ifSuccess = result;
         this.message = message;
         this.clientId = clientId;
+        this.ifAdmin = ifAdmin;
 
     }
 
@@ -22,5 +24,9 @@ public class LoginResponseMessage extends Message{
 
     public int getClientId() {
         return clientId;
+    }
+
+    public int getIfAdmin() {
+        return ifAdmin;
     }
 }
