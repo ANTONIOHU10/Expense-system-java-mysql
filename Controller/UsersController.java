@@ -19,31 +19,32 @@ public class UsersController {
 
     }
 
-    /*
-    public void createTable() throws SQLException {
-        Statement statement = dbConnection.createStatement();
-        statement.executeUpdate("CREATE TABLE IF NOT EXISTS users (" +
-                "id INT NOT NULL AUTO_INCREMENT," +
-                "username VARCHAR(50) NOT NULL," +
-                "password VARCHAR(50) NOT NULL," +
-                "PRIMARY KEY (id)," +
-                "UNIQUE KEY (username)" +
-                ")");
-    }
-     */
-
     public boolean registerAccount(String username, String password) throws SQLException {
+
+        //Il PreparedStatement è utilizzato per inviare una query SQL al database.
+            //Questa query inserisce una nuova riga nella tabella "users" del database "test", con i valori "username" e "password" passati come parametri.
         PreparedStatement preparedStatement = dbConnection.prepareStatement("INSERT INTO test.users (username, password) VALUES (?, ?)");
+
+        //Il metodo "setString" imposta il valore del parametro specificato (in questo caso, "?") con il valore della stringa specificata.
         preparedStatement.setString(1, username);
         preparedStatement.setString(2, password);
+        // Il valore restituito da questo metodo è il numero di righe modificate dalla query (in questo caso, il numero di righe inserite nella tabella "users").
         int rowsInserted = preparedStatement.executeUpdate();
+        // Il metodo restituisce "true" se il numero di righe inserite è maggiore di zero, altrimenti restituisce "false". Ciò indica se l'inserimento nella tabella è riuscito o meno.
         return rowsInserted > 0;
     }
 
     public boolean usernameExists(String username) throws SQLException {
+        //Questa query seleziona tutte le righe dalla tabella "users" del database "test"
+        // dove il valore della colonna "username" corrisponde al parametro fornito.
         PreparedStatement preparedStatement = dbConnection.prepareStatement("SELECT * FROM test.users WHERE username = ?");
         preparedStatement.setString(1, username);
+        //Il metodo "executeQuery" restituisce un oggetto ResultSet che contiene i risultati della query.
         ResultSet resultSet = preparedStatement.executeQuery();
+        //il metodo restituisce "true" se il ResultSet contiene almeno una riga, altrimenti restituisce "false".
+        // Ciò indica se l'username fornito esiste già nella tabella "users".
+            // La chiamata "resultSet.next()" restituisce "true" se il ResultSet contiene almeno una riga.
+            // Se il ResultSet è vuoto, restituirà "false".
         return resultSet.next();
     }
     public boolean login(String username, String password) throws SQLException {
@@ -68,8 +69,16 @@ public class UsersController {
         List<String> usernames = new ArrayList<>();
         String selectSql = "SELECT username FROM test.users";
         Statement selectStatement = dbConnection.createStatement();
+
+        //La query SQL può selezionare dati da una o più tabelle del database,
+        // e i dati risultanti verranno restituiti come un oggetto ResultSet.
         ResultSet resultSet = selectStatement.executeQuery(selectSql);
+
+        //La chiamata a "next()" restituisce "true" se ci sono ulteriori righe nel ResultSet e sposta il cursore alla prima riga disponibile.
+            //Il blocco di codice all'interno del ciclo "while" viene eseguito finché ci sono ulteriori righe nel ResultSet.
         while (resultSet.next()) {
+            // il metodo "getString" dell'oggetto ResultSet per recuperare il valore della colonna "username" della riga corrente
+                //Il valore viene assegnato alla variabile "username".
             String username = resultSet.getString("username");
             usernames.add(username);
         }

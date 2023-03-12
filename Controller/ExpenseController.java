@@ -33,24 +33,31 @@ public class ExpenseController {
         // Get the list of usernames from the users table
         List<String> usernames = getUsernames();
 
-        // Calculate the payee amount per user
-        int numUsers = usernames.size() - 1; // exclude payer from count
+        // Calcola il numero di persone che devono pagare
+        // Calcola l'importo da pagare per ognuno
+        //fixme => se voglio che anche il payer paga un importo-> tolgo -1/ aggiungo -1, così tutti pagano un certo importo
+        int numUsers = usernames.size(); // exclude payer from count
         double payeeAmount = amount / numUsers;
 
-        // Insert new expense record for each user
+        // Ottiene expense_id della nuova spesa
         int expenseId = getNextExpenseId();
+        // Per ogni utente
         for (String username : usernames) {
+            //quando non è l'utente che ha pagato la spesa
             if (!username.equals(getUsernameById(idUser))) {
                 // payee record
                 //fixme -> se voglio utilizzare username, basta manipolare sui metodi getIdByUsername e getUsernameById
                 insertExpenseRecord(expenseId, idUser, getIdByUsername(username), amount, payeeAmount, day, month, year, description);
                 //fixme -> aggiornamento della tabella Balance
-                updateBalanceFromExpense(expenseId);
+
 
                 // payer record
                 //insertExpenseRecord(expenseId, idUser, idUser, amount, 0, day, month, year, description);
             }
         }
+        //! non metto dentro il for di sopra, crea problemi
+        updateBalanceFromExpense(expenseId);
+        setBalance();
     }
 
     //metodo ausiliare:
@@ -70,13 +77,20 @@ public class ExpenseController {
     }
 
     //metodo ausiliare
+    //il codice cerca il valore massimo della colonna "expense_id" nella tabella "expense" del database,
+    // e restituisce il valore successivo per creare un nuovo ID univoco per l'aggiunta di una nuova spesa alla tabella.
     private int getNextExpenseId() throws SQLException {
+        //La query seleziona il valore massimo della colonna "expense_id" dalla tabella "expense".
         String querySql = "SELECT MAX(expense_id) FROM expense";
         Statement queryStatement = dbConnection.createStatement();
         ResultSet resultSet = queryStatement.executeQuery(querySql);
+        //Viene utilizzato il metodo "next()" dell'oggetto ResultSet per spostare il cursore sulla prima riga dei risultati.
+        // Se ci sono risultati disponibili, la riga successiva verrà eseguita.
         if (resultSet.next()) {
+            //La chiamata al metodo "getInt()" dell'oggetto ResultSet restituisce il valore intero corrispondente al risultato della query.
             return resultSet.getInt(1) + 1;
         } else {
+            //Se la query non ha restituito risultati (ad esempio, la tabella "expense" è vuota), viene restituito il valore 1 come valore di ritorno del metodo.
             return 1;
         }
     }
@@ -98,9 +112,15 @@ public class ExpenseController {
     private String getUsernameById(int id) throws SQLException {
         String querySql = "SELECT username FROM users WHERE id = ?";
         PreparedStatement queryStatement = dbConnection.prepareStatement(querySql);
+        //1 = il primo parametro, id = parametro di "?"
         queryStatement.setInt(1, id);
         ResultSet resultSet = queryStatement.executeQuery();
+        //La riga "if (resultSet.next())" controlla se l'oggetto ResultSet
+        // ha almeno una riga di risultati, che si sposta sulla prima riga del risultato se presente
         if (resultSet.next()) {
+            //Il metodo "getString(1)" dell'oggetto ResultSet restituisce il valore della prima colonna della riga corrente come una stringa.
+            // In questo caso, la query seleziona solo una colonna "username" -> perché gli altri sono uguali
+            // Quindi il valore restituito dalla riga è il nome utente corrispondente all'ID passato come parametro al metodo.
             return resultSet.getString(1);
         } else {
             throw new SQLException("User with ID " + id + " not found.");
@@ -131,6 +151,8 @@ public class ExpenseController {
     public void updateBalanceFromExpense(int expenseId) throws SQLException {
         // Ottieni i payee_id per la spesa con l'id specificato
         List<Integer> payeeIds = new ArrayList<>();
+        List<Integer> allId = new ArrayList<>();
+
         String query = "SELECT DISTINCT payee_id FROM expense WHERE expense_id = ?";
         try (PreparedStatement statement = dbConnection.prepareStatement(query)) {
             statement.setInt(1, expenseId);
@@ -140,36 +162,47 @@ public class ExpenseController {
             }
         }
 
-        // Verifica se gli id dei payee sono presenti nella tabella balance
-        for (int payeeId : payeeIds) {
+        allId = payeeIds;
+        allId.add(getPayerIdForExpense(expenseId));
+
+        // Verifica se gli id dei payee(appena estratti) sono presenti nella tabella balance
+        for (int id : allId) {
             query = "SELECT * FROM balance WHERE id = ?";
             try (PreparedStatement statement = dbConnection.prepareStatement(query)) {
-                statement.setInt(1, payeeId);
+                statement.setInt(1, id);
                 ResultSet resultSet = statement.executeQuery();
                 if (!resultSet.next()) {
                     // Il payee non è presente nella tabella balance, lo aggiungi
                     query = "INSERT INTO balance (id, amount_paid) VALUES (?, ?)";
+                    //per ogni istruzione MySQL devo stabilire una connessione
                     try (PreparedStatement insertStatement = dbConnection.prepareStatement(query)) {
-                        insertStatement.setInt(1, payeeId);
+                        insertStatement.setInt(1, id);
                         insertStatement.setDouble(2, 0.0);
                         insertStatement.executeUpdate();
                     }
                 }
             }
         }
-
+        //fixme: ottiene la somma di payee_amount = payer_amount
         // Aggiorna la quantità "amount_paid" per ogni payee nella tabella balance
-        query = "UPDATE balance SET amount_paid = amount_paid + ? WHERE id = ?";
+        query = "UPDATE balance SET amount_owed = amount_owed + ? WHERE id = ?";
         try (PreparedStatement statement = dbConnection.prepareStatement(query)) {
+            //utilizzo del metodo ausiliare
             statement.setDouble(1, getPayeeAmountForExpense(expenseId));
+            //fixme: qui devo passare solo chi ha pagato, non quelli che devono pagare
+            //versione originale di *
+
             for (int payeeId : payeeIds) {
                 statement.setInt(2, payeeId);
                 statement.executeUpdate();
             }
+
+            //fixme: è una prova *
+            //statement.setDouble(2,getPayerIdForExpense(expenseId));
         }
 
         // Aggiorna la quantità "amount_owed" per il payer nella tabella balance
-        query = "UPDATE balance SET amount_owed = amount_owed + ? WHERE id = ?";
+        query = "UPDATE balance SET amount_paid = amount_paid+ ? WHERE id = ?";
         try (PreparedStatement statement = dbConnection.prepareStatement(query)) {
             statement.setDouble(1, getPayerAmountForExpense(expenseId));
             statement.setInt(2, getPayerIdForExpense(expenseId));
@@ -178,12 +211,12 @@ public class ExpenseController {
     }
 
     private double getPayeeAmountForExpense(int expenseId) throws SQLException {
-        String query = "SELECT SUM(payee_amount) AS total FROM expense WHERE expense_id = ?";
+        String query = "SELECT payee_amount FROM expense WHERE expense_id = ? LIMIT 1";
         try (PreparedStatement statement = dbConnection.prepareStatement(query)) {
             statement.setInt(1, expenseId);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                return resultSet.getDouble("total");
+                return resultSet.getDouble("payee_amount");
             } else {
                 return 0.0;
             }
@@ -215,6 +248,13 @@ public class ExpenseController {
             }
         }
     }
+    public void setBalance() throws SQLException {
+        String query = "UPDATE balance SET balance = amount_paid - amount_owed";
+        try (PreparedStatement statement = dbConnection.prepareStatement(query)) {
+            statement.executeUpdate();
+        }
+    }
+
 
 
 
