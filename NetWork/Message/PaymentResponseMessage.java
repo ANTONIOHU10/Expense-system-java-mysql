@@ -6,4 +6,8 @@ public class PaymentResponseMessage extends Message{
         super(MessageType.PAYMENT_EXPENSE_RESPONSE);
         this.message = message;
     }
+
+    public String getMessage() {
+        return message;
+    }
 }

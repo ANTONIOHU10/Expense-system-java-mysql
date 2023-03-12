@@ -134,6 +134,14 @@ public class ClientHandler extends Thread {
                         case PAYMENT_EXPENSE_REQUEST:
                             PaymentRequestMessage paymentRequestMessage = (PaymentRequestMessage) request;
                             System.out.println(">>>ricevuto una richiesta di pagamento della spesa:     "+paymentRequestMessage.getExpenseId());
+                            boolean ifPaid = expenseController.payExpense(paymentRequestMessage.getExpenseId(),idUser);
+                            if(ifPaid==true){
+                                //invio l'avvenuta successa del pagamento
+                                serverMessageHandler.send(new PaymentResponseMessage("Pagamento avvenuto con successo!"));
+                            } else {
+                                //invio messaggio che non può pagare di nuovo
+                                serverMessageHandler.send(new PaymentResponseMessage("Non puoi pagare di nuovo!"));
+                            }
                             break;
                         case CONSULTATION_EXPENSES_PAID_REQUEST:
                             System.out.println(">>>ricevuto una richiesta di consultazione delle spese pagate");

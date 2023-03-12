@@ -244,6 +244,79 @@ public class ExpenseController {
         }
     }
 
+    public boolean payExpense(int expenseId, int payee_id) throws SQLException {
+        //verifico se la persona che sta cercando di pagare è la stessa che ha caricato la spesa
+
+
+        String querysql = "SELECT COUNT(*) FROM expense WHERE expense_id = ? AND payer_id = ?";
+        PreparedStatement queryStatement = dbConnection.prepareStatement(querysql);
+        queryStatement.setInt(1,expenseId);
+        queryStatement.setInt(2,payee_id);
+        ResultSet resultSet = queryStatement.executeQuery();
+        if(resultSet.next()){
+            int count = resultSet.getInt(1);
+            //caso 0 :non può pagare di nuovo
+            if(count >0){
+
+                return false;
+
+
+            //caso 1 :può pagare
+            } else {
+                //prima si verifica se è stato già pagata la spesa
+
+                if(isExpensePaid(expenseId,payee_id)) {
+                    return false;
+                } else {
+
+                    //pay the amount_owed amount
+                    String querysqlPayment = "UPDATE balance SET amount_owed = amount_owed - ? WHERE id = ? ";
+                    PreparedStatement queryStatementPayment = dbConnection.prepareStatement(querysqlPayment);
+                    queryStatementPayment.setDouble(1,getPayeeAmountForExpense(expenseId));
+                    queryStatementPayment.setInt(2,payee_id);
+                    queryStatementPayment.executeUpdate();
+
+                    //take away from amount_paid from the (payer) of the expense
+                    String querysqlPaymentPayer = "UPDATE balance SET amount_paid = amount_paid - ? WHERE id = ? ";
+                    PreparedStatement queryStatementPaymentPayer = dbConnection.prepareStatement(querysqlPaymentPayer);
+                    queryStatementPaymentPayer.setDouble(1,getPayeeAmountForExpense(expenseId));
+                    queryStatementPaymentPayer.setInt(2,getPayerIdForExpense(expenseId));
+                    queryStatementPaymentPayer.executeUpdate();
+
+                    //aggiornamento del balance
+                    setBalance();
+                    //set ifPaid = 1
+                    String query = "UPDATE expense SET ifPaid = 1 WHERE expense_id = ? AND payee_id = ?";
+                    try (PreparedStatement statement = dbConnection.prepareStatement(query)){
+                        statement.setInt(1, expenseId);
+                        statement.setInt(2, payee_id);
+                        statement.executeUpdate();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public boolean isExpensePaid(int expense_id, int payee_id) throws SQLException {
+        String querySql = "SELECT ifPaid FROM expense WHERE expense_id = ? AND payee_id = ?";
+        try (PreparedStatement queryStatement = dbConnection.prepareStatement(querySql)) {
+            queryStatement.setInt(1, expense_id);
+            queryStatement.setInt(2,payee_id);
+            try (ResultSet resultSet = queryStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    int ifPaid = resultSet.getInt("ifPaid");
+                    return ifPaid == 1;
+                }
+            }
+        }
+        return false;
+    }
+
 
 
 

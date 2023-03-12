@@ -217,6 +217,8 @@ public class Client {
                                     }
                                 }
                                 commandHandler.paymentRequset(idExpense);
+                                Message paymentReplyFromServer = messageHandler.receive();
+                                messageHandler.handle(paymentReplyFromServer);
                                 break;
                             case 4:
                                 commandHandler.consultationExpensesToBePaidRequest();

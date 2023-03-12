@@ -33,7 +33,7 @@ public class MessageHandler {
     //elabora il messaggio ricevuto
     public void handle(Message message) {
         MessageType type = message.getType();
-        System.out.println(">>>>il messaggio ricevuto è tipo"+type);
+        System.out.println(">>>>il messaggio ricevuto è tipo "+type);
         switch (type) {
 
             case LOGIN_RESPONSE:
@@ -44,6 +44,10 @@ public class MessageHandler {
                 break;
             case VIEW_USERNAMES_RESPONSE:
                 handlerViewUsernamesResponse((ViewUsernamesResponse) message);
+                break;
+            case PAYMENT_EXPENSE_RESPONSE:
+                handlerPaymentResponse((PaymentResponseMessage) message);
+                break;
             // handle other message types here
         }
     }
@@ -62,11 +66,17 @@ public class MessageHandler {
     private void handleRegisterResponse(RegisterResponseMessage message){
         System.out.println("Hai ricevuto un messaggio: >>>    "+ message.getMessage());
     }
+
     private void handlerViewUsernamesResponse(ViewUsernamesResponse message){
         System.out.println("Questi sono i tuoi coinquilini:");
         for(int i=0; i<message.getUsernames().size();i++){
             System.out.println(message.getUsernames().get(i));
         }
+    }
+
+    private void handlerPaymentResponse(PaymentResponseMessage message){
+        System.out.println("Messaggio relativo al pagamento effettuato");
+        System.out.println(message.getMessage());
     }
     public ObjectInputStream getInput() {
         return input;
