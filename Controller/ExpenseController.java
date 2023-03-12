@@ -316,9 +316,33 @@ public class ExpenseController {
         }
         return false;
     }
+    //if
+    // option =0 -> to be paid
+    // option =1 -> paid
+     public List<Expense> consultListExpense(int id_user,int option) throws SQLException {
+        //lista da restituire
+        List<Expense> expenses = new ArrayList<>();
 
+        String querySql = "SELECT * FROM expense WHERE payee_id = ? AND ifPaid = ?";
+        PreparedStatement queryStatement = dbConnection.prepareStatement(querySql);
+        queryStatement.setInt(1, id_user);
+        queryStatement.setInt(2,option);
+        ResultSet resultSet = queryStatement.executeQuery();
+        while (resultSet.next()) {
 
-
+            int expenseIdResult = resultSet.getInt("expense_id");
+            int payerId = resultSet.getInt("payer_id");
+            int payerAmount = resultSet.getInt("payer_amount");
+            int payeeAmount = resultSet.getInt("payee_amount");
+            int day = resultSet.getInt("day");
+            int month = resultSet.getInt("month");
+            int year = resultSet.getInt("year");
+            String description= resultSet.getString("description");
+            Expense expense = new Expense(expenseIdResult,payerId,payerAmount,payeeAmount,day,month,year,description);
+            expenses.add(expense);
+        }
+        return expenses;
+    }
 
 
 }

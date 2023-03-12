@@ -222,9 +222,14 @@ public class Client {
                                 break;
                             case 4:
                                 commandHandler.consultationExpensesToBePaidRequest();
+                                //elabora il messaggio ricevuto dal Server
+                                Message replyFromServerForExpenseToBePaid = messageHandler.receive();
+                                messageHandler.handle(replyFromServerForExpenseToBePaid);
                                 break;
                             case 5:
                                 commandHandler.consultationExpensesPaidRequest();
+                                Message replyFromServerForExpensePaid = messageHandler.receive();
+                                messageHandler.handle(replyFromServerForExpensePaid);
                                 break;
                             case 0:
                                 Client.setLoggedIn(false);

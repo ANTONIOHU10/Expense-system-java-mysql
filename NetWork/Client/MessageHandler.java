@@ -48,6 +48,11 @@ public class MessageHandler {
             case PAYMENT_EXPENSE_RESPONSE:
                 handlerPaymentResponse((PaymentResponseMessage) message);
                 break;
+            case CONSULTATION_EXPENSES_TO_BE_PAID_RESPONSE:
+                handlerExpenseToBePaidResponse((ConsultExpensesToBePaidResponse) message);
+                break;
+            case CONSULTATION_EXPENSES_PAID_RESPONSE:
+                handlerExpensePaidResponse((ConsultExpensesPaidResponse) message);
             // handle other message types here
         }
     }
@@ -77,6 +82,36 @@ public class MessageHandler {
     private void handlerPaymentResponse(PaymentResponseMessage message){
         System.out.println("Messaggio relativo al pagamento effettuato");
         System.out.println(message.getMessage());
+    }
+
+    private void handlerExpenseToBePaidResponse(ConsultExpensesToBePaidResponse message){
+        System.out.println("Elenco delle spese da pagare:    "+"ci sono "+message.getListOfExpense().size()+" spese");
+        for(int i=0; i<message.getListOfExpense().size();i++){
+            System.out.println("Codice spesa: "+ message.getListOfExpense().get(i).getExpense_id()
+                    + "Codice pagante: "+ message.getListOfExpense().get(i).getId_payer()
+                    + "Totale: "+message.getListOfExpense().get(i).getPayer_amount()
+                    + "Da pagare: "+message.getListOfExpense().get(i).getPayee_amount()
+                    + "Giorno: "+message.getListOfExpense().get(i).getDay()
+                    + "Mese: "+message.getListOfExpense().get(i).getMonth()
+                    + "Anno: "+message.getListOfExpense().get(i).getYear()
+                    + "Descrizione: "+message.getListOfExpense().get(i).getDescription()
+            );
+        }
+    }
+
+    private void handlerExpensePaidResponse(ConsultExpensesPaidResponse message){
+        System.out.println("Elenco delle spese pagate:    "+"ci sono "+message.getListOfExpense().size()+" spese");
+        for(int i=0; i<message.getListOfExpense().size();i++){
+            System.out.println("Codice spesa: "+ message.getListOfExpense().get(i).getExpense_id()
+                    + " Codice pagante: "+ message.getListOfExpense().get(i).getId_payer()
+                    + " Totale: "+message.getListOfExpense().get(i).getPayer_amount()
+                    + " Pagata: "+message.getListOfExpense().get(i).getPayee_amount()
+                    + " Giorno: "+message.getListOfExpense().get(i).getDay()
+                    + " Mese: "+message.getListOfExpense().get(i).getMonth()
+                    + " Anno: "+message.getListOfExpense().get(i).getYear()
+                    + " Descrizione: "+message.getListOfExpense().get(i).getDescription()
+            );
+        }
     }
     public ObjectInputStream getInput() {
         return input;

@@ -6,16 +6,20 @@ import java.util.Objects;
 
 public class Expense implements Serializable {
     private static final long serialVersionUID = 1L;
+    private int expense_id;
     private int id_payer;
-    private double amount;
+    private double payer_amount;
+    private double payee_amount;
     private int day;
     private int month;
     private int year;
     private String description;
 
-    public Expense(int id_payer, double amount,int day, int month, int year, String description){
+    public Expense(int expense_id,int id_payer, double payer_amount,double payee_amount,int day, int month, int year, String description){
+        this.expense_id = expense_id;
         this.id_payer = id_payer;
-        this.amount = amount;
+        this.payer_amount = payer_amount;
+        this.payee_amount = payee_amount;
         this.day = day;
         this.month = month;
         this.year = year;
@@ -26,8 +30,8 @@ public class Expense implements Serializable {
         return description;
     }
 
-    public double getAmount() {
-        return amount;
+    public double getPayer_amount() {
+        return payer_amount;
     }
 
     public int getDay() {
@@ -36,6 +40,14 @@ public class Expense implements Serializable {
 
     public int getMonth() {
         return month;
+    }
+
+    public int getExpense_id() {
+        return expense_id;
+    }
+
+    public double getPayee_amount() {
+        return payee_amount;
     }
 
     public int getId_payer() {
@@ -49,29 +61,4 @@ public class Expense implements Serializable {
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }
-
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
-
-    public void setDay(int day) {
-        this.day = day;
-    }
-
-    public void setMonth(int month) {
-        this.month = month;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setId_payer(int id_payer) {
-        this.id_payer = id_payer;
-    }
-
-    public void setYear(int year) {
-        this.year = year;
-    }
-
-}
+ }

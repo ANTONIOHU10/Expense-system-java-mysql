@@ -116,7 +116,7 @@ public class ClientHandler extends Thread {
                         case EXPENSE:
                             System.out.println("esegue operazione del caso EXPENSE");
                             ExpenseMessage expenseMessage = (ExpenseMessage) request;
-                            double amount = expenseMessage.getExpense().getAmount();
+                            double amount = expenseMessage.getExpense().getPayer_amount();
                             int day = expenseMessage.getExpense().getDay();
                             int month = expenseMessage.getExpense().getMonth();
                             int year = expenseMessage.getExpense().getYear();
@@ -145,9 +145,15 @@ public class ClientHandler extends Thread {
                             break;
                         case CONSULTATION_EXPENSES_PAID_REQUEST:
                             System.out.println(">>>ricevuto una richiesta di consultazione delle spese pagate");
+                            //option 1= paid
+                            ConsultExpensesPaidResponse consultExpensesPaidResponse = new ConsultExpensesPaidResponse(expenseController.consultListExpense(idUser,1));
+                            serverMessageHandler.send(consultExpensesPaidResponse);
                             break;
                         case CONSULTATION_EXPENSES_TO_BE_PAID_REQUEST:
                             System.out.println(">>>ricevuto una richiesta di consultazione delle spese da pagare");
+                            //option 0= to be paid
+                            ConsultExpensesToBePaidResponse consultExpensesToBePaidResponse = new ConsultExpensesToBePaidResponse(expenseController.consultListExpense(idUser,0));
+                            serverMessageHandler.send(consultExpensesToBePaidResponse);
                             break;
                     }
 

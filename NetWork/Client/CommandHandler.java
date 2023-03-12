@@ -35,7 +35,7 @@ public class CommandHandler {
 
     //operazione inserimento spesa
     public void expenseMessage(int id_payer, double amount, int day, int month , int year, String description) throws IOException {
-        ExpenseMessage message = new ExpenseMessage(new Expense(id_payer, amount, day, month, year, description));
+        ExpenseMessage message = new ExpenseMessage(new Expense(0,id_payer,amount ,0, day, month, year, description));
         messageHandler.send(message);
     }
 
