@@ -388,4 +388,18 @@ public class ExpenseController {
         return balances;
 
     }
+
+    public boolean consultIfExistsExpense(int expenseId) throws SQLException {
+
+        String querySql = "SELECT COUNT(*) FROM expense WHERE expense_id = ?";
+        PreparedStatement queryStatement = dbConnection.prepareStatement(querySql);
+        queryStatement.setInt(1, expenseId);
+        ResultSet resultSet = queryStatement.executeQuery();
+        if (resultSet.next()) {
+            int count = resultSet.getInt(1);
+            return count > 0;
+        } else {
+            return false;
+        }
+    }
 }

@@ -123,6 +123,7 @@ public class MessageHandler {
                     + " Descrizione: "+message.getListOfExpense().get(i).getDescription()
             );
         }
+        Client.setExpensesList(message.getListOfExpense());
     }
 
     private void handlerExpensePaidResponse(ConsultExpensesPaidResponse message){
@@ -138,6 +139,7 @@ public class MessageHandler {
                     + " Descrizione: "+message.getListOfExpense().get(i).getDescription()
             );
         }
+        Client.setExpensesList(message.getListOfExpense());
     }
 
     private void handlerAllExpensesConsultationResponse(ConsultAllExpensesResponse message){
@@ -155,6 +157,7 @@ public class MessageHandler {
                     + " Se pagato: "+message.getListOfExpense().get(i).getIfPaid()
             );
         }
+        Client.setExpensesList(message.getListOfExpense());
     }
 
     private void handlerAllBalanceConsultationResponse(ConsultBalanceResponse message){

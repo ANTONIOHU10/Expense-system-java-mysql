@@ -1,10 +1,13 @@
 package NetWork.Client;
 
 import JavaFX.ClientApplication;
+import Model.Expense;
 import NetWork.Message.Message;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -16,7 +19,7 @@ public class Client {
     private static int id_client;
     private static boolean isAdmin = false;
     private static String message;
-
+    private static List<Expense> expensesList = new ArrayList<>();
     public static MessageHandler messageHandler;
     public static CommandHandler commandHandler;
     //GUI
@@ -499,7 +502,9 @@ public class Client {
     public static void setId_client(int id_client) {
         Client.id_client = id_client;
     }
-
+    public static void setExpensesList(List<Expense> expensesList){
+        Client.expensesList = expensesList;
+    }
     public static void setAdmin(){
         Client.isAdmin = true;
     }
@@ -514,7 +519,9 @@ public class Client {
         return message;
     }
 
-
+    public static List<Expense> getExpensesList() {
+        return expensesList;
+    }
 
     private static void inserisciSpesa(Scanner scanner, ObjectOutputStream  output, ObjectInputStream input) throws IOException {
         System.out.println("Inserisci l'importo della spesa:");

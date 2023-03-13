@@ -142,13 +142,20 @@ public class ClientHandler extends Thread {
                             PaymentRequestMessage paymentRequestMessage = (PaymentRequestMessage) request;
                             System.out.println(">>>ricevuto una richiesta di pagamento della spesa:     "+paymentRequestMessage.getExpenseId());
                             boolean ifPaid = expenseController.payExpense(paymentRequestMessage.getExpenseId(),idUser);
-                            if(ifPaid==true){
-                                //invio l'avvenuta successa del pagamento
-                                serverMessageHandler.send(new PaymentResponseMessage("Pagamento avvenuto con successo!"));
+                            boolean ifExists = expenseController.consultIfExistsExpense(paymentRequestMessage.getExpenseId());
+                            if(ifExists){
+                                if(ifPaid){
+                                    //invio l'avvenuta successa del pagamento
+                                    serverMessageHandler.send(new PaymentResponseMessage("Pagamento avvenuto con successo!"));
+                                } else {
+                                    //invio messaggio che non può pagare di nuovo
+                                    serverMessageHandler.send(new PaymentResponseMessage("Non puoi pagare di nuovo!"));
+                                }
                             } else {
-                                //invio messaggio che non può pagare di nuovo
-                                serverMessageHandler.send(new PaymentResponseMessage("Non puoi pagare di nuovo!"));
+                                //invio messaggio che la spesa non esiste
+                                serverMessageHandler.send(new PaymentResponseMessage("Non esiste la spesa inserita!"));
                             }
+
                             break;
                         case CONSULTATION_EXPENSES_PAID_REQUEST:
                             System.out.println(">>>ricevuto una richiesta di consultazione delle spese pagate");

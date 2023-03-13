@@ -1,5 +1,6 @@
 package JavaFX;
 
+import Model.Expense;
 import NetWork.Client.Client;
 import NetWork.Message.Message;
 import javafx.event.ActionEvent;
@@ -11,8 +12,10 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
@@ -221,5 +224,166 @@ public class AdminAfterLoginController {
                 break;
             }
         }
+    }
+
+    public void handleConsultExpensesToBePaidAction(ActionEvent event) throws IOException, ClassNotFoundException {
+        //invia un messsaggio al Server
+        Client.commandHandler.consultationExpensesToBePaidRequest();
+
+        //riceve un messaggio dal Server
+        Message replyFromServer = Client.messageHandler.receive();
+        Client.messageHandler.handle(replyFromServer);
+
+        TableView<Expense> table = new TableView<>();
+
+        // Definizione delle colonne della tabella
+        TableColumn<Expense, Integer> codeCol = new TableColumn<>("Codice spesa");
+        codeCol.setCellValueFactory(new PropertyValueFactory<>("expense_id"));
+
+        TableColumn<Expense, Integer> payerCol = new TableColumn<>("Codice pagante");
+        payerCol.setCellValueFactory(new PropertyValueFactory<>("id_payer"));
+
+        TableColumn<Expense, Double> totalCol = new TableColumn<>("Totale");
+        totalCol.setCellValueFactory(new PropertyValueFactory<>("payer_amount"));
+
+        TableColumn<Expense, Double> paidCol = new TableColumn<>("Pagata");
+        paidCol.setCellValueFactory(new PropertyValueFactory<>("payee_amount"));
+
+        TableColumn<Expense, Integer> dayCol = new TableColumn<>("Giorno");
+        dayCol.setCellValueFactory(new PropertyValueFactory<>("day"));
+
+        TableColumn<Expense, Integer> monthCol = new TableColumn<>("Mese");
+        monthCol.setCellValueFactory(new PropertyValueFactory<>("month"));
+
+        TableColumn<Expense, Integer> yearCol = new TableColumn<>("Anno");
+        yearCol.setCellValueFactory(new PropertyValueFactory<>("year"));
+
+        TableColumn<Expense, String> descCol = new TableColumn<>("Descrizione");
+        descCol.setCellValueFactory(new PropertyValueFactory<>("description"));
+
+        TableColumn<Expense, Integer> paidStatusCol = new TableColumn<>("Se pagata(1 = sì /0 = no)");
+        paidStatusCol.setCellValueFactory(new PropertyValueFactory<>("ifPaid"));
+
+        table.getColumns().addAll(codeCol, payerCol, totalCol, paidCol, dayCol, monthCol, yearCol, descCol, paidStatusCol);
+        table.getItems().addAll(Client.getExpensesList());
+
+        VBox vbox = new VBox(table);
+        Scene scene = new Scene(vbox);
+
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("Tabella delle spese");
+
+        Client.setExpensesList(null);
+        stage.show();
+
+    }
+
+    public void handleConsultExpensesPaidAction(ActionEvent event) throws IOException, ClassNotFoundException {
+        //invia un messsaggio al Server
+        Client.commandHandler.consultationExpensesPaidRequest();
+
+        //riceve un messaggio dal Server
+        Message replyFromServer = Client.messageHandler.receive();
+        Client.messageHandler.handle(replyFromServer);
+
+        TableView<Expense> table = new TableView<>();
+
+        // Definizione delle colonne della tabella
+        TableColumn<Expense, Integer> codeCol = new TableColumn<>("Codice spesa");
+        codeCol.setCellValueFactory(new PropertyValueFactory<>("expense_id"));
+
+        TableColumn<Expense, Integer> payerCol = new TableColumn<>("Codice pagante");
+        payerCol.setCellValueFactory(new PropertyValueFactory<>("id_payer"));
+
+        TableColumn<Expense, Double> totalCol = new TableColumn<>("Totale");
+        totalCol.setCellValueFactory(new PropertyValueFactory<>("payer_amount"));
+
+        TableColumn<Expense, Double> paidCol = new TableColumn<>("Pagata");
+        paidCol.setCellValueFactory(new PropertyValueFactory<>("payee_amount"));
+
+        TableColumn<Expense, Integer> dayCol = new TableColumn<>("Giorno");
+        dayCol.setCellValueFactory(new PropertyValueFactory<>("day"));
+
+        TableColumn<Expense, Integer> monthCol = new TableColumn<>("Mese");
+        monthCol.setCellValueFactory(new PropertyValueFactory<>("month"));
+
+        TableColumn<Expense, Integer> yearCol = new TableColumn<>("Anno");
+        yearCol.setCellValueFactory(new PropertyValueFactory<>("year"));
+
+        TableColumn<Expense, String> descCol = new TableColumn<>("Descrizione");
+        descCol.setCellValueFactory(new PropertyValueFactory<>("description"));
+
+        TableColumn<Expense, Integer> paidStatusCol = new TableColumn<>("Se pagata(1 = sì /0 = no)");
+        paidStatusCol.setCellValueFactory(new PropertyValueFactory<>("ifPaid"));
+
+        table.getColumns().addAll(codeCol, payerCol, totalCol, paidCol, dayCol, monthCol, yearCol, descCol, paidStatusCol);
+        table.getItems().addAll(Client.getExpensesList());
+
+        VBox vbox = new VBox(table);
+        Scene scene = new Scene(vbox);
+
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("Tabella delle spese");
+
+        Client.setExpensesList(null);
+        stage.show();
+
+    }
+
+    public void handleConsultAllExpensesAction(ActionEvent event) throws IOException, ClassNotFoundException {
+        //invia un messsaggio al Server
+        Client.commandHandler.consultationAllExpenses();
+
+        //riceve un messaggio dal Server
+        Message replyFromServer = Client.messageHandler.receive();
+        Client.messageHandler.handle(replyFromServer);
+
+        TableView<Expense> table = new TableView<>();
+
+        // Definizione delle colonne della tabella
+        TableColumn<Expense, Integer> codeCol = new TableColumn<>("Codice spesa");
+        codeCol.setCellValueFactory(new PropertyValueFactory<>("expense_id"));
+
+        TableColumn<Expense, Integer> payerCol = new TableColumn<>("Codice pagante");
+        payerCol.setCellValueFactory(new PropertyValueFactory<>("id_payer"));
+
+        TableColumn<Expense, Double> totalCol = new TableColumn<>("Totale");
+        totalCol.setCellValueFactory(new PropertyValueFactory<>("payer_amount"));
+
+        TableColumn<Expense, Double> paidCol = new TableColumn<>("Pagata");
+        paidCol.setCellValueFactory(new PropertyValueFactory<>("payee_amount"));
+
+        TableColumn<Expense, Integer> dayCol = new TableColumn<>("Giorno");
+        dayCol.setCellValueFactory(new PropertyValueFactory<>("day"));
+
+        TableColumn<Expense, Integer> monthCol = new TableColumn<>("Mese");
+        monthCol.setCellValueFactory(new PropertyValueFactory<>("month"));
+
+        TableColumn<Expense, Integer> yearCol = new TableColumn<>("Anno");
+        yearCol.setCellValueFactory(new PropertyValueFactory<>("year"));
+
+        TableColumn<Expense, String> descCol = new TableColumn<>("Descrizione");
+        descCol.setCellValueFactory(new PropertyValueFactory<>("description"));
+
+        TableColumn<Expense, Integer> paidStatusCol = new TableColumn<>("Se pagata(1 = sì /0 = no)");
+        paidStatusCol.setCellValueFactory(new PropertyValueFactory<>("ifPaid"));
+
+        table.getColumns().addAll(codeCol, payerCol, totalCol, paidCol, dayCol, monthCol, yearCol, descCol, paidStatusCol);
+        table.getItems().addAll(Client.getExpensesList());
+
+        VBox vbox = new VBox(table);
+        Scene scene = new Scene(vbox);
+
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("Tabella delle spese");
+
+        Client.setExpensesList(null);
+        stage.show();
+    }
+
+    public void handleConsultBalanceAction(ActionEvent event) {
     }
 }
