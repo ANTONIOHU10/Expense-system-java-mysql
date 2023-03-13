@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="598.0" prefWidth="871.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="JavaFX.AdminAfterLoginController">
+    <ImageView fitHeight="629.0" fitWidth="916.0" layoutY="-18.0" pickOnBounds="true" preserveRatio="true">
+        <image>
+            <Image url="@../Resourse/pexels-photo-629167.jpeg" />
+        </image>
+    </ImageView>
+    <Button fx:id="button1" layoutX="14.0" layoutY="239.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="186.0" text="1. Inserire una spesa" textAlignment="JUSTIFY" />
+    <Button fx:id="button2" layoutX="14.0" layoutY="294.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="236.0" text="2. Visualizzare tutti i coinquilin2" />
+    <Button fx:id="button3" layoutX="13.0" layoutY="344.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="186.0" text="3. Pagare una spesa" textAlignment="JUSTIFY" />
+    <Button fx:id="button4" layoutX="14.0" layoutY="399.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="333.0" text="4. Consultazione lista delle spese da pagare" textAlignment="JUSTIFY" />
+    <Button fx:id="button5" layoutX="14.0" layoutY="448.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="326.0" text="5. Consultazione lista delle spese pagate" textAlignment="JUSTIFY" />
+    <Button fx:id="button6" layoutX="13.0" layoutY="499.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="316.0" text="6. Consultazione tutta la cronologia" textAlignment="JUSTIFY" />
+    <Button fx:id="button7" layoutX="13.0" layoutY="553.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="268.0" text="7. Consultazione la tabella bilancio" textAlignment="JUSTIFY" />
+   <Button fx:id="button8" layoutX="518.0" layoutY="239.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="236.0" text="8. Cancellare tutte le informazioni" textAlignment="JUSTIFY" />
+   <Button fx:id="button9" layoutX="518.0" layoutY="294.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="236.0" text="9. Cancellare le spese e i conti" textAlignment="JUSTIFY" />
+   <Button fx:id="button0" layoutX="14.0" layoutY="29.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="186.0" text="0. Uscire" textAlignment="JUSTIFY" />
+</AnchorPane>

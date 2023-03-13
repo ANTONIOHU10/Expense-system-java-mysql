@@ -17,14 +17,14 @@ public class ClientApplication extends Application {
     public void start(Stage primaryStage) throws Exception{
         //viene creato un oggetto FXMLLoader che viene utilizzato per caricare il file FXML
         // Controller.fxml che contiene la struttura della GUI dell'applicazione.
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Controller.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("BeforeLoginScene.fxml"));
 
         //carica il file FXML e lo converte in un oggetto Parent
         // che rappresenta la radice della scena principale.
         Parent root = loader.load();
 
         //Questa riga imposta il titolo della finestra principale.
-        primaryStage.setTitle("Hello World");
+        primaryStage.setTitle("Payment system");
 
         primaryStage.setResizable(false); //finestra modificabile
         primaryStage.setMaximized(false);

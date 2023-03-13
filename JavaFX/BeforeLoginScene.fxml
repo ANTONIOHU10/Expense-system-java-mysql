@@ -9,13 +9,13 @@
 <AnchorPane prefHeight="598.0" prefWidth="871.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="JavaFX.Controller">
    <ImageView fitHeight="629.0" fitWidth="916.0" layoutY="-18.0" pickOnBounds="true" preserveRatio="true">
       <image>
-         <Image url="E:\ingegneria_software_progetto_finale\ProgettoSoftware2023\Resourse\pexels-photo-629167.jpeg" />
+         <Image url="@../Resourse/pexels-photo-629167.jpeg" />
       </image>
    </ImageView>
-    <Button cache="true" cacheHint="QUALITY" layoutX="380.0" layoutY="330.0" onAction="#handleButtonAction" prefHeight="51.0" prefWidth="109.0" text="Login">
+    <Button fx:id="LoginButton" cache="true" cacheHint="QUALITY" layoutX="380.0" layoutY="330.0" onAction="#handleLoginButtonAction" prefHeight="51.0" prefWidth="109.0" text="Login">
       <effect>
          <Blend />
       </effect></Button>
-   <Button layoutX="379.0" layoutY="405.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="110.0" text="Register" />
-   <Button layoutX="379.0" layoutY="473.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="110.0" text="Exit" />
+   <Button fx:id="RegisterButton" layoutX="379.0" layoutY="405.0" mnemonicParsing="false" onAction="#handleRegisterButtonAction" prefHeight="51.0" prefWidth="110.0" text="Register" />
+   <Button fx:id="ExitButton" layoutX="379.0" layoutY="473.0" mnemonicParsing="false" onAction="#handleExitButton" prefHeight="51.0" prefWidth="110.0" text="Exit" />
 </AnchorPane>
