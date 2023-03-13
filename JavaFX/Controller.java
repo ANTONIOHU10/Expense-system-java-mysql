@@ -112,6 +112,13 @@ public class Controller {
             currentStage.setScene(newScene);
             currentStage.show();
         } else {
+            //fixme: se le credenziali sono errate -> deve notificare l'utente
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Login fallito");
+            alert.setHeaderText("Username o password errati");
+            alert.setContentText("Si prega di riprovare.");
+
+            alert.showAndWait();
             System.out.println("Fallito!");
         }
     }
