@@ -6,13 +6,15 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MessageHandler {
     private ObjectOutputStream output;
     private ObjectInputStream input;
     private Socket socket;
     private Client client;
-
+    private List<String> usernames = new ArrayList<>();
     //costruttore
     public MessageHandler(Socket socket) throws IOException {
         output = new ObjectOutputStream(socket.getOutputStream());
@@ -92,16 +94,20 @@ public class MessageHandler {
     private void handleExpenseResponse(ExpenseMessageResponse message){
         Client.setMessage(message.getMessage());
     }
+
+
     private void handlerViewUsernamesResponse(ViewUsernamesResponse message){
         System.out.println("Questi sono i tuoi coinquilini:");
         for(int i=0; i<message.getUsernames().size();i++){
             System.out.println(message.getUsernames().get(i));
         }
+        usernames = message.getUsernames();
     }
 
     private void handlerPaymentResponse(PaymentResponseMessage message){
         System.out.println("Messaggio relativo al pagamento effettuato");
         System.out.println(message.getMessage());
+        Client.setMessage(message.getMessage());
     }
 
     private void handlerExpenseToBePaidResponse(ConsultExpensesToBePaidResponse message){
@@ -179,4 +185,9 @@ public class MessageHandler {
         return socket;
     }
     // add other handler methods here
+
+
+    public List<String> getUsernames() {
+        return usernames;
+    }
 }

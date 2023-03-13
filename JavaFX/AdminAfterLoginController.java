@@ -12,11 +12,14 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Optional;
 
 public class AdminAfterLoginController {
 
@@ -136,9 +139,87 @@ public class AdminAfterLoginController {
         dialog.show();
     }
 
-    public void handleViewAllMembersAdmin(ActionEvent event) {
+    public void handleViewAllMembersAdmin(ActionEvent event) throws IOException, ClassNotFoundException {
+        //invia un messaggio al Server
+        Client.commandHandler.viewRoomates();
+
+        //riceve un messaggio dal Server
+        Message replyFromServer = Client.messageHandler.receive();
+        Client.messageHandler.handle(replyFromServer);
+
+        //ottiene la lista dei nomi
+        //Client.messageHandler.getUsernames()
+
+        // Creazione del componente TextArea che conterrà gli elementi della lista
+        TextArea textArea = new TextArea();
+        textArea.setEditable(false);
+        textArea.setText(String.join("\n", Client.messageHandler.getUsernames()));
+
+        // Creazione del componente ScrollPane per permettere la visualizzazione della lista completa
+        ScrollPane scrollPane = new ScrollPane(textArea);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setPrefHeight(400);
+
+        // Creazione del componente di dialogo Alert e impostazione del contenuto della finestra
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Lista dei coinquilini");
+        alert.setHeaderText(null);
+        alert.getDialogPane().setContent(scrollPane);
+
+        // Impostazione del comportamento della finestra di dialogo
+        alert.showAndWait();
     }
 
     public void handlePaymentAdmin(ActionEvent event) {
+        int code = 0;
+
+        // Crea un TextInputDialog
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Inserisci il codice della spesa");
+        dialog.setHeaderText(null);
+        dialog.setContentText("Codice:");
+
+        // Loop finché l'utente non inserisce un valore valido
+        while (true) {
+            Optional<String> result = dialog.showAndWait();
+            if (result.isPresent()) {
+                try {
+                    code = Integer.parseInt(result.get());
+
+                    //invia un messaggio
+                    Client.commandHandler.paymentRequset(code);
+                    //System.out.println("->>>>>>>>>>>"+code);
+
+                    //riceve un messaggio dal server
+                    Message replyFromServer = Client.messageHandler.receive();
+                    Client.messageHandler.handle(replyFromServer);
+
+                    //notifica con il messaggio ricevuto
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("Messaggio: ");
+                    alert.setHeaderText("Inserimento della spesa: ");
+                    alert.setContentText(Client.getMessage());
+                    //messaggio di default
+                    Client.setMessage("");
+                    alert.showAndWait();
+
+                    break;
+                } catch (NumberFormatException e) {
+                    // Mostra un messaggio di errore se l'utente non ha inserito un intero
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Errore");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Inserisci un valore numerico intero!");
+                    alert.showAndWait();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                // L'utente ha premuto cancel
+                break;
+            }
+        }
     }
 }
