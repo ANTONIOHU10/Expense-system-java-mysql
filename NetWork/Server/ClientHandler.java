@@ -127,6 +127,8 @@ public class ClientHandler extends Thread {
                             int year = expenseMessage.getExpense().getYear();
                             String description = expenseMessage.getExpense().getDescription();
                             expenseController.insertExpense(idUser,amount, day, month,year,description);
+                            //messaggio di risposta
+                            serverMessageHandler.send(new ExpenseMessageResponse("Spesa inserita con successo!"));
                             break;
                         case VIEW_USERNAMES_REQUEST:
                             System.out.println("preparando i nomi dei coinquilini da inviare.....");

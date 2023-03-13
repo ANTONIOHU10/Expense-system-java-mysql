@@ -42,6 +42,9 @@ public class MessageHandler {
             case REGISTER_RESPONSE:
                 handleRegisterResponse((RegisterResponseMessage) message);
                 break;
+            case EXPENSE_RESPONSE:
+                handleExpenseResponse((ExpenseMessageResponse) message);
+                break;
             case VIEW_USERNAMES_RESPONSE:
                 handlerViewUsernamesResponse((ViewUsernamesResponse) message);
                 break;
@@ -81,10 +84,14 @@ public class MessageHandler {
         }
     }
     private void handleRegisterResponse(RegisterResponseMessage message){
-        System.out.println("Hai ricevuto un messaggio: >>>    "+ message.getMessage());
+        //System.out.println("Hai ricevuto un messaggio: >>>    "+ message.getMessage());
+        Client.setMessage(message.getMessage());
         //System.out.println("Sei un: "+message.getIfAdmin() +     "1= Admin, 0= User");
     }
 
+    private void handleExpenseResponse(ExpenseMessageResponse message){
+        Client.setMessage(message.getMessage());
+    }
     private void handlerViewUsernamesResponse(ViewUsernamesResponse message){
         System.out.println("Questi sono i tuoi coinquilini:");
         for(int i=0; i<message.getUsernames().size();i++){

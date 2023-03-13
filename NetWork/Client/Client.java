@@ -15,6 +15,7 @@ public class Client {
     private static boolean isLoggedIn = false;
     private static int id_client;
     private static boolean isAdmin = false;
+    private static String message;
 
     public static MessageHandler messageHandler;
     public static CommandHandler commandHandler;
@@ -486,7 +487,10 @@ public class Client {
     }
     public static boolean getIsAdmin(){
         return isAdmin;
+    }
 
+    public static int getIdClient(){
+        return id_client;
     }
     public static void setLoggedIn(boolean loggedIn) {
         isLoggedIn = loggedIn;
@@ -499,6 +503,18 @@ public class Client {
     public static void setAdmin(){
         Client.isAdmin = true;
     }
+
+    public static void setNotAdmin(){Client.isAdmin = false;}
+
+    public static void setMessage(String message) {
+        Client.message = message;
+    }
+
+    public static String getMessage() {
+        return message;
+    }
+
+
 
     private static void inserisciSpesa(Scanner scanner, ObjectOutputStream  output, ObjectInputStream input) throws IOException {
         System.out.println("Inserisci l'importo della spesa:");

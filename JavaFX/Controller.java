@@ -28,6 +28,7 @@ public class Controller {
 
     @FXML
     private Button ExitButton;
+
     @FXML
     private Scene scene;
 
@@ -81,6 +82,57 @@ public class Controller {
         //当用户单击登录按钮时，将用户名和密码传递回主应用程序
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == loginButtonType) {
+                //Inviare il messaggio al Server
+                try {
+                    Client.commandHandler.loginRequest(username.getText(),password.getText());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                //Ricevere un messaggio dal Server
+                Message replyFromServer = null;
+                try {
+                    replyFromServer = Client.messageHandler.receive();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+                Client.messageHandler.handle(replyFromServer);
+
+
+                //Verifica della condizione
+                if(Client.getIsLoggedIn()){
+                    FXMLLoader loader;
+                    if(Client.getIsAdmin()){
+
+                        loader = new FXMLLoader(getClass().getResource("AdminAfterLoginScene.fxml"));
+                    } else {
+                        loader = new FXMLLoader(getClass().getResource("UserAfterLoginScene.fxml"));
+                    }
+                    //System.out.println("Logged in !!!!!");
+
+                    //Apertura nuova scena
+                    Parent root = null;
+                    try {
+                        root = loader.load();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    Scene newScene = new Scene(root);
+                    Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                    currentStage.setScene(newScene);
+                    currentStage.show();
+                } else {
+
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Login fallito");
+                    alert.setHeaderText("Username o password errati");
+                    alert.setContentText("Si prega di riprovare.");
+
+                    alert.showAndWait();
+                    System.out.println("Fallito!");
+                }
                 return username.getText() + ":" + password.getText();
             }
             return null;
@@ -91,41 +143,14 @@ public class Controller {
 
         //如果用户单击登录按钮，则打印用户名和密码
         result.ifPresent(usernamePassword -> System.out.println("Username and password: " + usernamePassword));
-        Client.commandHandler.loginRequest(username.getText(),password.getText());
 
-        Message replyFromServer = Client.messageHandler.receive();
-        Client.messageHandler.handle(replyFromServer);
 
-        if(Client.getIsLoggedIn()){
-            FXMLLoader loader;
-            if(Client.getIsAdmin()){
 
-                loader = new FXMLLoader(getClass().getResource("AdminAfterLoginScene.fxml"));
-            } else {
-                loader = new FXMLLoader(getClass().getResource("UserAfterLoginScene.fxml"));
-            }
-            //System.out.println("Logged in !!!!!");
-
-            Parent root = loader.load();
-            Scene newScene = new Scene(root);
-            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            currentStage.setScene(newScene);
-            currentStage.show();
-        } else {
-            //fixme: se le credenziali sono errate -> deve notificare l'utente
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Login fallito");
-            alert.setHeaderText("Username o password errati");
-            alert.setContentText("Si prega di riprovare.");
-
-            alert.showAndWait();
-            System.out.println("Fallito!");
-        }
     }
 
 
     @FXML
-    private void handleRegisterButtonAction(ActionEvent event){
+    private void handleRegisterButtonAction(ActionEvent event) throws IOException, ClassNotFoundException {
         //crea un nuovo ChoiceBox per selezionare Admin o User
         ChoiceBox<String> userTypeChoiceBox = new ChoiceBox<>();
         userTypeChoiceBox.getItems().addAll("Admin", "User");
@@ -137,7 +162,7 @@ public class Controller {
         dialog.setHeaderText("Please enter your register information.");
 
         //crea il bottone di login
-        ButtonType loginButtonType = new ButtonType("Login", ButtonBar.ButtonData.OK_DONE);
+        ButtonType loginButtonType = new ButtonType("Register", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
 
         //crea il form
@@ -177,6 +202,39 @@ public class Controller {
         //quando l'utente clicca il bottone di login, ritorna l'username e la password
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == loginButtonType) {
+                //Inviare il messaggio al Server
+                if(userTypeChoiceBox.getValue().equals("Admin")){
+                    try {
+                        Client.commandHandler.registerRequest(username.getText(),password.getText(),1);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    try {
+                        Client.commandHandler.registerRequest(username.getText(),password.getText(),0);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                //Ricevere un messaggio dal Server
+                Message replyFromServer = null;
+                try {
+                    replyFromServer = Client.messageHandler.receive();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+                Client.messageHandler.handle(replyFromServer);
+
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Hai ricevuto un messaggio");
+                alert.setHeaderText("Message");
+                alert.setContentText(Client.getMessage());
+
+                alert.showAndWait();
+                //set message a default
                 return userTypeChoiceBox.getValue() + ":" + username.getText() + ":" + password.getText();
             }
             return null;
@@ -187,6 +245,9 @@ public class Controller {
 
         //se l'utente ha cliccato il bottone di login, stampa l'username e la password
         result.ifPresent(usernamePassword -> System.out.println("User Type, username, and password: " + usernamePassword));
+
+
+        Client.setMessage("");
 
     }
 
