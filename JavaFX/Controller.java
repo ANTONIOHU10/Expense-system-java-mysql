@@ -1,15 +1,22 @@
 package JavaFX;
 
+import NetWork.Client.Client;
+import NetWork.Client.CommandHandler;
+import NetWork.Client.MessageHandler;
+import NetWork.Message.Message;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.Optional;
 
 public class Controller {
@@ -29,7 +36,7 @@ public class Controller {
     }
 
     @FXML
-    private void handleLoginButtonAction(ActionEvent event) {
+    private void handleLoginButtonAction(ActionEvent event) throws IOException, ClassNotFoundException {
         //创建一个对话框
         Dialog<String> dialog = new Dialog<>();
         dialog.setTitle("Login Dialog");
@@ -84,11 +91,34 @@ public class Controller {
 
         //如果用户单击登录按钮，则打印用户名和密码
         result.ifPresent(usernamePassword -> System.out.println("Username and password: " + usernamePassword));
+        Client.commandHandler.loginRequest(username.getText(),password.getText());
+
+        Message replyFromServer = Client.messageHandler.receive();
+        Client.messageHandler.handle(replyFromServer);
+
+        if(Client.getIsLoggedIn()){
+            FXMLLoader loader;
+            if(Client.getIsAdmin()){
+
+                loader = new FXMLLoader(getClass().getResource("AdminAfterLoginScene.fxml"));
+            } else {
+                loader = new FXMLLoader(getClass().getResource("UserAfterLoginScene.fxml"));
+            }
+            //System.out.println("Logged in !!!!!");
+
+            Parent root = loader.load();
+            Scene newScene = new Scene(root);
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            currentStage.setScene(newScene);
+            currentStage.show();
+        } else {
+            System.out.println("Fallito!");
+        }
     }
 
 
     @FXML
-    private void handleRegisterButtonAction(ActionEvent event) {
+    private void handleRegisterButtonAction(ActionEvent event){
         //crea un nuovo ChoiceBox per selezionare Admin o User
         ChoiceBox<String> userTypeChoiceBox = new ChoiceBox<>();
         userTypeChoiceBox.getItems().addAll("Admin", "User");
@@ -150,6 +180,7 @@ public class Controller {
 
         //se l'utente ha cliccato il bottone di login, stampa l'username e la password
         result.ifPresent(usernamePassword -> System.out.println("User Type, username, and password: " + usernamePassword));
+
     }
 
     @FXML

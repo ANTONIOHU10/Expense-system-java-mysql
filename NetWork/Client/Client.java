@@ -1,41 +1,46 @@
 package NetWork.Client;
 
+import JavaFX.ClientApplication;
 import NetWork.Message.Message;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
  * Client + MessageHandler(riceve messaggio) + CommandHandler(invia messaggi) = part Client
  */
 public class Client {
+    //Variabili per identificazione
     private static boolean isLoggedIn = false;
     private static int id_client;
     private static boolean isAdmin = false;
+
+    public static MessageHandler messageHandler;
+    public static CommandHandler commandHandler;
+    //GUI
+
+
     public static void main(String[] args) {
         Client client = new Client();
         String host = "localhost"; // IP o nome del server
         int port = 8080; // porta su cui il server ascolta le connessioni
-
         try (
-
              Socket socket = new Socket(host, port);
 
              //legge un carattere dalla tastiera -> è necessario
              Scanner scanner = new Scanner(System.in)
         ) {
             //istanziare handler di message + command  -> set up
-            MessageHandler messageHandler = new MessageHandler(socket);
-            CommandHandler commandHandler = new CommandHandler(messageHandler);
+            messageHandler = new MessageHandler(socket);
+            commandHandler = new CommandHandler(messageHandler);
             System.out.println("Benvenuto nel sistema di gestione delle spese.");
 
-
+            ClientApplication.launch(ClientApplication.class,args);
+            //fixme---------------------le seguenti sono da togliere
             while(true){
                 if(!Client.isLoggedIn){
                     //TODO  ------------------------ prima login -----------------------------
-                    // Loop principale del client
                     System.out.println("Cosa vuoi fare?");
                     System.out.println("1. Login");
                     System.out.println("2. Registrazione");
@@ -476,7 +481,10 @@ public class Client {
     public static boolean getIsLoggedIn() {
         return isLoggedIn;
     }
+    public static boolean getIsAdmin(){
+        return isAdmin;
 
+    }
     public static void setLoggedIn(boolean loggedIn) {
         isLoggedIn = loggedIn;
     }
@@ -488,6 +496,7 @@ public class Client {
     public static void setAdmin(){
         Client.isAdmin = true;
     }
+
     private static void inserisciSpesa(Scanner scanner, ObjectOutputStream  output, ObjectInputStream input) throws IOException {
         System.out.println("Inserisci l'importo della spesa:");
         double importo = scanner.nextDouble();

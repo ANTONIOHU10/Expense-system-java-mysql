@@ -65,7 +65,10 @@ public class ClientApplication extends Application {
             // l'utente ha cliccato "Cancel" o ha chiuso la finestra di dialogo
         }
     }
+    /*
     public static void main(String[] args) {
         launch(args);
     }
+
+     */
 }

@@ -67,9 +67,11 @@ public class MessageHandler {
     private void handleLoginResponse(LoginResponseMessage message) {
         System.out.println("Hai ricevuto un messaggio:  >>>   "+ message.getMessage());
         // handle data reply message
+        //se login ha avuto successo
         if(message.getIfSuccess()){
             Client.setLoggedIn(true);
             Client.setId_client(message.getClientId());
+            //se è un admin
             if(message.getIfAdmin()==1){
                 Client.setAdmin();
             }
