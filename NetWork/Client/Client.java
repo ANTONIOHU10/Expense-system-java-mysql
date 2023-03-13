@@ -38,6 +38,7 @@ public class Client {
 
             ClientApplication.launch(ClientApplication.class,args);
             //fixme---------------------le seguenti sono da togliere
+            /*
             while(true){
                 if(!Client.isLoggedIn){
                     //TODO  ------------------------ prima login -----------------------------
@@ -470,10 +471,12 @@ public class Client {
 
             }
 
+             */
 
 
 
-        } catch (IOException | ClassNotFoundException e) {
+
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
