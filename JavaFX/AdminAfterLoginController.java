@@ -291,7 +291,7 @@ public class AdminAfterLoginController {
         TableColumn<Expense, Double> totalCol = new TableColumn<>("Totale");
         totalCol.setCellValueFactory(new PropertyValueFactory<>("payer_amount"));
 
-        TableColumn<Expense, Double> paidCol = new TableColumn<>("Pagata");
+        TableColumn<Expense, Double> paidCol = new TableColumn<>("Da pagare");
         paidCol.setCellValueFactory(new PropertyValueFactory<>("payee_amount"));
 
         TableColumn<Expense, Integer> dayCol = new TableColumn<>("Giorno");
@@ -349,7 +349,7 @@ public class AdminAfterLoginController {
         TableColumn<Expense, Double> totalCol = new TableColumn<>("Totale");
         totalCol.setCellValueFactory(new PropertyValueFactory<>("payer_amount"));
 
-        TableColumn<Expense, Double> paidCol = new TableColumn<>("Pagata");
+        TableColumn<Expense, Double> paidCol = new TableColumn<>("Da pagare");
         paidCol.setCellValueFactory(new PropertyValueFactory<>("payee_amount"));
 
         TableColumn<Expense, Integer> dayCol = new TableColumn<>("Giorno");
@@ -407,7 +407,7 @@ public class AdminAfterLoginController {
         TableColumn<Expense, Double> totalCol = new TableColumn<>("Totale");
         totalCol.setCellValueFactory(new PropertyValueFactory<>("payer_amount"));
 
-        TableColumn<Expense, Double> paidCol = new TableColumn<>("Pagata");
+        TableColumn<Expense, Double> paidCol = new TableColumn<>("Da pagare");
         paidCol.setCellValueFactory(new PropertyValueFactory<>("payee_amount"));
 
         TableColumn<Expense, Integer> dayCol = new TableColumn<>("Giorno");

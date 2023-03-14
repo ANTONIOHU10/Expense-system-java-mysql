@@ -60,10 +60,12 @@ public class ClientApplication extends Application {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Conferma chiusura");
         alert.setHeaderText("Sei sicuro di voler chiudere la finestra?");
+        alert.setGraphic(new ImageView(new Image("Resource/iconCoffee2.jpg")));
+        //set icon
         Stage stage=(Stage) alert.getDialogPane().getScene().getWindow();
         stage.getIcons().add(new Image("Resource/icon.png"));
 
-        alert.setContentText("Tutti i dati non salvati andranno persi.");
+        alert.setContentText("Tutti i dati sono salvati .");
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK){
             // esegui le operazioni di chiusura
