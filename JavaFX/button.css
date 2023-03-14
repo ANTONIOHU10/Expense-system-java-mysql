@@ -1,0 +1,30 @@
+.button {
+    -fx-background-color: #fff;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 1.5em;
+    -fx-border-width: 0;
+    -fx-text-fill: #0d172a;
+    -fx-font-family: "Basier Circle",-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+    -fx-font-size: 1.1em;
+    -fx-font-weight: 600;
+    -fx-padding: 1em 1.6em;
+    -fx-alignment: center;
+    -fx-text-decoration: underline;
+    -fx-text-decoration-color: #0d172a;
+    -fx-text-decoration-thickness: 1px;
+    -fx-effect: dropshadow(gaussian, rgba(166, 175, 195, 0.25), 0, 1, 2, 0);
+    -fx-cursor: hand;
+
+}
+
+.button:hover {
+    -fx-background-color: #1e293b;
+    -fx-text-fill: #fff;
+}
+
+@media (min-width: 768px) {
+    .button {
+        -fx-font-size: 1.125em;
+        -fx-padding: 1em 2em;
+    }
+}
