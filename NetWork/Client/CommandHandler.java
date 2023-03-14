@@ -2,7 +2,6 @@ package NetWork.Client;
 
 import Model.Expense;
 import NetWork.Message.*;
-
 import java.io.IOException;
 
 public record CommandHandler(MessageHandler messageHandler) {
@@ -128,6 +127,14 @@ public record CommandHandler(MessageHandler messageHandler) {
         messageHandler.send(message);
     }
 
+    /**
+     *
+     * @throws IOException error of the message I/O
+     */
+    public void logOutRequest() throws IOException {
+        LogoutMessage message = new LogoutMessage();
+        messageHandler.send(message);
+    }
 
     // add other command methods here
 

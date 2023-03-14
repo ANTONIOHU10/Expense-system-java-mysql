@@ -1,12 +1,21 @@
 package NetWork.Message;
 
 public class DeleteAllInformationResponse extends Message{
-    private String message;
+    private final String message;
+
+    /**
+     *
+     * @param message the message to be sent to Client
+     */
     public DeleteAllInformationResponse(String message) {
         super(MessageType.DELETE_ALL_INFORMATION_RESPONSE);
         this.message = message;
     }
 
+    /**
+     *
+     * @return the message to be sent to Client
+     */
     public String getMessage() {
         return message;
     }

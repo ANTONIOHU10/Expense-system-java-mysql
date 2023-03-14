@@ -6,77 +6,73 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class MessageHandler {
-    private ObjectOutputStream output;
-    private ObjectInputStream input;
-    private Socket socket;
-    private Client client;
+    private final ObjectOutputStream output;
+    private final ObjectInputStream input;
     private Map<Integer, String> idAndUsernames;
     //costruttore
+
+    /**
+     *
+     * @param socket the socket object of the client
+     * @throws IOException error of the I/O
+     */
     public MessageHandler(Socket socket) throws IOException {
         output = new ObjectOutputStream(socket.getOutputStream());
         input = new ObjectInputStream(socket.getInputStream());
-        this.socket = socket;
     }
 
+    /**
+     *
+     * @param message message of Message type to be sent
+     * @throws IOException error of the message I/O
+     */
     //invio del messaggio
     public void send(Message message) throws IOException {
         output.writeObject(message);
     }
 
+    /**
+     *
+     * @return the message of Message get from Server
+     * @throws IOException error of the message I/O
+     * @throws ClassNotFoundException error of the class used
+     */
     //riceve un messaggio
     public Message receive() throws IOException, ClassNotFoundException {
         return (Message) input.readObject();
     }
 
+    /**
+     *
+     * @param message message got from Server
+     */
     //elabora il messaggio ricevuto
     public void handle(Message message) {
         MessageType type = message.getType();
         System.out.println(">>>>il messaggio ricevuto è tipo "+type);
         switch (type) {
-
-            case LOGIN_RESPONSE:
-                handleLoginResponse((LoginResponseMessage) message);
-                break;
-            case REGISTER_RESPONSE:
-                handleRegisterResponse((RegisterResponseMessage) message);
-                break;
-            case EXPENSE_RESPONSE:
-                handleExpenseResponse((ExpenseMessageResponse) message);
-                break;
-            case VIEW_USERNAMES_RESPONSE:
-                handlerViewUsernamesResponse((ViewUsernamesResponse) message);
-                break;
-            case PAYMENT_EXPENSE_RESPONSE:
-                handlerPaymentResponse((PaymentResponseMessage) message);
-                break;
-            case CONSULTATION_EXPENSES_TO_BE_PAID_RESPONSE:
-                handlerExpenseToBePaidResponse((ConsultExpensesToBePaidResponse) message);
-                break;
-            case CONSULTATION_EXPENSES_PAID_RESPONSE:
-                handlerExpensePaidResponse((ConsultExpensesPaidResponse) message);
-                break;
-            case CONSULTATION_ALL_EXPENSES_INFORMATION_RESPONSE:
-                handlerAllExpensesConsultationResponse((ConsultAllExpensesResponse) message);
-                break;
-            case CONSULTATION_BALANCE_INFORMATION_RESPONSE:
-                handlerAllBalanceConsultationResponse((ConsultBalanceResponse) message);
-                break;
-            case DELETE_ALL_INFORMATION_RESPONSE:
-                handlerDeleteAllInfoResponse((DeleteAllInformationResponse) message);
-                break;
-            case DELETE_EXPENSES_BALANCE_INFORMATION_RESPONSE:
-                handlerDeleteExpenseBalance((DeleteExpensesBalanceResponse) message);
-                break;
-
+            case LOGIN_RESPONSE -> handleLoginResponse((LoginResponseMessage) message);
+            case REGISTER_RESPONSE -> handleRegisterResponse((RegisterResponseMessage) message);
+            case EXPENSE_RESPONSE -> handleExpenseResponse((ExpenseMessageResponse) message);
+            case VIEW_USERNAMES_RESPONSE -> handlerViewUsernamesResponse((ViewUsernamesResponse) message);
+            case PAYMENT_EXPENSE_RESPONSE -> handlerPaymentResponse((PaymentResponseMessage) message);
+            case CONSULTATION_EXPENSES_TO_BE_PAID_RESPONSE -> handlerExpenseToBePaidResponse((ConsultExpensesToBePaidResponse) message);
+            case CONSULTATION_EXPENSES_PAID_RESPONSE -> handlerExpensePaidResponse((ConsultExpensesPaidResponse) message);
+            case CONSULTATION_ALL_EXPENSES_INFORMATION_RESPONSE -> handlerAllExpensesConsultationResponse((ConsultAllExpensesResponse) message);
+            case CONSULTATION_BALANCE_INFORMATION_RESPONSE -> handlerAllBalanceConsultationResponse((ConsultBalanceResponse) message);
+            case DELETE_ALL_INFORMATION_RESPONSE -> handlerDeleteAllInfoResponse((DeleteAllInformationResponse) message);
+            case DELETE_EXPENSES_BALANCE_INFORMATION_RESPONSE -> handlerDeleteExpenseBalance((DeleteExpensesBalanceResponse) message);
             // handle other message types here
         }
     }
 
+    /**
+     *
+     * @param message Message got from Server
+     */
     private void handleLoginResponse(LoginResponseMessage message) {
         System.out.println("Hai ricevuto un messaggio:  >>>   "+ message.getMessage());
         // handle data reply message
@@ -93,28 +89,48 @@ public class MessageHandler {
             Client.setLoggedIn(false);
         }
     }
+
+    /**
+     *
+     * @param message Message got from Server
+     */
     private void handleRegisterResponse(RegisterResponseMessage message){
         //System.out.println("Hai ricevuto un messaggio: >>>    "+ message.getMessage());
         Client.setMessage(message.getMessage());
         //System.out.println("Sei un: "+message.getIfAdmin() +     "1= Admin, 0= User");
     }
 
+    /**
+     *
+     * @param message Message got from Server
+     */
     private void handleExpenseResponse(ExpenseMessageResponse message){
         Client.setMessage(message.getMessage());
     }
 
-
+    /**
+     *
+     * @param message Message got from Server
+     */
     private void handlerViewUsernamesResponse(ViewUsernamesResponse message){
 
         idAndUsernames = message.getUsernames();
     }
 
+    /**
+     *
+     * @param message Message got from Server
+     */
     private void handlerPaymentResponse(PaymentResponseMessage message){
         System.out.println("Messaggio relativo al pagamento effettuato");
         System.out.println(message.getMessage());
         Client.setMessage(message.getMessage());
     }
 
+    /**
+     *
+     * @param message Message got from Server
+     */
     private void handlerExpenseToBePaidResponse(ConsultExpensesToBePaidResponse message){
         System.out.println("Elenco delle spese da pagare:    "+"ci sono "+message.getListOfExpense().size()+" spese");
         for(int i=0; i<message.getListOfExpense().size();i++){
@@ -131,6 +147,10 @@ public class MessageHandler {
         Client.setExpensesList(message.getListOfExpense());
     }
 
+    /**
+     *
+     * @param message Message got from Server
+     */
     private void handlerExpensePaidResponse(ConsultExpensesPaidResponse message){
         System.out.println("Elenco delle spese pagate:    "+"ci sono "+message.getListOfExpense().size()+" spese");
         for(int i=0; i<message.getListOfExpense().size();i++){
@@ -147,6 +167,10 @@ public class MessageHandler {
         Client.setExpensesList(message.getListOfExpense());
     }
 
+    /**
+     *
+     * @param message Message got from Server
+     */
     private void handlerAllExpensesConsultationResponse(ConsultAllExpensesResponse message){
         System.out.println("Tutte le informazioni: ");
         System.out.println("Elenco delle spese :    "+"ci sono "+message.getListOfExpense().size()+" spese");
@@ -165,6 +189,10 @@ public class MessageHandler {
         Client.setExpensesList(message.getListOfExpense());
     }
 
+    /**
+     *
+     * @param message Message got from Server
+     */
     private void handlerAllBalanceConsultationResponse(ConsultBalanceResponse message){
         System.out.println("Tabella Balance: ");
         for(int i=0; i<message.getListOfBalance().size();i++){
@@ -176,28 +204,32 @@ public class MessageHandler {
         }
         Client.setBalanceList(message.getListOfBalance());
     }
+
+    /**
+     *
+     * @param message Message got from Server
+     */
     private void handlerDeleteAllInfoResponse(DeleteAllInformationResponse message){
         System.out.println(message.getMessage());
         Client.setMessage(message.getMessage());
 
     }
+
+    /**
+     *
+     * @param message Message got from Server
+     */
     private void handlerDeleteExpenseBalance(DeleteExpensesBalanceResponse message){
         System.out.println(message.getMessage());
         Client.setMessage(message.getMessage());
     }
-    public ObjectInputStream getInput() {
-        return input;
-    }
 
-    public ObjectOutputStream getOutput() {
-        return output;
-    }
-
-    public Socket getSocket() {
-        return socket;
-    }
     // add other handler methods here
 
+    /**
+     *
+     * @return map that contains unique value userId and usernames
+     */
     public Map<Integer, String> getIdAndUsernames() {
         return idAndUsernames;
     }

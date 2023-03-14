@@ -69,6 +69,9 @@ public class UserAfterLoginController {
     public void handleExitButtonActionUser(ActionEvent event) throws IOException {
         //Torna all'interfaccia iniziale
         Client.setNotAdmin();
+        //Notificare il server che ha effettuato il log out
+        Client.commandHandler.logOutRequest();
+
         FXMLLoader loaderInitial = new FXMLLoader(getClass().getResource("BeforeLoginScene.fxml"));
         Parent rootInitial = loaderInitial.load();
         Scene newScene = new Scene(rootInitial);
