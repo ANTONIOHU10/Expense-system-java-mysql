@@ -6,10 +6,8 @@ import NetWork.Client.Client;
 import NetWork.Message.Message;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -20,11 +18,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Pair;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -34,43 +29,17 @@ import java.util.Map;
 import java.util.Optional;
 
 public class AdminAfterLoginController {
-
-    @FXML
-    private Button button0;
-
-    @FXML
-    private Button button1;
-
-    @FXML
-    private Button button2;
-
-    @FXML
-    private Button button3;
-
-    @FXML
-    private Button button4;
-
-    @FXML
-    private Button button5;
-
-    @FXML
-    private Button button6;
-
-    @FXML
-    private Button button7;
-
-    @FXML
-    private Button button8;
-
-    @FXML
-    private Button button9;
-
     @FXML
     private CheckBox ifUserIdOn;
 
     @FXML
     private Label userId;
 
+    /**
+     *
+     * @param event click action
+     * @throws IOException error of action
+     */
     @FXML
     public void handleExitButtonAction(javafx.event.ActionEvent event) throws IOException {
 
@@ -85,8 +54,10 @@ public class AdminAfterLoginController {
         currentStage.show();
 
     }
+
+
     @FXML
-    public void handleInsertExpenseAdmin(ActionEvent eventClick) {
+    public void handleInsertExpenseAdmin() {
 
         // Crea la finestra di dialogo
         Stage dialog = new Stage();
@@ -135,9 +106,7 @@ public class AdminAfterLoginController {
                 Client.setMessage("");
 
                 alert.showAndWait();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
+            } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
 
@@ -163,8 +132,13 @@ public class AdminAfterLoginController {
         dialog.show();
     }
 
+    /**
+     *
+     * @throws IOException error of action
+     * @throws ClassNotFoundException error of connection
+     */
     @FXML
-    public void handleViewAllMembersAdmin(ActionEvent event) throws IOException, ClassNotFoundException {
+    public void handleViewAllMembersAdmin() throws IOException, ClassNotFoundException {
         //invia un messaggio al Server
         Client.commandHandler.viewRoomates();
 
@@ -173,7 +147,7 @@ public class AdminAfterLoginController {
         Client.messageHandler.handle(replyFromServer);
 
         // Creiamo una tabella
-        TableView<Map.Entry<Integer, String>> table = new TableView<Map.Entry<Integer, String>>();
+        TableView<Map.Entry<Integer, String>> table = new TableView<>();
 
         // Creiamo due colonne, una per l'id e una per lo username
         TableColumn<Map.Entry<Integer, String>, Integer> idColumn = new TableColumn<>("ID");
@@ -208,16 +182,16 @@ public class AdminAfterLoginController {
         stage.show();
     }
 
+
     @FXML
-    public void handlePaymentAdmin(ActionEvent event) {
-        int code = 0;
+    public void handlePaymentAdmin() {
+        int code;
 
         // Crea un TextInputDialog
         TextInputDialog dialog = new TextInputDialog();
 
         //set icon
-        Image icon = new Image("Resource/icon.png");
-        dialog.setTitle("Inserisci il codice della spesa");
+       dialog.setTitle("Inserisci il codice della spesa");
         dialog.setHeaderText(null);
         dialog.setContentText("Codice:");
         //set graphic
@@ -258,9 +232,7 @@ public class AdminAfterLoginController {
                     alert.setHeaderText(null);
                     alert.setContentText("Inserisci un valore numerico intero!");
                     alert.showAndWait();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ClassNotFoundException e) {
+                } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
             } else {
@@ -270,8 +242,13 @@ public class AdminAfterLoginController {
         }
     }
 
+    /**
+     *
+     * @throws IOException error of action
+     * @throws ClassNotFoundException error of class used
+     */
     @FXML
-    public void handleConsultExpensesToBePaidAction(ActionEvent event) throws IOException, ClassNotFoundException {
+    public void handleConsultExpensesToBePaidAction() throws IOException, ClassNotFoundException {
         //invia un messsaggio al Server
         Client.commandHandler.consultationExpensesToBePaidRequest();
 
@@ -328,8 +305,13 @@ public class AdminAfterLoginController {
 
     }
 
+    /**
+     *
+     * @throws IOException error of action
+     * @throws ClassNotFoundException error of class used
+     */
     @FXML
-    public void handleConsultExpensesPaidAction(ActionEvent event) throws IOException, ClassNotFoundException {
+    public void handleConsultExpensesPaidAction() throws IOException, ClassNotFoundException {
         //invia un messsaggio al Server
         Client.commandHandler.consultationExpensesPaidRequest();
 
@@ -386,8 +368,13 @@ public class AdminAfterLoginController {
 
     }
 
+    /**
+     *
+     * @throws IOException error of action
+     * @throws ClassNotFoundException error of class used
+     */
     @FXML
-    public void handleConsultAllExpensesAction(ActionEvent event) throws IOException, ClassNotFoundException {
+    public void handleConsultAllExpensesAction() throws IOException, ClassNotFoundException {
         //invia un messsaggio al Server
         Client.commandHandler.consultationAllExpenses();
 
@@ -443,8 +430,13 @@ public class AdminAfterLoginController {
         stage.show();
     }
 
+    /**
+     *
+     * @throws IOException error of action
+     * @throws ClassNotFoundException error of class used
+     */
     @FXML
-    public void handleConsultBalanceAction(ActionEvent event) throws IOException, ClassNotFoundException {
+    public void handleConsultBalanceAction() throws IOException, ClassNotFoundException {
         //invia un messsaggio al Server
         Client.commandHandler.consultationAllBalance();
 
@@ -484,8 +476,13 @@ public class AdminAfterLoginController {
         stage.show();
     }
 
+    /**
+     *
+     * @throws IOException error of action
+     * @throws ClassNotFoundException error of class used
+     */
     @FXML
-    public void handleDeleteAllInfo(ActionEvent event) throws IOException, ClassNotFoundException {
+    public void handleDeleteAllInfo() throws IOException, ClassNotFoundException {
         //invia un messsaggio al Server
         Client.commandHandler.deleteAllInfoRequest();
 
@@ -503,8 +500,13 @@ public class AdminAfterLoginController {
         alert.showAndWait();
     }
 
+    /**
+     *
+     * @throws IOException error of action
+     * @throws ClassNotFoundException error of class used
+     */
     @FXML
-    public void handleDeleteExpensesBalance(ActionEvent event) throws IOException, ClassNotFoundException {
+    public void handleDeleteExpensesBalance() throws IOException, ClassNotFoundException {
         //invia un messsaggio al Server
         Client.commandHandler.deleteExpensesBalanceRequest();
 
@@ -522,27 +524,18 @@ public class AdminAfterLoginController {
         alert.showAndWait();
     }
 
+
     @FXML
-    public void handleUserIdCheck(ActionEvent event) {
+    public void handleUserIdCheck() {
 
         //ricavare l'id dell'utente
         String id = String.valueOf(Client.getIdClient());
         userId.setText(id);
 
         //se la prima volta che clicco
-        if (ifUserIdOn.isSelected()) {
-            userId.setVisible(true);
-        } else {
-            userId.setVisible(false);
-        }
+        userId.setVisible(ifUserIdOn.isSelected());
 
-        // 当 CheckBox 被选中时，设置 Label 可见；当 CheckBox 未被选中时，设置 Label 不可见
-              ifUserIdOn.setOnAction(eventOn -> {
-            if (ifUserIdOn.isSelected()) {
-                userId.setVisible(true);
-            } else {
-                userId.setVisible(false);
-            }
-        });
+        // quando checkBox viene scelto-> diventa visibile
+              ifUserIdOn.setOnAction(eventOn -> userId.setVisible(ifUserIdOn.isSelected()));
     }
 }
