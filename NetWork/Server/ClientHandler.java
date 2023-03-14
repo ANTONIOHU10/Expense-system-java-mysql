@@ -132,7 +132,7 @@ public class ClientHandler extends Thread {
                             break;
                         case VIEW_USERNAMES_REQUEST:
                             System.out.println("preparando i nomi dei coinquilini da inviare.....");
-                            serverMessageHandler.send(new ViewUsernamesResponse(usersController.getUsernames()));
+                            serverMessageHandler.send(new ViewUsernamesResponse(usersController.getUsersIdAndUsername()));
                             break;
                         case LOGOUT:
                             System.out.println("un client ha effettuato il logout");

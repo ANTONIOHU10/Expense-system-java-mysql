@@ -6,7 +6,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 import java.util.Optional;
 
@@ -19,6 +23,9 @@ public class ClientApplication extends Application {
         // Controller.fxml che contiene la struttura della GUI dell'applicazione.
         FXMLLoader loader = new FXMLLoader(getClass().getResource("BeforeLoginScene.fxml"));
 
+        //otenere l'icone
+        Image icon = new Image("Resource/icon.png");
+
         //carica il file FXML e lo converte in un oggetto Parent
         // che rappresenta la radice della scena principale.
         Parent root = loader.load();
@@ -29,7 +36,7 @@ public class ClientApplication extends Application {
         primaryStage.setResizable(false); //finestra modificabile
         primaryStage.setMaximized(false);
 
-
+        primaryStage.getIcons().add(icon);
 
         primaryStage.setOnCloseRequest(e -> { //bottone di chiusura
             e.consume(); //per evitare che si chiude subito
@@ -53,8 +60,10 @@ public class ClientApplication extends Application {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Conferma chiusura");
         alert.setHeaderText("Sei sicuro di voler chiudere la finestra?");
-        alert.setContentText("Tutti i dati non salvati andranno persi.");
+        Stage stage=(Stage) alert.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(new Image("Resource/icon.png"));
 
+        alert.setContentText("Tutti i dati non salvati andranno persi.");
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK){
             // esegui le operazioni di chiusura

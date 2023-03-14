@@ -8,13 +8,14 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class MessageHandler {
     private ObjectOutputStream output;
     private ObjectInputStream input;
     private Socket socket;
     private Client client;
-    private List<String> usernames = new ArrayList<>();
+    private Map<Integer, String> idAndUsernames;
     //costruttore
     public MessageHandler(Socket socket) throws IOException {
         output = new ObjectOutputStream(socket.getOutputStream());
@@ -104,11 +105,14 @@ public class MessageHandler {
 
 
     private void handlerViewUsernamesResponse(ViewUsernamesResponse message){
+        /*
         System.out.println("Questi sono i tuoi coinquilini:");
         for(int i=0; i<message.getUsernames().size();i++){
             System.out.println(message.getUsernames().get(i));
         }
-        usernames = message.getUsernames();
+
+         */
+        idAndUsernames = message.getUsernames();
     }
 
     private void handlerPaymentResponse(PaymentResponseMessage message){
@@ -200,8 +204,7 @@ public class MessageHandler {
     }
     // add other handler methods here
 
-
-    public List<String> getUsernames() {
-        return usernames;
+    public Map<Integer, String> getIdAndUsernames() {
+        return idAndUsernames;
     }
 }

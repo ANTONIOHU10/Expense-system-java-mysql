@@ -1,8 +1,6 @@
 package JavaFX;
 
 import NetWork.Client.Client;
-import NetWork.Client.CommandHandler;
-import NetWork.Client.MessageHandler;
 import NetWork.Message.Message;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -13,6 +11,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
@@ -38,10 +38,15 @@ public class Controller {
 
     @FXML
     private void handleLoginButtonAction(ActionEvent event) throws IOException, ClassNotFoundException {
+        //caricare icone
+        Image icon = new Image("Resource/icon.png");
+
         //创建一个对话框
         Dialog<String> dialog = new Dialog<>();
         dialog.setTitle("Login Dialog");
         dialog.setHeaderText("Please enter your login information.");
+        Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(icon);
 
         //创建登录按钮
         ButtonType loginButtonType = new ButtonType("Login", ButtonBar.ButtonData.OK_DONE);
@@ -151,6 +156,9 @@ public class Controller {
 
     @FXML
     private void handleRegisterButtonAction(ActionEvent event) throws IOException, ClassNotFoundException {
+        //caricare icone
+        Image icon = new Image("Resource/icon.png");
+
         //crea un nuovo ChoiceBox per selezionare Admin o User
         ChoiceBox<String> userTypeChoiceBox = new ChoiceBox<>();
         userTypeChoiceBox.getItems().addAll("Admin", "User");
@@ -161,6 +169,9 @@ public class Controller {
         dialog.setTitle("Register Dialog");
         dialog.setHeaderText("Please enter your register information.");
 
+        //set icon
+        Stage stage =(Stage) dialog.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(icon);
         //crea il bottone di login
         ButtonType loginButtonType = new ButtonType("Register", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);

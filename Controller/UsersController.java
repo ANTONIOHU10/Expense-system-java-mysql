@@ -3,7 +3,9 @@ package Controller;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class UsersController {
     private Connection dbConnection;
@@ -128,5 +130,22 @@ public class UsersController {
             e.printStackTrace();
         }
     }
+
+    public Map<Integer, String> getUsersIdAndUsername() throws SQLException {
+        Map<Integer, String> idUsernameMap = new HashMap<>();
+        String querySql = "SELECT id, username FROM test.users";
+        try (Statement queryStatement = dbConnection.createStatement()) {
+            ResultSet resultSet = queryStatement.executeQuery(querySql);
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String username = resultSet.getString("username");
+                idUsernameMap.put(id, username);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return idUsernameMap;
+    }
+
 
 }

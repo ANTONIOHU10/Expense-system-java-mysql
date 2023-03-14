@@ -4,21 +4,29 @@ import Model.Balance;
 import Model.Expense;
 import NetWork.Client.Client;
 import NetWork.Message.Message;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class UserAfterLoginController {
@@ -46,7 +54,7 @@ public class UserAfterLoginController {
     @FXML
     private Button button7;
 
-
+    @FXML
     public void handleExitButtonActionUser(ActionEvent event) throws IOException {
         //Torna all'interfaccia iniziale
         Client.setNotAdmin();
@@ -59,11 +67,15 @@ public class UserAfterLoginController {
         currentStage.show();
 
     }
-
+    @FXML
     public void handleInsertExpenseUser(ActionEvent event) {
         // Crea la finestra di dialogo
         Stage dialog = new Stage();
         dialog.setTitle("Inserisci dati");
+
+        //set icon
+        Image icon = new Image("Resource/icon.png");
+        dialog.getIcons().add(icon);
 
         // Crea i controlli per l'input
         Label importoLabel = new Label("Importo:");
@@ -131,6 +143,7 @@ public class UserAfterLoginController {
         dialog.show();
     }
 
+    @FXML
     public void handleViewAllMembersUser(ActionEvent event) throws IOException, ClassNotFoundException {
         //invia un messaggio al Server
         Client.commandHandler.viewRoomates();
@@ -139,29 +152,44 @@ public class UserAfterLoginController {
         Message replyFromServer = Client.messageHandler.receive();
         Client.messageHandler.handle(replyFromServer);
 
-        //ottiene la lista dei nomi
-        //Client.messageHandler.getUsernames()
 
-        // Creazione del componente TextArea che conterrà gli elementi della lista
-        TextArea textArea = new TextArea();
-        textArea.setEditable(false);
-        textArea.setText(String.join("\n", Client.messageHandler.getUsernames()));
+        // Creiamo una tabella
+        TableView<Map.Entry<Integer, String>> table = new TableView<Map.Entry<Integer, String>>();
 
-        // Creazione del componente ScrollPane per permettere la visualizzazione della lista completa
-        ScrollPane scrollPane = new ScrollPane(textArea);
-        scrollPane.setFitToWidth(true);
-        scrollPane.setPrefHeight(400);
+        // Creiamo due colonne, una per l'id e una per lo username
+        TableColumn<Map.Entry<Integer, String>, Integer> idColumn = new TableColumn<>("ID");
+        idColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getKey()).asObject());
 
-        // Creazione del componente di dialogo Alert e impostazione del contenuto della finestra
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Lista dei coinquilini");
-        alert.setHeaderText(null);
-        alert.getDialogPane().setContent(scrollPane);
+        TableColumn<Map.Entry<Integer, String>, String> usernameColumn = new TableColumn<>("Username");
+        usernameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getValue()));
 
-        // Impostazione del comportamento della finestra di dialogo
-        alert.showAndWait();
+        // Aggiungiamo le colonne alla tabella
+        table.getColumns().add(idColumn);
+        table.getColumns().add(usernameColumn);
+
+        // Creiamo una lista di entry (ovvero chiavi-valori) a partire dalla mappa
+        List<Map.Entry<Integer, String>> entries = new ArrayList<>(Client.messageHandler.getIdAndUsernames().entrySet());
+
+        // Aggiungiamo gli entry alla tabella
+        table.getItems().addAll(entries);
+
+        // Creiamo una finestra di dialogo per mostrare la tabella all'utente
+        Stage stage = new Stage();
+        Scene scene = new Scene(new Group());
+        stage.setTitle("Tabella utenti");
+        stage.setWidth(300);
+        stage.setHeight(500);
+
+        //set icon
+        Image icon = new Image("Resource/icon.png");
+        stage.getIcons().add(icon);
+
+        ((Group) scene.getRoot()).getChildren().add(table);
+        stage.setScene(scene);
+        stage.show();
     }
 
+    @FXML
     public void handlePaymentUser(ActionEvent event) {
         int code = 0;
 
@@ -170,6 +198,10 @@ public class UserAfterLoginController {
         dialog.setTitle("Inserisci il codice della spesa");
         dialog.setHeaderText(null);
         dialog.setContentText("Codice:");
+        dialog.setGraphic(new ImageView("Resource/iconEagle.jpg"));
+        //icone
+        Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(new Image("Resource/icon.png"));
 
         // Loop finché l'utente non inserisce un valore valido
         while (true) {
@@ -215,6 +247,7 @@ public class UserAfterLoginController {
         }
     }
 
+    @FXML
     public void handleConsultExpensesToBePaidUser(ActionEvent event) throws IOException, ClassNotFoundException {
         //invia un messsaggio al Server
         Client.commandHandler.consultationExpensesToBePaidRequest();
@@ -263,10 +296,15 @@ public class UserAfterLoginController {
         stage.setScene(scene);
         stage.setTitle("Tabella delle spese");
 
+        //set icon
+        Image icon = new Image("Resource/icon.png");
+        stage.getIcons().add(icon);
+
         Client.setExpensesList(null);
         stage.show();
     }
 
+    @FXML
     public void handleConsultExpensesPaidUser(ActionEvent event) throws IOException, ClassNotFoundException {
         //invia un messsaggio al Server
         Client.commandHandler.consultationExpensesPaidRequest();
@@ -315,10 +353,15 @@ public class UserAfterLoginController {
         stage.setScene(scene);
         stage.setTitle("Tabella delle spese");
 
+        //set icon
+        Image icon = new Image("Resource/icon.png");
+        stage.getIcons().add(icon);
+
         Client.setExpensesList(null);
         stage.show();
     }
 
+    @FXML
     public void handleConsultAllExpensesUser(ActionEvent event) throws IOException, ClassNotFoundException {
         //invia un messsaggio al Server
         Client.commandHandler.consultationAllExpenses();
@@ -367,10 +410,15 @@ public class UserAfterLoginController {
         stage.setScene(scene);
         stage.setTitle("Tabella delle spese");
 
+        //set icon
+        Image icon = new Image("Resource/icon.png");
+        stage.getIcons().add(icon);
+
         Client.setExpensesList(null);
         stage.show();
     }
 
+    @FXML
     public void handleConsultBalanceUser(ActionEvent event) throws IOException, ClassNotFoundException {
         //invia un messsaggio al Server
         Client.commandHandler.consultationAllBalance();
@@ -403,6 +451,10 @@ public class UserAfterLoginController {
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.setTitle("Tabella del bilancio");
+
+        //set icon
+        Image icon = new Image("Resource/icon.png");
+        stage.getIcons().add(icon);
 
         stage.show();
     }
