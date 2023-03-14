@@ -12,7 +12,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
@@ -20,12 +19,6 @@ import java.io.IOException;
 import java.util.Optional;
 
 public class Controller {
-    @FXML
-    private Button LoginButton;
-
-    @FXML
-    private Button RegisterButton;
-
     @FXML
     private Button ExitButton;
 
@@ -36,29 +29,33 @@ public class Controller {
         this.scene = scene;
     }
 
+    /**
+     *
+     * @param event the click action
+     */
     @FXML
-    private void handleLoginButtonAction(ActionEvent event) throws IOException, ClassNotFoundException {
+    private void handleLoginButtonAction(ActionEvent event) {
         //caricare icone
         Image icon = new Image("Resource/icon.png");
 
-        //创建一个对话框
+        //create a dialog pane
         Dialog<String> dialog = new Dialog<>();
         dialog.setTitle("Login Dialog");
         dialog.setHeaderText("Please enter your login information.");
         Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
         stage.getIcons().add(icon);
 
-        //创建登录按钮
+        //create the login button
         ButtonType loginButtonType = new ButtonType("Login", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
 
-        //创建表单
+        //create a grid pane
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
         grid.setPadding(new Insets(20, 150, 10, 10));
 
-        //添加表单控件
+        //create grid controller field
         TextField username = new TextField();
         username.setPromptText("Username");
         PasswordField password = new PasswordField();
@@ -68,23 +65,19 @@ public class Controller {
         grid.add(new Label("Password:"), 0, 1);
         grid.add(password, 1, 1);
 
-        //禁用登录按钮，除非用户名和密码都不为空
+        //disable the login button unless other filed are filled up
         Node loginButton = dialog.getDialogPane().lookupButton(loginButtonType);
         loginButton.setDisable(true);
-        username.textProperty().addListener((observable, oldValue, newValue) -> {
-            loginButton.setDisable(newValue.trim().isEmpty() || password.getText().isEmpty());
-        });
-        password.textProperty().addListener((observable, oldValue, newValue) -> {
-            loginButton.setDisable(newValue.trim().isEmpty() || username.getText().isEmpty());
-        });
+        username.textProperty().addListener((observable, oldValue, newValue) -> loginButton.setDisable(newValue.trim().isEmpty() || password.getText().isEmpty()));
+        password.textProperty().addListener((observable, oldValue, newValue) -> loginButton.setDisable(newValue.trim().isEmpty() || username.getText().isEmpty()));
 
-        //将表单添加到对话框中
+        //add the dialog into the pane
         dialog.getDialogPane().setContent(grid);
 
-        //聚焦用户名字段
-        Platform.runLater(() -> username.requestFocus());
+        //focus the username field
+        Platform.runLater(username::requestFocus);
 
-        //当用户单击登录按钮时，将用户名和密码传递回主应用程序
+        //when the client clicked the login button, return the information
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == loginButtonType) {
                 //Inviare il messaggio al Server
@@ -98,11 +91,10 @@ public class Controller {
                 Message replyFromServer = null;
                 try {
                     replyFromServer = Client.messageHandler.receive();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ClassNotFoundException e) {
+                } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
+                assert replyFromServer != null;
                 Client.messageHandler.handle(replyFromServer);
 
 
@@ -143,19 +135,13 @@ public class Controller {
             return null;
         });
 
-        //显示对话框，等待用户输入
-        Optional<String> result = dialog.showAndWait();
-
-        //如果用户单击登录按钮，则打印用户名和密码
-        result.ifPresent(usernamePassword -> System.out.println("Username and password: " + usernamePassword));
-
-
-
+        //display the dialog pane
+        dialog.showAndWait();
     }
 
 
     @FXML
-    private void handleRegisterButtonAction(ActionEvent event) throws IOException, ClassNotFoundException {
+    private void handleRegisterButtonAction() {
         //caricare icone
         Image icon = new Image("Resource/icon.png");
 
@@ -197,18 +183,14 @@ public class Controller {
         //disabilita il bottone di login finché l'utente e la password non sono validi
         Node loginButton = dialog.getDialogPane().lookupButton(loginButtonType);
         loginButton.setDisable(true);
-        username.textProperty().addListener((observable, oldValue, newValue) -> {
-            loginButton.setDisable(newValue.trim().isEmpty() || password.getText().isEmpty());
-        });
-        password.textProperty().addListener((observable, oldValue, newValue) -> {
-            loginButton.setDisable(newValue.trim().isEmpty() || username.getText().isEmpty());
-        });
+        username.textProperty().addListener((observable, oldValue, newValue) -> loginButton.setDisable(newValue.trim().isEmpty() || password.getText().isEmpty()));
+        password.textProperty().addListener((observable, oldValue, newValue) -> loginButton.setDisable(newValue.trim().isEmpty() || username.getText().isEmpty()));
 
         //aggiunge il form al dialog
         dialog.getDialogPane().setContent(grid);
 
         //fa focus sulla casella di testo dell'utente
-        Platform.runLater(() -> username.requestFocus());
+        Platform.runLater(username::requestFocus);
 
         //quando l'utente clicca il bottone di login, ritorna l'username e la password
         dialog.setResultConverter(dialogButton -> {
@@ -232,11 +214,10 @@ public class Controller {
                 Message replyFromServer = null;
                 try {
                     replyFromServer = Client.messageHandler.receive();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ClassNotFoundException e) {
+                } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
+                assert replyFromServer != null;
                 Client.messageHandler.handle(replyFromServer);
 
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -263,7 +244,7 @@ public class Controller {
     }
 
     @FXML
-    private void handleExitButton(ActionEvent event) {
+    private void handleExitButton() {
         Stage stage = (Stage) ExitButton.getScene().getWindow();
         stage.close();
     }

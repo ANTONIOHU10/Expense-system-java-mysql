@@ -6,13 +6,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.DialogPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-import javafx.stage.Window;
-
 import java.util.Optional;
+
 
 public class ClientApplication extends Application {
     @Override
@@ -56,6 +54,10 @@ public class ClientApplication extends Application {
         controller.setScene(primaryStage.getScene());
     }
 
+    /**
+     *
+     * @param primaryStage the first stage opened
+     */
     private void closeProgram(Stage primaryStage) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Conferma chiusura");
@@ -67,19 +69,12 @@ public class ClientApplication extends Application {
 
         alert.setContentText("Tutti i dati sono salvati .");
         Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK){
+        if (result.isPresent() && result.get() == ButtonType.OK){
             // esegui le operazioni di chiusura
             primaryStage.close();
             // ...
             primaryStage.close();
-        } else {
-            // l'utente ha cliccato "Cancel" o ha chiuso la finestra di dialogo
-        }
-    }
-    /*
-    public static void main(String[] args) {
-        launch(args);
-    }
+        }  // l'utente ha cliccato "Cancel" o ha chiuso la finestra di dialogo
 
-     */
+    }
 }
