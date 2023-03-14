@@ -60,6 +60,11 @@ public class UserAfterLoginController {
     @FXML
     private Label userIdUser;
 
+    /**
+     *
+     * @param event the click action
+     * @throws IOException error of action input
+     */
     @FXML
     public void handleExitButtonActionUser(ActionEvent event) throws IOException {
         //Torna all'interfaccia iniziale
@@ -73,6 +78,11 @@ public class UserAfterLoginController {
         currentStage.show();
 
     }
+
+    /**
+     *
+     * @param event the click action
+     */
     @FXML
     public void handleInsertExpenseUser(ActionEvent event) {
         // Crea la finestra di dialogo
@@ -103,7 +113,7 @@ public class UserAfterLoginController {
             System.out.println("Importo: " + importo);
             System.out.println("Data: " + data);
             System.out.println("Descrizione: " + descrizione);
-            //TODO: inviare il messaggio
+            //inviare il messaggio
             try {
                 //invia un messaggio al Server
                 Client.commandHandler.expenseMessage(Client.getIdClient(),importo,data.getDayOfMonth(),data.getMonthValue(),data.getYear(),descrizione);
@@ -121,9 +131,7 @@ public class UserAfterLoginController {
                 Client.setMessage("");
 
                 alert.showAndWait();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
+            } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
 
@@ -149,6 +157,12 @@ public class UserAfterLoginController {
         dialog.show();
     }
 
+    /**
+     *
+     * @param event action click
+     * @throws IOException error of action input
+     * @throws ClassNotFoundException error of class used
+     */
     @FXML
     public void handleViewAllMembersUser(ActionEvent event) throws IOException, ClassNotFoundException {
         //invia un messaggio al Server
@@ -160,7 +174,7 @@ public class UserAfterLoginController {
 
 
         // Creiamo una tabella
-        TableView<Map.Entry<Integer, String>> table = new TableView<Map.Entry<Integer, String>>();
+        TableView<Map.Entry<Integer, String>> table = new TableView<>();
 
         // Creiamo due colonne, una per l'id e una per lo username
         TableColumn<Map.Entry<Integer, String>, Integer> idColumn = new TableColumn<>("ID");
@@ -195,9 +209,13 @@ public class UserAfterLoginController {
         stage.show();
     }
 
+    /**
+     *
+     * @param event click action event
+     */
     @FXML
     public void handlePaymentUser(ActionEvent event) {
-        int code = 0;
+        int code;
 
         // Crea un TextInputDialog
         TextInputDialog dialog = new TextInputDialog();
@@ -241,9 +259,7 @@ public class UserAfterLoginController {
                     alert.setHeaderText(null);
                     alert.setContentText("Inserisci un valore numerico intero!");
                     alert.showAndWait();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ClassNotFoundException e) {
+                } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
             } else {
@@ -253,6 +269,12 @@ public class UserAfterLoginController {
         }
     }
 
+    /**
+     *
+     * @param event click action event
+     * @throws IOException error of action input
+     * @throws ClassNotFoundException error of class used
+     */
     @FXML
     public void handleConsultExpensesToBePaidUser(ActionEvent event) throws IOException, ClassNotFoundException {
         //invia un messsaggio al Server
@@ -310,6 +332,12 @@ public class UserAfterLoginController {
         stage.show();
     }
 
+    /**
+     *
+     * @param event click action event
+     * @throws IOException error of action input
+     * @throws ClassNotFoundException error of the class used
+     */
     @FXML
     public void handleConsultExpensesPaidUser(ActionEvent event) throws IOException, ClassNotFoundException {
         //invia un messsaggio al Server
@@ -367,6 +395,12 @@ public class UserAfterLoginController {
         stage.show();
     }
 
+    /**
+     *
+     * @param event click action event
+     * @throws IOException error of action input
+     * @throws ClassNotFoundException error of the class used
+     */
     @FXML
     public void handleConsultAllExpensesUser(ActionEvent event) throws IOException, ClassNotFoundException {
         //invia un messsaggio al Server
@@ -424,6 +458,12 @@ public class UserAfterLoginController {
         stage.show();
     }
 
+    /**
+     *
+     * @param event click action
+     * @throws IOException error of action input
+     * @throws ClassNotFoundException error of the class used
+     */
     @FXML
     public void handleConsultBalanceUser(ActionEvent event) throws IOException, ClassNotFoundException {
         //invia un messsaggio al Server
@@ -465,27 +505,18 @@ public class UserAfterLoginController {
         stage.show();
     }
 
-    public void handleUserIdCheckUser(ActionEvent event) {
+
+    public void handleUserIdCheckUser() {
 
         //ricavare l'id dell'utente
         String id = String.valueOf(Client.getIdClient());
         userIdUser.setText(id);
 
         //se la prima volta che clicco
-        if (ifUserIdOnUser.isSelected()) {
-            userIdUser.setVisible(true);
-        } else {
-            userIdUser.setVisible(false);
-        }
+        userIdUser.setVisible(ifUserIdOnUser.isSelected());
 
-        // 当 CheckBox 被选中时，设置 Label 可见；当 CheckBox 未被选中时，设置 Label 不可见
-        ifUserIdOnUser.setOnAction(eventOn -> {
-            if (ifUserIdOnUser.isSelected()) {
-                userIdUser.setVisible(true);
-            } else {
-                userIdUser.setVisible(false);
-            }
-        });
+        // if checkbox is selected -> let label visible
+        ifUserIdOnUser.setOnAction(eventOn -> userIdUser.setVisible(ifUserIdOnUser.isSelected()));
 
     }
 }
