@@ -1,0 +1,14 @@
+.button {
+    background-color: #4CAF50; /* Colore di sfondo */
+    border: none; /* Rimuove il bordo */
+    color: white; /* Colore del testo */
+    padding: 10px 20px; /* Spaziatura interna */
+    text-align: center; /* Allineamento testo al centro */
+    text-decoration: none; /* Rimuove la sottolineatura del testo */
+    display: inline-block; /* Imposta il display come blocco */
+    font-size: 16px; /* Dimensione del testo */
+    margin: 4px 2px; /* Margine */
+    cursor: pointer; /* Cambia il cursore quando si passa sopra il pulsante */
+    border-radius: 10px; /* Rendi i bordi arrotondati */
+    box-shadow: 2px 2px 2px #888888; /* Aggiungi un'ombra */
+}

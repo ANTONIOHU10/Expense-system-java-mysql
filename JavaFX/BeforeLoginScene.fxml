@@ -6,13 +6,13 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="598.0" prefWidth="871.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="JavaFX.Controller">
+<AnchorPane prefHeight="598.0" prefWidth="871.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="JavaFX.Controller"  >
    <ImageView fitHeight="629.0" fitWidth="916.0" layoutY="-18.0" pickOnBounds="true" preserveRatio="true">
       <image>
          <Image url="@../Resourse/pexels-photo-629167.jpeg" />
       </image>
    </ImageView>
-    <Button fx:id="LoginButton" cache="true" cacheHint="QUALITY" layoutX="380.0" layoutY="330.0" onAction="#handleLoginButtonAction" prefHeight="51.0" prefWidth="109.0" text="Login">
+    <Button fx:id="LoginButton" cache="true" cacheHint="QUALITY" layoutX="380.0" layoutY="330.0" onAction="#handleLoginButtonAction" prefHeight="51.0" prefWidth="109.0" stylesheets="@Botton.css" text="Login" >
       <effect>
          <Blend />
       </effect></Button>

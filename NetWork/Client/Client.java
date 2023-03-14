@@ -1,6 +1,7 @@
 package NetWork.Client;
 
 import JavaFX.ClientApplication;
+import Model.Balance;
 import Model.Expense;
 import NetWork.Message.Message;
 
@@ -20,6 +21,7 @@ public class Client {
     private static boolean isAdmin = false;
     private static String message;
     private static List<Expense> expensesList = new ArrayList<>();
+    private static List<Balance> balanceList = new ArrayList<>();
     public static MessageHandler messageHandler;
     public static CommandHandler commandHandler;
     //GUI
@@ -515,12 +517,20 @@ public class Client {
         Client.message = message;
     }
 
+    public static void setBalanceList(List<Balance> balanceList) {
+        Client.balanceList = balanceList;
+    }
+
     public static String getMessage() {
         return message;
     }
 
     public static List<Expense> getExpensesList() {
         return expensesList;
+    }
+
+    public static List<Balance> getBalanceList() {
+        return balanceList;
     }
 
     private static void inserisciSpesa(Scanner scanner, ObjectOutputStream  output, ObjectInputStream input) throws IOException {

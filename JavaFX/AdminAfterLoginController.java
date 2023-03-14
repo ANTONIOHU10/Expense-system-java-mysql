@@ -1,5 +1,6 @@
 package JavaFX;
 
+import Model.Balance;
 import Model.Expense;
 import NetWork.Client.Client;
 import NetWork.Message.Message;
@@ -384,6 +385,75 @@ public class AdminAfterLoginController {
         stage.show();
     }
 
-    public void handleConsultBalanceAction(ActionEvent event) {
+    public void handleConsultBalanceAction(ActionEvent event) throws IOException, ClassNotFoundException {
+        //invia un messsaggio al Server
+        Client.commandHandler.consultationAllBalance();
+
+        //riceve un messaggio dal Server
+        Message replyFromServer = Client.messageHandler.receive();
+        Client.messageHandler.handle(replyFromServer);
+
+        TableView<Balance> table = new TableView<>();
+
+        // Definizione delle colonne della tabella
+        TableColumn<Balance, Integer> idCol = new TableColumn<>("ID");
+        idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+
+        TableColumn<Balance, Double> owedCol = new TableColumn<>("Importo dovuto");
+        owedCol.setCellValueFactory(new PropertyValueFactory<>("amount_owed"));
+
+        TableColumn<Balance, Double> paidCol = new TableColumn<>("Importo pagato");
+        paidCol.setCellValueFactory(new PropertyValueFactory<>("amount_paid"));
+
+        TableColumn<Balance, Double> balanceCol = new TableColumn<>("Bilancio");
+        balanceCol.setCellValueFactory(new PropertyValueFactory<>("balance"));
+
+        table.getColumns().addAll(idCol, owedCol, paidCol, balanceCol);
+        table.getItems().addAll(Client.getBalanceList());
+
+        VBox vbox = new VBox(table);
+        Scene scene = new Scene(vbox);
+
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("Tabella del bilancio");
+
+        stage.show();
+    }
+
+    public void handleDeleteAllInfo(ActionEvent event) throws IOException, ClassNotFoundException {
+        //invia un messsaggio al Server
+        Client.commandHandler.deleteAllInfoRequest();
+
+        //riceve un messaggio dal Server
+        Message replyFromServer = Client.messageHandler.receive();
+        Client.messageHandler.handle(replyFromServer);
+
+        //notifica con il messaggio ricevuto
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Messaggio: ");
+        alert.setHeaderText("Risultato della cancellazione: ");
+        alert.setContentText(Client.getMessage());
+        //messaggio di default
+        Client.setMessage("");
+        alert.showAndWait();
+    }
+
+    public void handleDeleteExpensesBalance(ActionEvent event) throws IOException, ClassNotFoundException {
+        //invia un messsaggio al Server
+        Client.commandHandler.deleteExpensesBalanceRequest();
+
+        //riceve un messaggio dal Server
+        Message replyFromServer = Client.messageHandler.receive();
+        Client.messageHandler.handle(replyFromServer);
+
+        //notifica con il messaggio ricevuto
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Messaggio: ");
+        alert.setHeaderText("Risultato della cancellazione: ");
+        alert.setContentText(Client.getMessage());
+        //messaggio di default
+        Client.setMessage("");
+        alert.showAndWait();
     }
 }

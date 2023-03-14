@@ -65,6 +65,13 @@ public class MessageHandler {
             case CONSULTATION_BALANCE_INFORMATION_RESPONSE:
                 handlerAllBalanceConsultationResponse((ConsultBalanceResponse) message);
                 break;
+            case DELETE_ALL_INFORMATION_RESPONSE:
+                handlerDeleteAllInfoResponse((DeleteAllInformationResponse) message);
+                break;
+            case DELETE_EXPENSES_BALANCE_INFORMATION_RESPONSE:
+                handlerDeleteExpenseBalance((DeleteExpensesBalanceResponse) message);
+                break;
+
             // handle other message types here
         }
     }
@@ -169,12 +176,16 @@ public class MessageHandler {
                     + " bilancio: "+ message.getListOfBalance().get(i).getBalance()
             );
         }
+        Client.setBalanceList(message.getListOfBalance());
     }
     private void handlerDeleteAllInfoResponse(DeleteAllInformationResponse message){
         System.out.println(message.getMessage());
+        Client.setMessage(message.getMessage());
+
     }
     private void handlerDeleteExpenseBalance(DeleteExpensesBalanceResponse message){
         System.out.println(message.getMessage());
+        Client.setMessage(message.getMessage());
     }
     public ObjectInputStream getInput() {
         return input;
