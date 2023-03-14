@@ -2,13 +2,11 @@ package Controller;
 
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class UsersController {
-    private Connection dbConnection;
+    private final Connection dbConnection;
 
     /**
      *
@@ -17,11 +15,18 @@ public class UsersController {
      * @param password "825310894"
      */
     public UsersController(String url, String username, String password) throws SQLException {
-        dbConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "825310894");
+        dbConnection = DriverManager.getConnection(url, username, password);
 
     }
 
-    public boolean registerAccount(String username, String password,int ifAdmin) throws SQLException {
+    /**
+     *
+     * @param username username chosen
+     * @param password password chosen
+     * @param ifAdmin 0 = User, 1 = Admin
+     * @throws SQLException error of MySQL connection
+     */
+    public void registerAccount(String username, String password, int ifAdmin) throws SQLException {
 
         //Il PreparedStatement è utilizzato per inviare una query SQL al database.
             //Questa query inserisce una nuova riga nella tabella "users" del database "test", con i valori "username" e "password" passati come parametri.
@@ -36,11 +41,17 @@ public class UsersController {
             preparedStatement.setString(3, "User");
         }
         // Il valore restituito da questo metodo è il numero di righe modificate dalla query (in questo caso, il numero di righe inserite nella tabella "users").
-        int rowsInserted = preparedStatement.executeUpdate();
+
+            preparedStatement.executeUpdate();
         // Il metodo restituisce "true" se il numero di righe inserite è maggiore di zero, altrimenti restituisce "false". Ciò indica se l'inserimento nella tabella è riuscito o meno.
-        return rowsInserted > 0;
     }
 
+    /**
+     *
+     * @param username the name to be checked
+     * @return true = exists, false = not exists
+     * @throws SQLException error of MySQL connection
+     */
     public boolean usernameExists(String username) throws SQLException {
         //Questa query seleziona tutte le righe dalla tabella "users" del database "test"
         // dove il valore della colonna "username" corrisponde al parametro fornito.
@@ -54,6 +65,14 @@ public class UsersController {
             // Se il ResultSet è vuoto, restituirà "false".
         return resultSet.next();
     }
+
+    /**
+     *
+     * @param username username for login
+     * @param password password for login
+     * @return true = success, false = failed
+     * @throws SQLException error of MySQL connection
+     */
     public boolean login(String username, String password) throws SQLException {
         PreparedStatement preparedStatement = dbConnection.prepareStatement("SELECT * FROM test.users WHERE username = ? AND password = ?");
         preparedStatement.setString(1, username);
@@ -61,6 +80,13 @@ public class UsersController {
         ResultSet resultSet = preparedStatement.executeQuery();
         return resultSet.next();
     }
+
+    /**
+     *
+     * @param username username inserted to get id
+     * @return unique id of the user
+     * @throws SQLException error of MySQL connection
+     */
     public int getUserId(String username) throws SQLException {
         PreparedStatement preparedStatement = dbConnection.prepareStatement("SELECT id FROM test.users WHERE username = ?");
         preparedStatement.setString(1, username);
@@ -72,25 +98,12 @@ public class UsersController {
         }
     }
 
-    public List<String> getUsernames() throws SQLException {
-        List<String> usernames = new ArrayList<>();
-        String selectSql = "SELECT username FROM test.users";
-        Statement selectStatement = dbConnection.createStatement();
-
-        //La query SQL può selezionare dati da una o più tabelle del database,
-        // e i dati risultanti verranno restituiti come un oggetto ResultSet.
-        ResultSet resultSet = selectStatement.executeQuery(selectSql);
-
-        //La chiamata a "next()" restituisce "true" se ci sono ulteriori righe nel ResultSet e sposta il cursore alla prima riga disponibile.
-            //Il blocco di codice all'interno del ciclo "while" viene eseguito finché ci sono ulteriori righe nel ResultSet.
-        while (resultSet.next()) {
-            // il metodo "getString" dell'oggetto ResultSet per recuperare il valore della colonna "username" della riga corrente
-                //Il valore viene assegnato alla variabile "username".
-            String username = resultSet.getString("username");
-            usernames.add(username);
-        }
-        return usernames;
-    }
+    /**
+     *
+     * @param id unique id of the user to be serched
+     * @return possible values = "Admin" or "User"
+     * @throws SQLException error of MySQL connection
+     */
     public String getUserRoleById(int id) throws SQLException {
         String querySql = "SELECT role FROM test.users WHERE id = ?";
         PreparedStatement queryStatement = dbConnection.prepareStatement(querySql);
@@ -108,6 +121,10 @@ public class UsersController {
         }
     }
 
+    /**
+     *
+     * @throws SQLException error of MySQL connection
+     */
     public void deleteAllData() throws SQLException {
         String deleteUsersSql = "DELETE FROM test.users";
         String deleteBalanceSql = "DELETE FROM test.balance";
@@ -120,6 +137,11 @@ public class UsersController {
             e.printStackTrace();
         }
     }
+
+    /**
+     *
+     * @throws SQLException error of MySQL connection
+     */
     public void deleteExpensesBalance() throws SQLException {
         String deleteBalanceSqlNew = "DELETE FROM test.balance";
         String deleteExpenseSqlNew = "DELETE FROM test.expense";
@@ -131,6 +153,11 @@ public class UsersController {
         }
     }
 
+    /**
+     *
+     * @return map that contains all usernames and id
+     * @throws SQLException error of MySQL connection
+     */
     public Map<Integer, String> getUsersIdAndUsername() throws SQLException {
         Map<Integer, String> idUsernameMap = new HashMap<>();
         String querySql = "SELECT id, username FROM test.users";

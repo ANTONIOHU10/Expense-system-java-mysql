@@ -105,13 +105,7 @@ public class MessageHandler {
 
 
     private void handlerViewUsernamesResponse(ViewUsernamesResponse message){
-        /*
-        System.out.println("Questi sono i tuoi coinquilini:");
-        for(int i=0; i<message.getUsernames().size();i++){
-            System.out.println(message.getUsernames().get(i));
-        }
 
-         */
         idAndUsernames = message.getUsernames();
     }
 
