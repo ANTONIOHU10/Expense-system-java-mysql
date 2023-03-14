@@ -30,6 +30,17 @@ public class ExpenseController {
         In questo modo puoi tenere traccia di tutti i pagamenti effettuati
         * e di quelli ancora da effettuare, e calcolare facilmente il saldo di ogni utente per ogni spesa.
     * */
+
+    /**
+     *
+     * @param idUser id of the user registerd in the users table
+     * @param amount value of the expense inserted
+     * @param day information about time of this expense
+     * @param month information about time of this expense
+     * @param year information about time of this expense
+     * @param description information about detail of this expense
+     * @throws SQLException error of MySQL connection
+     */
     public void insertExpense(int idUser, double amount, int day, int month, int year, String description) throws SQLException {
         // Get the list of usernames from the users table
         List<String> usernames = getUsernames();
@@ -57,6 +68,19 @@ public class ExpenseController {
         setBalance();
     }
 
+    /**
+     *
+     * @param expenseId the unique id of the expense
+     * @param payerId id of the person who inserted this expense
+     * @param payeeId id of the person that should pay this expense
+     * @param payerAmount total value of the expense
+     * @param payeeAmount value to be paid by the payee
+     * @param day information about time of this expense
+     * @param month information about time of this expense
+     * @param year information about time of this expense
+     * @param description information about detail of this expense
+     * @throws SQLException error of MySQL connection
+     */
     //metodo ausiliare:
     private void insertExpenseRecord(int expenseId, int payerId, int payeeId, double payerAmount, double payeeAmount, int day, int month, int year, String description) throws SQLException {
         String insertSql = "INSERT INTO expense (expense_id, payer_id, payee_id, payer_amount, payee_amount, day, month, year, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -76,6 +100,12 @@ public class ExpenseController {
     //metodo ausiliare
     //il codice cerca il valore massimo della colonna "expense_id" nella tabella "expense" del database,
     // e restituisce il valore successivo per creare un nuovo ID univoco per l'aggiunta di una nuova spesa alla tabella.
+
+    /**
+     *
+     * @return unique id of the expense
+     * @throws SQLException error of MySQL connection
+     */
     private int getNextExpenseId() throws SQLException {
         //La query seleziona il valore massimo della colonna "expense_id" dalla tabella "expense".
         String querySql = "SELECT MAX(expense_id) FROM expense";
@@ -92,6 +122,12 @@ public class ExpenseController {
         }
     }
 
+    /**
+     *
+     * @param username username of the user registerd in the users table
+     * @return unique id of the user registerd in the users table
+     * @throws SQLException error MySQL connection
+     */
     //metodo ausiliare
     private int getIdByUsername(String username) throws SQLException {
         String querySql = "SELECT id FROM users WHERE username = ?";
@@ -105,6 +141,12 @@ public class ExpenseController {
         }
     }
 
+    /**
+     *
+     * @param id unique id of the user registerd in the users table
+     * @return the username of the user
+     * @throws SQLException error of MySQL connection
+     */
     //metodo ausiliare
     private String getUsernameById(int id) throws SQLException {
         String querySql = "SELECT username FROM users WHERE id = ?";
@@ -126,6 +168,12 @@ public class ExpenseController {
 
     //metodo ausiliare
     //questo metodo recupera una lista di tutti gli username presenti nella tabella "users".
+
+    /**
+     *
+     * @return list of the usernames
+     * @throws SQLException error of MySQL connection
+     */
     public List<String> getUsernames() throws SQLException {
         List<String> usernames = new ArrayList<>();
 
@@ -142,10 +190,16 @@ public class ExpenseController {
     }
 
     //---------------------------------------aggiornamento tabella balance--------------------------------------------------------
+
+    /**
+     *
+     * @param expenseId the unique id of the expense
+     * @throws SQLException error of the MySQL connection
+     */
     public void updateBalanceFromExpense(int expenseId) throws SQLException {
         // Ottieni i payee_id per la spesa con l'id specificato
         List<Integer> payeeIds = new ArrayList<>();
-        List<Integer> allId = new ArrayList<>();
+        List<Integer> allId;
 
         String query = "SELECT DISTINCT payee_id FROM expense WHERE expense_id = ?";
         try (PreparedStatement statement = dbConnection.prepareStatement(query)) {
@@ -200,6 +254,12 @@ public class ExpenseController {
         }
     }
 
+    /**
+     *
+     * @param expenseId the unique id of the expense
+     * @return value to be paid by the payee
+     * @throws SQLException error of the MySQL connection
+     */
     private double getPayeeAmountForExpense(int expenseId) throws SQLException {
         String query = "SELECT payee_amount FROM expense WHERE expense_id = ? LIMIT 1";
         try (PreparedStatement statement = dbConnection.prepareStatement(query)) {
@@ -213,6 +273,12 @@ public class ExpenseController {
         }
     }
 
+    /**
+     *
+     * @param expenseId the unique id of the expense
+     * @return total value of the expense inserted by the uploader
+     * @throws SQLException error of the MySQL connection
+     */
     private double getPayerAmountForExpense(int expenseId) throws SQLException {
         String query = "SELECT payer_amount FROM expense WHERE expense_id = ? LIMIT 1";
         try (PreparedStatement statement = dbConnection.prepareStatement(query)) {
@@ -226,6 +292,12 @@ public class ExpenseController {
         }
     }
 
+    /**
+     *
+     * @param expenseId unique id of the expense in expense table
+     * @return the unique id of the uploader of the expense
+     * @throws SQLException error of MySQL connection
+     */
     private int getPayerIdForExpense(int expenseId) throws SQLException {
         String query = "SELECT payer_id FROM expense WHERE expense_id = ? LIMIT 1";
         try (PreparedStatement statement = dbConnection.prepareStatement(query)) {
@@ -238,6 +310,11 @@ public class ExpenseController {
             }
         }
     }
+
+    /**
+     *
+     * @throws SQLException error of MySQL connection
+     */
     public void setBalance() throws SQLException {
         String query = "UPDATE balance SET balance = amount_paid - amount_owed";
         try (PreparedStatement statement = dbConnection.prepareStatement(query)) {
@@ -245,6 +322,13 @@ public class ExpenseController {
         }
     }
 
+    /**
+     *
+     * @param expenseId unique id of the expense to be paid
+     * @param payee_id unique id of the payee id
+     * @return true = success, false = failed
+     * @throws SQLException error of MySQL connection
+     */
     public boolean payExpense(int expenseId, int payee_id) throws SQLException {
         //verifico se la persona che sta cercando di pagare è la stessa che ha caricato la spesa
 
@@ -303,6 +387,13 @@ public class ExpenseController {
         return false;
     }
 
+    /**
+     *
+     * @param expense_id the unique id of the expense
+     * @param payee_id the unique id of the payee
+     * @return if an expense is paid by the corresponding payee
+     * @throws SQLException error of MySQL connection
+     */
     public boolean isExpensePaid(int expense_id, int payee_id) throws SQLException {
         String querySql = "SELECT ifPaid FROM expense WHERE expense_id = ? AND payee_id = ?";
         try (PreparedStatement queryStatement = dbConnection.prepareStatement(querySql)) {
@@ -320,6 +411,14 @@ public class ExpenseController {
     //if
     // option =0 -> to be paid
     // option =1 -> paid
+
+    /**
+     *
+     * @param id_user the unique id of the user
+     * @param option 0 = list of expenses to be paid, 1 = list of expenses paid
+     * @return list of expenses
+     * @throws SQLException error of MySQL connection
+     */
      public List<Expense> consultListExpense(int id_user,int option) throws SQLException {
         //lista da restituire
         List<Expense> expenses = new ArrayList<>();
@@ -329,6 +428,17 @@ public class ExpenseController {
         queryStatement.setInt(1, id_user);
         queryStatement.setInt(2,option);
         ResultSet resultSet = queryStatement.executeQuery();
+         return getExpenses(expenses, resultSet);
+     }
+
+    /**
+     *
+     * @param expenses list of expenses
+     * @param resultSet list of result got from MySQL database
+     * @return list of expenses filterd
+     * @throws SQLException error of MySQL connection
+     */
+    private List<Expense> getExpenses(List<Expense> expenses, ResultSet resultSet) throws SQLException {
         while (resultSet.next()) {
 
             int expenseIdResult = resultSet.getInt("expense_id");
@@ -346,6 +456,11 @@ public class ExpenseController {
         return expenses;
     }
 
+    /**
+     *
+     * @return list of all expenses
+     * @throws SQLException error of MySQL connection
+     */
     public List<Expense> consultAllExpenses() throws SQLException {
         //lista da restituire
         List<Expense> expenses = new ArrayList<>();
@@ -353,22 +468,14 @@ public class ExpenseController {
         String querySql = "SELECT * FROM expense";
         PreparedStatement queryStatement = dbConnection.prepareStatement(querySql);
         ResultSet resultSet = queryStatement.executeQuery();
-        while (resultSet.next()) {
-
-            int expenseIdResult = resultSet.getInt("expense_id");
-            int payerId = resultSet.getInt("payer_id");
-            int payerAmount = resultSet.getInt("payer_amount");
-            int payeeAmount = resultSet.getInt("payee_amount");
-            int day = resultSet.getInt("day");
-            int month = resultSet.getInt("month");
-            int year = resultSet.getInt("year");
-            int ifPaid = resultSet.getInt("ifPaid");
-            String description= resultSet.getString("description");
-            Expense expense = new Expense(expenseIdResult,payerId,payerAmount,payeeAmount,day,month,year,description,ifPaid);
-            expenses.add(expense);
-        }
-        return expenses;
+        return getExpenses(expenses, resultSet);
     }
+
+    /**
+     *
+     * @return list of balance of all users
+     * @throws SQLException error of MySQL connection
+     */
     public List<Balance> consultAllBalances() throws SQLException {
         //lista da restituire
         List<Balance> balances = new ArrayList<>();
@@ -389,6 +496,12 @@ public class ExpenseController {
 
     }
 
+    /**
+     *
+     * @param expenseId the unique id of the expense to be checked
+     * @return 0 = does not exist, 1 = exists
+     * @throws SQLException error of MySQL connection
+     */
     public boolean consultIfExistsExpense(int expenseId) throws SQLException {
 
         String querySql = "SELECT COUNT(*) FROM expense WHERE expense_id = ?";
