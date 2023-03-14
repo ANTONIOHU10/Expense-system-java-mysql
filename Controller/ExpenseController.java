@@ -7,16 +7,16 @@ import java.sql.*;
 import java.util.*;
 
 public class ExpenseController {
-    private Connection dbConnection;
+    private final Connection dbConnection;
 
     /**
      *
-     * @param url "jdbc:mysql//localhost:3306/test"
+     * @param url "jdbc:mysql//localhost:3306/test" , url address for Database connection
      * @param username "root"
      * @param password "825310894"
      */
     public ExpenseController(String url, String username, String password) throws SQLException {
-        dbConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "825310894");
+        dbConnection = DriverManager.getConnection(url, username, password);
 
     }
     /*

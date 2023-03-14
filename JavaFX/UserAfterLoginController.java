@@ -55,6 +55,12 @@ public class UserAfterLoginController {
     private Button button7;
 
     @FXML
+    private CheckBox ifUserIdOnUser;
+
+    @FXML
+    private Label userIdUser;
+
+    @FXML
     public void handleExitButtonActionUser(ActionEvent event) throws IOException {
         //Torna all'interfaccia iniziale
         Client.setNotAdmin();
@@ -457,5 +463,29 @@ public class UserAfterLoginController {
         stage.getIcons().add(icon);
 
         stage.show();
+    }
+
+    public void handleUserIdCheckUser(ActionEvent event) {
+
+        //ricavare l'id dell'utente
+        String id = String.valueOf(Client.getIdClient());
+        userIdUser.setText(id);
+
+        //se la prima volta che clicco
+        if (ifUserIdOnUser.isSelected()) {
+            userIdUser.setVisible(true);
+        } else {
+            userIdUser.setVisible(false);
+        }
+
+        // 当 CheckBox 被选中时，设置 Label 可见；当 CheckBox 未被选中时，设置 Label 不可见
+        ifUserIdOnUser.setOnAction(eventOn -> {
+            if (ifUserIdOnUser.isSelected()) {
+                userIdUser.setVisible(true);
+            } else {
+                userIdUser.setVisible(false);
+            }
+        });
+
     }
 }

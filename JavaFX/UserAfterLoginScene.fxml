@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="598.0" prefWidth="871.0" stylesheets="../Resource/button.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="JavaFX.UserAfterLoginController">
     <ImageView fitHeight="629.0" fitWidth="916.0" layoutY="-17.0" pickOnBounds="true" preserveRatio="true">
@@ -19,4 +22,10 @@
    <Button fx:id="button6" layoutX="13.0" layoutY="488.0" mnemonicParsing="false" onAction="#handleConsultAllExpensesUser" opacity="0.81" prefHeight="40.0" prefWidth="316.0" stylesheets="@../Resource/button.css" text="6. Consultazione tutta la cronologia" />
    <Button fx:id="button7" layoutX="13.0" layoutY="542.0" mnemonicParsing="false" onAction="#handleConsultBalanceUser" opacity="0.81" prefHeight="40.0" prefWidth="268.0" stylesheets="@../Resource/button.css" text="7. Consultazione la tabella bilancio" />
    <Button fx:id="button0" layoutX="20.0" layoutY="32.0" mnemonicParsing="false" onAction="#handleExitButtonActionUser" opacity="0.81" prefHeight="40.0" prefWidth="186.0" stylesheets="@../Resource/button.css" text="0. Uscire" />
+   <CheckBox fx:id="ifUserIdOnUser" layoutX="656.0" layoutY="20.0" mnemonicParsing="false" onAction="#handleUserIdCheckUser" prefHeight="34.0" prefWidth="127.0" text="Visualizzare ID" />
+   <Label fx:id="userIdUser" layoutX="790.0" layoutY="20.0" prefHeight="34.0" prefWidth="55.0" text="Label" visible="false">
+      <font>
+         <Font size="17.0" />
+      </font>
+   </Label>
 </AnchorPane>
