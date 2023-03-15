@@ -1,25 +1,25 @@
 # ProgettoSoftware2023
 
-## Istruzione per l'esecuzione del pacchetto "Client.jar" "Server.jar"
+## Istruzione per l'esecuzione del pacchetto "Client.jar" "Server.jar" dal prompt
 
 ### Client:
-spostare in -> *E:\ingegneria_software_progetto_finale\ProgettoSoftware2023\out\artifacts\Client_jar*
+***From root E:->*** *cd E:\ingegneria_software_progetto_finale\ProgettoSoftware2023\out\artifacts\Client_jar*
 
 **path del pacchetto jar**
 
-poi
+poi per esecuzione:
 
-java --module-path "E:\javaFX\javafx-sdk-19.0.2.1\lib" --add-modules javafx.controls,javafx.fxml -jar Client.jar
+***java --module-path "E:\javaFX\javafx-sdk-19.0.2.1\lib" --add-modules javafx.controls,javafx.fxml -jar Client.jar***
 
 ### Server:
 
-spostare in -> *E:\ingegneria_software_progetto_finale\ProgettoSoftware2023\out\artifacts\Server_jar*
+***From root E:->*** *E:\ingegneria_software_progetto_finale\ProgettoSoftware2023\out\artifacts\Server_jar*
 
 **path del pacchetto jar**
 
-poi
+poi per esecuzione:
 
-java -jar Server.jar
+***java -jar Server.jar***
 
 ## Eventuali problemi
 
