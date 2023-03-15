@@ -1,4 +1,4 @@
-package test;
+package test.NetWork;
 
 public class prova {
 }
