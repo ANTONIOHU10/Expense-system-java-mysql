@@ -1,9 +1,10 @@
 package NetWork.Message;
 
+/**
+ * a response for login
+ */
 public class RegisterResponseMessage extends Message{
-    private final Boolean ifSuccess;
     private final String message;
-    private final int ifAdmin;
 
     /**
      *
@@ -13,9 +14,7 @@ public class RegisterResponseMessage extends Message{
      */
     public RegisterResponseMessage(Boolean result, String message,int ifAdmin){
         super(MessageType.REGISTER_RESPONSE);
-        ifSuccess = result;
         this.message = message;
-        this.ifAdmin = ifAdmin;
     }
 
     /**

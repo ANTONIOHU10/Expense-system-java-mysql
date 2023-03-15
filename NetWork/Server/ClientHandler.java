@@ -10,7 +10,9 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.sql.SQLException;
 
-
+/**
+ * a single thread that contain a connection with the Client socket
+ */
 //per Server -> gestisce tutte le connessioni
 public class ClientHandler extends Thread {
     private final Socket clientSocket;

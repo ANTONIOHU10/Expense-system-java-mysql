@@ -2,6 +2,9 @@ package NetWork.Message;
 
 import Model.Expense;
 
+/**
+ * a request for a single expense
+ */
 public class ExpenseMessage extends Message{
     private Expense expense;
 

@@ -28,6 +28,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * controller for the scene after login as Admin
+ */
 public class AdminAfterLoginController {
     @FXML
     private CheckBox ifUserIdOn;

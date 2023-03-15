@@ -8,6 +8,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+/**
+ * handle a single message, send, receive
+ */
 public class ServerMessageHandler {
     private final ObjectOutputStream output;
     private final ObjectInputStream input;

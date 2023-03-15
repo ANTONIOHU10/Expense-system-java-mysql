@@ -5,14 +5,19 @@ import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The type Users controller.
+ */
 public class UsersController {
     private final Connection dbConnection;
 
     /**
+     * Instantiates a new Users controller.
      *
-     * @param url "jdbc:mysql//localhost:3306/test"
+     * @param url      "jdbc:mysql//localhost:3306/test"
      * @param username "root"
      * @param password "825310894"
+     * @throws SQLException the sql exception
      */
     public UsersController(String url, String username, String password) throws SQLException {
         dbConnection = DriverManager.getConnection(url, username, password);
@@ -20,10 +25,11 @@ public class UsersController {
     }
 
     /**
+     * Register account.
      *
      * @param username username chosen
      * @param password password chosen
-     * @param ifAdmin 0 = User, 1 = Admin
+     * @param ifAdmin  0 = User, 1 = Admin
      * @throws SQLException error of MySQL connection
      */
     public void registerAccount(String username, String password, int ifAdmin) throws SQLException {
@@ -47,6 +53,7 @@ public class UsersController {
     }
 
     /**
+     * Username exists boolean.
      *
      * @param username the name to be checked
      * @return true = exists, false = not exists
@@ -67,6 +74,7 @@ public class UsersController {
     }
 
     /**
+     * Login boolean.
      *
      * @param username username for login
      * @param password password for login
@@ -82,6 +90,7 @@ public class UsersController {
     }
 
     /**
+     * Gets user id.
      *
      * @param username username inserted to get id
      * @return unique id of the user
@@ -99,6 +108,7 @@ public class UsersController {
     }
 
     /**
+     * Gets user role by id.
      *
      * @param id unique id of the user to be serched
      * @return possible values = "Admin" or "User"
@@ -122,6 +132,7 @@ public class UsersController {
     }
 
     /**
+     * Delete all data.
      *
      * @throws SQLException error of MySQL connection
      */
@@ -139,6 +150,7 @@ public class UsersController {
     }
 
     /**
+     * Delete expenses balance.
      *
      * @throws SQLException error of MySQL connection
      */
@@ -154,6 +166,7 @@ public class UsersController {
     }
 
     /**
+     * Gets users id and username.
      *
      * @return map that contains all usernames and id
      * @throws SQLException error of MySQL connection
@@ -176,8 +189,9 @@ public class UsersController {
     //-------------------------------------------metodi ausiliari per test---------------------------------------------
 
     /**
+     * Count rows in column int.
      *
-     * @param tableName the name of the table in databse
+     * @param tableName  the name of the table in databse
      * @param columnName the name of the column to be consulted
      * @return number of rows
      * @throws SQLException error of database exception query
@@ -195,6 +209,7 @@ public class UsersController {
     }
 
     /**
+     * Gets first user id.
      *
      * @return the unique id of the user
      * @throws SQLException error of database exception query
@@ -212,6 +227,7 @@ public class UsersController {
     }
 
     /**
+     * Is table empty boolean.
      *
      * @param tableName name of the table in database
      * @return true = table is empty, false = table is not empty

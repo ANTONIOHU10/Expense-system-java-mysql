@@ -1,5 +1,8 @@
 package NetWork.Message;
 
+/**
+ * a request for register
+ */
 public class RegisterRequestMessage extends Message{
     private final String username;
     private final String password;

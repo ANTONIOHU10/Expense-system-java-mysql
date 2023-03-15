@@ -19,6 +19,9 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Optional;
 
+/**
+ * controller for the primary stage
+ */
 public class Controller {
     @FXML
     private Button ExitButton;

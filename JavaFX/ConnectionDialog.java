@@ -11,6 +11,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
+/**
+ * a panel that inform the user, connection is down
+ */
 public class ConnectionDialog extends Application {
 
     @Override

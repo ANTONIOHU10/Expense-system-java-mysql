@@ -1,5 +1,8 @@
 package NetWork.Message;
 
+/**
+ * all messsage types
+ */
 public enum MessageType {
     LOGIN_REQUEST,//usato
     LOGIN_RESPONSE,//usato

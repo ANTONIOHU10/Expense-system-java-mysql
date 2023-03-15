@@ -3,7 +3,9 @@ package Model;
 import java.io.Serial;
 import java.io.Serializable;
 
-
+/**
+ * expense used to be inserted
+ */
 public record Expense(int expense_id, int id_payer, double payer_amount, double payee_amount, int day, int month,
                       int year, String description, int ifPaid) implements Serializable {
     @Serial

@@ -3,6 +3,9 @@ package NetWork.Message;
 import Model.Balance;
 import java.util.List;
 
+/**
+ * a response for all expenses
+ */
 public class ConsultBalanceResponse extends Message{
     List<Balance> listOfBalance;
 

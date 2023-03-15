@@ -6,14 +6,19 @@ import Model.Expense;
 import java.sql.*;
 import java.util.*;
 
+/**
+ * The type Expense controller.
+ */
 public class ExpenseController {
     private final Connection dbConnection;
 
     /**
+     * Instantiates a new Expense controller.
      *
-     * @param url "jdbc:mysql//localhost:3306/test" , url address for Database connection
+     * @param url      "jdbc:mysql//localhost:3306/test" , url address for Database connection
      * @param username "root"
      * @param password "825310894"
+     * @throws SQLException the sql exception
      */
     public ExpenseController(String url, String username, String password) throws SQLException {
         dbConnection = DriverManager.getConnection(url, username, password);
@@ -32,12 +37,13 @@ public class ExpenseController {
     * */
 
     /**
+     * Insert expense.
      *
-     * @param idUser id of the user registerd in the users table
-     * @param amount value of the expense inserted
-     * @param day information about time of this expense
-     * @param month information about time of this expense
-     * @param year information about time of this expense
+     * @param idUser      id of the user registerd in the users table
+     * @param amount      value of the expense inserted
+     * @param day         information about time of this expense
+     * @param month       information about time of this expense
+     * @param year        information about time of this expense
      * @param description information about detail of this expense
      * @throws SQLException error of MySQL connection
      */
@@ -69,20 +75,20 @@ public class ExpenseController {
     }
 
     /**
+     * Insert expense record.
      *
-     * @param expenseId the unique id of the expense
-     * @param payerId id of the person who inserted this expense
-     * @param payeeId id of the person that should pay this expense
+     * @param expenseId   the unique id of the expense
+     * @param payerId     id of the person who inserted this expense
+     * @param payeeId     id of the person that should pay this expense
      * @param payerAmount total value of the expense
      * @param payeeAmount value to be paid by the payee
-     * @param day information about time of this expense
-     * @param month information about time of this expense
-     * @param year information about time of this expense
+     * @param day         information about time of this expense
+     * @param month       information about time of this expense
+     * @param year        information about time of this expense
      * @param description information about detail of this expense
      * @throws SQLException error of MySQL connection
      */
-
-    //metodo ausiliare:
+//metodo ausiliare:
     public void insertExpenseRecord(int expenseId, int payerId, int payeeId, double payerAmount, double payeeAmount, int day, int month, int year, String description) throws SQLException {
         String insertSql = "INSERT INTO expense (expense_id, payer_id, payee_id, payer_amount, payee_amount, day, month, year, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement insertStatement = dbConnection.prepareStatement(insertSql);
@@ -103,6 +109,7 @@ public class ExpenseController {
     // e restituisce il valore successivo per creare un nuovo ID univoco per l'aggiunta di una nuova spesa alla tabella.
 
     /**
+     * Gets next expense id.
      *
      * @return unique id of the expense
      * @throws SQLException error of MySQL connection
@@ -124,12 +131,13 @@ public class ExpenseController {
     }
 
     /**
+     * Gets id by username.
      *
      * @param username username of the user registerd in the users table
      * @return unique id of the user registerd in the users table
      * @throws SQLException error MySQL connection
      */
-    //metodo ausiliare
+//metodo ausiliare
     public int getIdByUsername(String username) throws SQLException {
         String querySql = "SELECT id FROM users WHERE username = ?";
         PreparedStatement queryStatement = dbConnection.prepareStatement(querySql);
@@ -143,12 +151,13 @@ public class ExpenseController {
     }
 
     /**
+     * Gets username by id.
      *
      * @param id unique id of the user registerd in the users table
      * @return the username of the user
      * @throws SQLException error of MySQL connection
      */
-    //metodo ausiliare
+//metodo ausiliare
     public String getUsernameById(int id) throws SQLException {
         String querySql = "SELECT username FROM users WHERE id = ?";
         PreparedStatement queryStatement = dbConnection.prepareStatement(querySql);
@@ -171,6 +180,7 @@ public class ExpenseController {
     //questo metodo recupera una lista di tutti gli username presenti nella tabella "users".
 
     /**
+     * Gets usernames.
      *
      * @return list of the usernames
      * @throws SQLException error of MySQL connection
@@ -193,6 +203,7 @@ public class ExpenseController {
     //---------------------------------------aggiornamento tabella balance--------------------------------------------------------
 
     /**
+     * Update balance from expense.
      *
      * @param expenseId the unique id of the expense
      * @throws SQLException error of the MySQL connection
@@ -256,6 +267,7 @@ public class ExpenseController {
     }
 
     /**
+     * Gets payee amount for expense.
      *
      * @param expenseId the unique id of the expense
      * @return value to be paid by the payee
@@ -275,6 +287,7 @@ public class ExpenseController {
     }
 
     /**
+     * Gets payer amount for expense.
      *
      * @param expenseId the unique id of the expense
      * @return total value of the expense inserted by the uploader
@@ -294,6 +307,7 @@ public class ExpenseController {
     }
 
     /**
+     * Gets payer id for expense.
      *
      * @param expenseId unique id of the expense in expense table
      * @return the unique id of the uploader of the expense
@@ -313,6 +327,7 @@ public class ExpenseController {
     }
 
     /**
+     * Sets balance.
      *
      * @throws SQLException error of MySQL connection
      */
@@ -324,9 +339,10 @@ public class ExpenseController {
     }
 
     /**
+     * Pay expense boolean.
      *
      * @param expenseId unique id of the expense to be paid
-     * @param payee_id unique id of the payee id
+     * @param payee_id  unique id of the payee id
      * @return true = success, false = failed
      * @throws SQLException error of MySQL connection
      */
@@ -389,9 +405,10 @@ public class ExpenseController {
     }
 
     /**
+     * Is expense paid boolean.
      *
      * @param expense_id the unique id of the expense
-     * @param payee_id the unique id of the payee
+     * @param payee_id   the unique id of the payee
      * @return if an expense is paid by the corresponding payee
      * @throws SQLException error of MySQL connection
      */
@@ -414,13 +431,14 @@ public class ExpenseController {
     // option =1 -> paid
 
     /**
+     * Consult list expense list.
      *
      * @param id_user the unique id of the user
-     * @param option 0 = list of expenses to be paid, 1 = list of expenses paid
+     * @param option  0 = list of expenses to be paid, 1 = list of expenses paid
      * @return list of expenses
      * @throws SQLException error of MySQL connection
      */
-     public List<Expense> consultListExpense(int id_user,int option) throws SQLException {
+    public List<Expense> consultListExpense(int id_user,int option) throws SQLException {
         //lista da restituire
         List<Expense> expenses = new ArrayList<>();
 
@@ -433,8 +451,9 @@ public class ExpenseController {
      }
 
     /**
+     * Gets expenses.
      *
-     * @param expenses list of expenses
+     * @param expenses  list of expenses
      * @param resultSet list of result got from MySQL database
      * @return list of expenses filterd
      * @throws SQLException error of MySQL connection
@@ -458,6 +477,7 @@ public class ExpenseController {
     }
 
     /**
+     * Consult all expenses list.
      *
      * @return list of all expenses
      * @throws SQLException error of MySQL connection
@@ -473,6 +493,7 @@ public class ExpenseController {
     }
 
     /**
+     * Consult all balances list.
      *
      * @return list of balance of all users
      * @throws SQLException error of MySQL connection
@@ -498,6 +519,7 @@ public class ExpenseController {
     }
 
     /**
+     * Consult if exists expense boolean.
      *
      * @param expenseId the unique id of the expense to be checked
      * @return 0 = does not exist, 1 = exists
@@ -520,8 +542,9 @@ public class ExpenseController {
     //-------------------------------------------metodi ausiliari per test---------------------------------------------
 
     /**
+     * Count rows in column int.
      *
-     * @param tableName name of the table in database
+     * @param tableName  name of the table in database
      * @param columnName name of the column in the table
      * @return number of rows
      * @throws SQLException error of database exception query
@@ -539,12 +562,13 @@ public class ExpenseController {
     }
 
     /**
+     * Gets string from table.
      *
-     * @param tableName name of the table
-     * @param whereColumn the parameter column
-     * @param whereValue the value of the parameter column
+     * @param tableName    name of the table
+     * @param whereColumn  the parameter column
+     * @param whereValue   the value of the parameter column
      * @param selectColumn the column that contains the element searched
-     * @return
+     * @return string from table
      * @throws SQLException error of database exception query
      */
     public String getStringFromTable(String tableName, String whereColumn, Object whereValue, String selectColumn) throws SQLException {
@@ -562,12 +586,13 @@ public class ExpenseController {
     }
 
     /**
+     * Gets double from table.
      *
-     * @param tableName name of the table
-     * @param whereColumn the parameter column
-     * @param whereValue the value of the parameter column
+     * @param tableName    name of the table
+     * @param whereColumn  the parameter column
+     * @param whereValue   the value of the parameter column
      * @param selectColumn the column that contains the element searched
-     * @return
+     * @return double from table
      * @throws SQLException error of database exception query
      */
     public Double getDoubleFromTable(String tableName, String whereColumn, Object whereValue, String selectColumn) throws SQLException {
@@ -585,12 +610,13 @@ public class ExpenseController {
     }
 
     /**
+     * Gets int from table.
      *
-     * @param tableName name of the table
-     * @param whereColumn the parameter column
-     * @param whereValue the value of the parameter column
+     * @param tableName    name of the table
+     * @param whereColumn  the parameter column
+     * @param whereValue   the value of the parameter column
      * @param selectColumn the column that contains the element searched
-     * @return
+     * @return int from table
      * @throws SQLException error of database exception query
      */
     public Integer getIntFromTable(String tableName, String whereColumn, Object whereValue, String selectColumn) throws SQLException {
@@ -608,12 +634,13 @@ public class ExpenseController {
     }
 
     /**
+     * Gets boolean from table.
      *
-     * @param tableName name of the table
-     * @param whereColumn the parameter column
-     * @param whereValue the value of the parameter column
+     * @param tableName    name of the table
+     * @param whereColumn  the parameter column
+     * @param whereValue   the value of the parameter column
      * @param selectColumn the column that contains the element searched
-     * @return
+     * @return boolean from table
      * @throws SQLException error of database exception query
      */
     public Boolean getBooleanFromTable(String tableName, String whereColumn, Object whereValue, String selectColumn) throws SQLException {

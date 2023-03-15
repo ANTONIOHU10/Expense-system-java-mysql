@@ -1,5 +1,8 @@
 package NetWork.Message;
 
+/**
+ * a request for payment
+ */
 public class PaymentRequestMessage extends Message{
     private final int expenseId;
 

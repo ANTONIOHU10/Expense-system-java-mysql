@@ -1,5 +1,8 @@
 package NetWork.Message;
 
+/**
+ * a response for login
+ */
 public class LoginResponseMessage extends Message{
     private final Boolean ifSuccess;
     private final String message;

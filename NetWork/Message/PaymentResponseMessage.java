@@ -1,5 +1,8 @@
 package NetWork.Message;
 
+/**
+ * a response for payment
+ */
 public class PaymentResponseMessage extends Message{
     String message;
 

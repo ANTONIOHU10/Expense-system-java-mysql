@@ -4,6 +4,9 @@ import Model.Expense;
 import NetWork.Message.*;
 import java.io.IOException;
 
+/**
+ * used for sending and receiving message
+ */
 public record CommandHandler(MessageHandler messageHandler) {
     //opearazioni da fare
 

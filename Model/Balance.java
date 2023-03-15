@@ -3,6 +3,9 @@ package Model;
 import java.io.Serial;
 import java.io.Serializable;
 
+/**
+ * balance used to be inserted
+ */
 public class Balance implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

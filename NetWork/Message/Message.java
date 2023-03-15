@@ -2,6 +2,9 @@ package NetWork.Message;
 
 import java.io.Serializable;
 
+/**
+ * Prototype of message
+ */
 public class Message implements Serializable {
     private final MessageType type;
 

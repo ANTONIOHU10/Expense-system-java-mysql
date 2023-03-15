@@ -29,6 +29,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * controller for the scene of user (not admin) after login
+ */
 public class UserAfterLoginController {
     @FXML
     private Button button0;

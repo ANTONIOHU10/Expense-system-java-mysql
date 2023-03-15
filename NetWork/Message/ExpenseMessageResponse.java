@@ -1,5 +1,8 @@
 package NetWork.Message;
 
+/**
+ * a response for a single expense
+ */
 public class ExpenseMessageResponse extends Message{
     private final String message;
 

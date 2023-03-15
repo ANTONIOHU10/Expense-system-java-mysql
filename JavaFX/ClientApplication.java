@@ -11,7 +11,9 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import java.util.Optional;
 
-
+/**
+ * contains the primary stage
+ */
 public class ClientApplication extends Application {
     @Override
     //Questo metodo ha un parametro Stage primaryStage

@@ -1,0 +1,26 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="ProgettoSoftware2023:jar2">
+    <output-path>$PROJECT_DIR$/out/artifacts/ProgettoSoftware2023_jar2</output-path>
+    <root id="archive" name="ProgettoSoftware2023.jar">
+      <element id="module-output" name="ProgettoSoftware2023" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../javaFX/javafx-sdk-19.0.2.1/lib/javafx-swt.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../javaFX/javafx-sdk-19.0.2.1/lib/javafx.web.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../javaFX/javafx-sdk-19.0.2.1/lib/javafx.base.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../javaFX/javafx-sdk-19.0.2.1/lib/javafx.fxml.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../javaFX/javafx-sdk-19.0.2.1/lib/javafx.media.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../javaFX/javafx-sdk-19.0.2.1/lib/javafx.swing.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../javaFX/javafx-sdk-19.0.2.1/lib/javafx.controls.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../javaFX/javafx-sdk-19.0.2.1/lib/javafx.graphics.jar" path-in-jar="/" />
+      <element id="library" level="project" name="javafx-sdk-19.0.2" />
+      <element id="extracted-dir" path="C:/Program Files (x86)/MySQL/Connector J 8.0/mysql-connector-j-8.0.32.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/junit/jupiter/junit-jupiter/5.8.1/junit-jupiter-5.8.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/junit/jupiter/junit-jupiter-api/5.8.1/junit-jupiter-api-5.8.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/junit/platform/junit-platform-commons/1.8.1/junit-platform-commons-1.8.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/junit/jupiter/junit-jupiter-params/5.8.1/junit-jupiter-params-5.8.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/junit/jupiter/junit-jupiter-engine/5.8.1/junit-jupiter-engine-5.8.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/junit/platform/junit-platform-engine/1.8.1/junit-platform-engine-1.8.1.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

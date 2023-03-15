@@ -8,6 +8,9 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Map;
 
+/**
+ * used to handle single message received
+ */
 public class MessageHandler {
     private final ObjectOutputStream output;
     private final ObjectInputStream input;

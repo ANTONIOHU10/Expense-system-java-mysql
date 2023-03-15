@@ -1,5 +1,8 @@
 package NetWork.Message;
 
+/**
+ * a response for deleting all expenses and balance information
+ */
 public class DeleteExpensesBalanceResponse extends Message{
     private final String message;
 

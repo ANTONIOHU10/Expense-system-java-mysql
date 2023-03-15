@@ -1,5 +1,8 @@
 package NetWork.Message;
 
+/**
+ * a response for deleting all user information
+ */
 public class DeleteAllInformationResponse extends Message{
     private final String message;
 

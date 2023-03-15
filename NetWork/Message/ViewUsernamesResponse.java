@@ -2,6 +2,9 @@ package NetWork.Message;
 
 import java.util.Map;
 
+/**
+ * a request for viewing all username
+ */
 public class ViewUsernamesResponse extends Message {
     Map<Integer, String> usernames;
 
