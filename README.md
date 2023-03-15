@@ -2,7 +2,7 @@
 
 ## Istruzione per l'esecuzione del pacchetto "Client.jar" "Server.jar"
 
-###Client:
+### Client:
 spostare in -> *E:\ingegneria_software_progetto_finale\ProgettoSoftware2023\out\artifacts\Client_jar*
 
 **path del pacchetto jar**
@@ -13,9 +13,10 @@ java --module-path "E:\javaFX\javafx-sdk-19.0.2.1\lib" --add-modules javafx.cont
 
 ### Server:
 
-spostare in -> *E:\ingegneria_software_progetto_finale\ProgettoSoftware2023\out\artifacts\Server_jar
+spostare in -> *E:\ingegneria_software_progetto_finale\ProgettoSoftware2023\out\artifacts\Server_jar*
 
 **path del pacchetto jar**
+
 poi
 
 java -jar Server.jar
