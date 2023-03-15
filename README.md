@@ -3,9 +3,9 @@
 ## Istruzione per l'esecuzione del pacchetto "Client.jar" "Server.jar" dal prompt
 
 ### Client:
-***From root E:->*** *cd E:\ingegneria_software_progetto_finale\ProgettoSoftware2023\out\artifacts\Client_jar*
+From root E:-> ***cd E:\ingegneria_software_progetto_finale\ProgettoSoftware2023\out\artifacts\Client_jar***
 
-**path del pacchetto jar**
+path del pacchetto jar
 
 poi per esecuzione:
 
@@ -13,9 +13,9 @@ poi per esecuzione:
 
 ### Server:
 
-***From root E:->*** *E:\ingegneria_software_progetto_finale\ProgettoSoftware2023\out\artifacts\Server_jar*
+From root E:-> ***E:\ingegneria_software_progetto_finale\ProgettoSoftware2023\out\artifacts\Server_jar***
 
-**path del pacchetto jar**
+path del pacchetto jar
 
 poi per esecuzione:
 
