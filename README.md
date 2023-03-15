@@ -20,7 +20,7 @@ poi
 
 java -jar Server.jar
 
-##Eventuali problemi
+## Eventuali problemi
 
 * Unsupported JavaFX configuration: classes were loaded from 'unnamed module
   * chiamata di una classe JavaFX extends Application da un thread che non è specificato per JavaFX 
