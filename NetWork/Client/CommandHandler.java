@@ -5,8 +5,6 @@ import NetWork.Message.*;
 import java.io.IOException;
 
 public record CommandHandler(MessageHandler messageHandler) {
-    //costruttore
-
     //opearazioni da fare
 
     /**

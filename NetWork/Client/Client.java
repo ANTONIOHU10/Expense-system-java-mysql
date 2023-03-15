@@ -1,6 +1,7 @@
 package NetWork.Client;
 
 import JavaFX.ClientApplication;
+import JavaFX.ConnectionDialog;
 import Model.Balance;
 import Model.Expense;
 
@@ -28,19 +29,25 @@ public class Client {
     public static void main(String[] args) {
         String host = "localhost"; // IP o nome del server
         int port = 8080; // porta su cui il server ascolta le connessioni
-        try (
-             Socket socket = new Socket(host, port)
-        ) {
-            //istanziare handler di message + command  -> set up
-            messageHandler = new MessageHandler(socket);
-            commandHandler = new CommandHandler(messageHandler);
-            System.out.println("Benvenuto nel sistema di gestione delle spese.");
 
-            ClientApplication.launch(ClientApplication.class,args);
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            try (
+                    Socket socket = new Socket(host, port)
+            ) {
+                //istanziare handler di message + command  -> set up
+                messageHandler = new MessageHandler(socket);
+                commandHandler = new CommandHandler(messageHandler);
+                System.out.println("Benvenuto nel sistema di gestione delle spese.");
+
+                ClientApplication.launch(ClientApplication.class,args);
+
+            } catch (IOException e) {
+                // Se la connessione fallisce, chiedi all'utente se vuole riprovare
+                ConnectionDialog.launch(ConnectionDialog.class);
+
+            }
+
+
     }
 
     /**

@@ -12,6 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
@@ -42,6 +43,10 @@ public class Controller {
         Dialog<String> dialog = new Dialog<>();
         dialog.setTitle("Login Dialog");
         dialog.setHeaderText("Please enter your login information.");
+
+        //icon per dialog
+        dialog.setGraphic(new ImageView(new Image("Resource/iconCoffee2.jpg")));
+
         Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
         stage.getIcons().add(icon);
 
@@ -155,6 +160,8 @@ public class Controller {
         dialog.setTitle("Register Dialog");
         dialog.setHeaderText("Please enter your register information.");
 
+        //icon
+        dialog.setGraphic(new ImageView(new Image("Resource/iconCoffee1.jpg")));
         //set icon
         Stage stage =(Stage) dialog.getDialogPane().getScene().getWindow();
         stage.getIcons().add(icon);
