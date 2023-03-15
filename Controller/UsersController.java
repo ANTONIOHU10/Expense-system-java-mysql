@@ -55,7 +55,7 @@ public class UsersController {
     public boolean usernameExists(String username) throws SQLException {
         //Questa query seleziona tutte le righe dalla tabella "users" del database "test"
         // dove il valore della colonna "username" corrisponde al parametro fornito.
-        PreparedStatement preparedStatement = dbConnection.prepareStatement("SELECT * FROM test.users WHERE username = ?");
+        PreparedStatement preparedStatement = dbConnection.prepareStatement("SELECT * FROM users WHERE username = ?");
         preparedStatement.setString(1, username);
         //Il metodo "executeQuery" restituisce un oggetto ResultSet che contiene i risultati della query.
         ResultSet resultSet = preparedStatement.executeQuery();
@@ -74,7 +74,7 @@ public class UsersController {
      * @throws SQLException error of MySQL connection
      */
     public boolean login(String username, String password) throws SQLException {
-        PreparedStatement preparedStatement = dbConnection.prepareStatement("SELECT * FROM test.users WHERE username = ? AND password = ?");
+        PreparedStatement preparedStatement = dbConnection.prepareStatement("SELECT * FROM users WHERE username = ? AND password = ?");
         preparedStatement.setString(1, username);
         preparedStatement.setString(2, password);
         ResultSet resultSet = preparedStatement.executeQuery();
@@ -88,7 +88,7 @@ public class UsersController {
      * @throws SQLException error of MySQL connection
      */
     public int getUserId(String username) throws SQLException {
-        PreparedStatement preparedStatement = dbConnection.prepareStatement("SELECT id FROM test.users WHERE username = ?");
+        PreparedStatement preparedStatement = dbConnection.prepareStatement("SELECT id FROM users WHERE username = ?");
         preparedStatement.setString(1, username);
         ResultSet resultSet = preparedStatement.executeQuery();
         if (resultSet.next()) {
@@ -105,7 +105,7 @@ public class UsersController {
      * @throws SQLException error of MySQL connection
      */
     public String getUserRoleById(int id) throws SQLException {
-        String querySql = "SELECT role FROM test.users WHERE id = ?";
+        String querySql = "SELECT role FROM users WHERE id = ?";
         PreparedStatement queryStatement = dbConnection.prepareStatement(querySql);
         queryStatement.setInt(1, id);
         ResultSet resultSet = queryStatement.executeQuery();
@@ -175,6 +175,13 @@ public class UsersController {
     }
     //-------------------------------------------metodi ausiliari per test---------------------------------------------
 
+    /**
+     *
+     * @param tableName the name of the table in databse
+     * @param columnName the name of the column to be consulted
+     * @return number of rows
+     * @throws SQLException error of database exception query
+     */
     public int countRowsInColumn(String tableName, String columnName) throws SQLException {
         String query = "SELECT COUNT(" + columnName + ") FROM " + tableName;
         try (PreparedStatement statement = dbConnection.prepareStatement(query)) {
@@ -187,6 +194,11 @@ public class UsersController {
         }
     }
 
+    /**
+     *
+     * @return the unique id of the user
+     * @throws SQLException error of database exception query
+     */
     public int getFirstUserId() throws SQLException {
         String query = "SELECT id FROM users ORDER BY id  LIMIT 1";
         try (PreparedStatement statement = dbConnection.prepareStatement(query)) {
@@ -195,6 +207,25 @@ public class UsersController {
                 return resultSet.getInt("id");
             } else {
                 throw new SQLException("No users found.");
+            }
+        }
+    }
+
+    /**
+     *
+     * @param tableName name of the table in database
+     * @return true = table is empty, false = table is not empty
+     * @throws SQLException error of database exception query
+     */
+    public boolean isTableEmpty(String tableName) throws SQLException {
+        String query = "SELECT COUNT(*) FROM " + tableName;
+        try (PreparedStatement statement = dbConnection.prepareStatement(query)) {
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                int count = resultSet.getInt(1);
+                return count == 0;
+            } else {
+                return true; // Non ci sono righe
             }
         }
     }

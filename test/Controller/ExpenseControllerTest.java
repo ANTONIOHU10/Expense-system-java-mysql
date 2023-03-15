@@ -2,6 +2,8 @@ package test.Controller;
 
 import Controller.ExpenseController;
 import Controller.UsersController;
+import Model.Balance;
+import Model.Expense;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
@@ -311,43 +313,240 @@ class ExpenseControllerTest {
     }
 
     @Test
-    void isExpensePaid() {
+    void isExpensePaid() throws SQLException {
+        //database connection
+        UsersController usersController = new UsersController("jdbc:mysql://localhost:3306/database_for_test","root","825310894");
+        ExpenseController expenseController = new ExpenseController("jdbc:mysql://localhost:3306/database_for_test", "root", "825310894");
+
+        //clear all existed data
+        usersController.deleteExpensesBalance();
+        usersController.deleteAllData();
+
+        //creazione account
+        usersController.registerAccount("NewUser","polimi123",0);
+        usersController.registerAccount("NewUser666","polimi123",0);
+
+        //inserimento
+        expenseController.insertExpense(usersController.getFirstUserId(),100,3,4,2023,"TEST");
+
+        //condizione
+        assertFalse(expenseController.isExpensePaid(1, usersController.getFirstUserId() + 1));
 
     }
 
     @Test
-    void consultListExpense() {
+    void consultListExpense() throws SQLException {
+        //database connection
+        UsersController usersController = new UsersController("jdbc:mysql://localhost:3306/database_for_test","root","825310894");
+        ExpenseController expenseController = new ExpenseController("jdbc:mysql://localhost:3306/database_for_test", "root", "825310894");
+
+        //clear all existed data
+        usersController.deleteExpensesBalance();
+        usersController.deleteAllData();
+
+        //creazione account
+        usersController.registerAccount("NewUser","polimi123",0);
+        usersController.registerAccount("NewUser666","polimi123",0);
+
+        //inserimento
+        expenseController.insertExpense(usersController.getFirstUserId(),100,3,4,2023,"TEST");
+
+        List<Expense> expenses = expenseController.consultListExpense(usersController.getFirstUserId()+1,0);
+
+        //condizione
+        assertEquals(expenses.get(0).getExpense_id(),1);
+        assertEquals(expenses.get(0).getPayer_amount(),100);
+        assertEquals(expenses.get(0).getDay(),3);
+        assertEquals(expenses.get(0).getMonth(),4);
+        assertEquals(expenses.get(0).getYear(),2023);
+        assertEquals(expenses.get(0).getDescription(),"TEST");
     }
 
     @Test
-    void getExpenses() {
+    void getExpenses() throws SQLException {
+        //database connection
+        UsersController usersController = new UsersController("jdbc:mysql://localhost:3306/database_for_test","root","825310894");
+        ExpenseController expenseController = new ExpenseController("jdbc:mysql://localhost:3306/database_for_test", "root", "825310894");
+
+        //clear all existed data
+        usersController.deleteExpensesBalance();
+        usersController.deleteAllData();
+
+        //creazione account
+        usersController.registerAccount("NewUser","polimi123",0);
+        usersController.registerAccount("NewUser666","polimi123",0);
+
+        //inserimento
+        expenseController.insertExpense(usersController.getFirstUserId(),100,3,4,2023,"TEST");
+
+        List<Expense> expenses = expenseController.consultListExpense(usersController.getFirstUserId()+1,0);
+
+        //condizione
+        assertEquals(expenses.get(0).getExpense_id(),1);
+        assertEquals(expenses.get(0).getPayer_amount(),100);
+        assertEquals(expenses.get(0).getDay(),3);
+        assertEquals(expenses.get(0).getMonth(),4);
+        assertEquals(expenses.get(0).getYear(),2023);
+        assertEquals(expenses.get(0).getDescription(),"TEST");
     }
 
     @Test
-    void consultAllExpenses() {
+    void consultAllExpenses() throws SQLException {
+        //database connection
+        UsersController usersController = new UsersController("jdbc:mysql://localhost:3306/database_for_test","root","825310894");
+        ExpenseController expenseController = new ExpenseController("jdbc:mysql://localhost:3306/database_for_test", "root", "825310894");
+
+        //clear all existed data
+        usersController.deleteExpensesBalance();
+        usersController.deleteAllData();
+
+        //creazione account
+        usersController.registerAccount("NewUser","polimi123",0);
+        usersController.registerAccount("NewUser666","polimi123",0);
+
+        //inserimento
+        expenseController.insertExpense(usersController.getFirstUserId(),100,3,4,2023,"TEST");
+
+        List<Expense> expenses = expenseController.consultListExpense(usersController.getFirstUserId()+1,0);
+
+        //condizione
+        assertEquals(expenses.get(0).getExpense_id(),1);
+        assertEquals(expenses.get(0).getPayer_amount(),100);
+        assertEquals(expenses.get(0).getDay(),3);
+        assertEquals(expenses.get(0).getMonth(),4);
+        assertEquals(expenses.get(0).getYear(),2023);
+        assertEquals(expenses.get(0).getDescription(),"TEST");
     }
 
     @Test
-    void consultAllBalances() {
+    void consultAllBalances() throws SQLException {
+        //database connection
+        UsersController usersController = new UsersController("jdbc:mysql://localhost:3306/database_for_test","root","825310894");
+        ExpenseController expenseController = new ExpenseController("jdbc:mysql://localhost:3306/database_for_test", "root", "825310894");
+
+        //clear all existed data
+        usersController.deleteExpensesBalance();
+        usersController.deleteAllData();
+
+        //creazione account
+        usersController.registerAccount("NewUser","polimi123",0);
+        usersController.registerAccount("NewUser666","polimi123",0);
+
+        //inserimento
+        expenseController.insertExpense(usersController.getFirstUserId(),100,3,4,2023,"TEST");
+
+        List<Balance> balances = expenseController.consultAllBalances();
+
+        //condizione
+        assertEquals(balances.get(0).getId(),usersController.getFirstUserId());
+        assertEquals(balances.get(0).getBalance(),50);
+        assertEquals(balances.get(0).getAmount_owed(),50);
+        assertEquals(balances.get(0).getAmount_paid(),100);
+
     }
 
     @Test
-    void consultIfExistsExpense() {
+    void consultIfExistsExpense() throws SQLException {
+        //database connection
+        UsersController usersController = new UsersController("jdbc:mysql://localhost:3306/database_for_test","root","825310894");
+        ExpenseController expenseController = new ExpenseController("jdbc:mysql://localhost:3306/database_for_test", "root", "825310894");
+
+        //clear all existed data
+        usersController.deleteExpensesBalance();
+        usersController.deleteAllData();
+
+        //creazione account
+        usersController.registerAccount("NewUser","polimi123",0);
+        usersController.registerAccount("NewUser666","polimi123",0);
+
+        //inserimento
+        expenseController.insertExpense(usersController.getFirstUserId(),100,3,4,2023,"TEST");
+
+        //condizione: expense_id:999 non esiste, esiste solo 1 -> quello che inserisco con amount 100
+        assertFalse(expenseController.consultIfExistsExpense(999));
     }
 
     @Test
-    void countRowsInColumn() {
+    void countRowsInColumn() throws SQLException {
+        //database connection
+        UsersController usersController = new UsersController("jdbc:mysql://localhost:3306/database_for_test","root","825310894");
+        ExpenseController expenseController = new ExpenseController("jdbc:mysql://localhost:3306/database_for_test", "root", "825310894");
+
+        //clear all existed data
+        usersController.deleteExpensesBalance();
+        usersController.deleteAllData();
+
+        //creazione account
+        usersController.registerAccount("NewUser","polimi123",0);
+        usersController.registerAccount("NewUser666","polimi123",0);
+
+        //inserimento
+        expenseController.insertExpense(usersController.getFirstUserId(),100,3,4,2023,"TEST");
+
+        //condizione
+        assertEquals(expenseController.countRowsInColumn("expense","id"),1);
     }
 
     @Test
-    void getStringFromTable() {
+    void getStringFromTable() throws SQLException {
+        //database connection
+        UsersController usersController = new UsersController("jdbc:mysql://localhost:3306/database_for_test","root","825310894");
+        ExpenseController expenseController = new ExpenseController("jdbc:mysql://localhost:3306/database_for_test", "root", "825310894");
+
+        //clear all existed data
+        usersController.deleteExpensesBalance();
+        usersController.deleteAllData();
+
+        //creazione account
+        usersController.registerAccount("NewUser","polimi123",0);
+        usersController.registerAccount("NewUser666","polimi123",0);
+
+        //inserimento
+        expenseController.insertExpense(usersController.getFirstUserId(),100,3,4,2023,"TEST");
+
+        //condizione
+        assertEquals(expenseController.getStringFromTable("expense","expense_id",1,"description"),"TEST");
     }
 
     @Test
-    void getDoubleFromTable() {
+    void getDoubleFromTable() throws SQLException {
+        //database connection
+        UsersController usersController = new UsersController("jdbc:mysql://localhost:3306/database_for_test","root","825310894");
+        ExpenseController expenseController = new ExpenseController("jdbc:mysql://localhost:3306/database_for_test", "root", "825310894");
+
+        //clear all existed data
+        usersController.deleteExpensesBalance();
+        usersController.deleteAllData();
+
+        //creazione account
+        usersController.registerAccount("NewUser","polimi123",0);
+        usersController.registerAccount("NewUser666","polimi123",0);
+
+        //inserimento
+        expenseController.insertExpense(usersController.getFirstUserId(),100,3,4,2023,"TEST");
+
+        //condizione
+        assertEquals(expenseController.getDoubleFromTable("expense","expense_id",1,"payee_amount"),50.00);
     }
 
     @Test
-    void getIntFromTable() {
+    void getIntFromTable() throws SQLException {
+        //database connection
+        UsersController usersController = new UsersController("jdbc:mysql://localhost:3306/database_for_test","root","825310894");
+        ExpenseController expenseController = new ExpenseController("jdbc:mysql://localhost:3306/database_for_test", "root", "825310894");
+
+        //clear all existed data
+        usersController.deleteExpensesBalance();
+        usersController.deleteAllData();
+
+        //creazione account
+        usersController.registerAccount("NewUser","polimi123",0);
+        usersController.registerAccount("NewUser666","polimi123",0);
+
+        //inserimento
+        expenseController.insertExpense(usersController.getFirstUserId(),100,3,4,2023,"TEST");
+
+        //condizione
+        assertEquals(expenseController.getIntFromTable("expense","description","TEST","day"),3);
     }
 }

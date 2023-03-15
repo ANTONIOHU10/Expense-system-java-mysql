@@ -518,6 +518,14 @@ public class ExpenseController {
     }
 
     //-------------------------------------------metodi ausiliari per test---------------------------------------------
+
+    /**
+     *
+     * @param tableName name of the table in database
+     * @param columnName name of the column in the table
+     * @return number of rows
+     * @throws SQLException error of database exception query
+     */
     public int countRowsInColumn(String tableName, String columnName) throws SQLException {
         String query = "SELECT COUNT(" + columnName + ") FROM " + tableName;
         try (PreparedStatement statement = dbConnection.prepareStatement(query)) {
@@ -530,6 +538,15 @@ public class ExpenseController {
         }
     }
 
+    /**
+     *
+     * @param tableName name of the table
+     * @param whereColumn the parameter column
+     * @param whereValue the value of the parameter column
+     * @param selectColumn the column that contains the element searched
+     * @return
+     * @throws SQLException error of database exception query
+     */
     public String getStringFromTable(String tableName, String whereColumn, Object whereValue, String selectColumn) throws SQLException {
         String query = "SELECT " + selectColumn + " FROM " + tableName + " WHERE " + whereColumn + " = ?";
         try (PreparedStatement statement = dbConnection.prepareStatement(query)) {
@@ -544,6 +561,15 @@ public class ExpenseController {
 
     }
 
+    /**
+     *
+     * @param tableName name of the table
+     * @param whereColumn the parameter column
+     * @param whereValue the value of the parameter column
+     * @param selectColumn the column that contains the element searched
+     * @return
+     * @throws SQLException error of database exception query
+     */
     public Double getDoubleFromTable(String tableName, String whereColumn, Object whereValue, String selectColumn) throws SQLException {
         String query = "SELECT " + selectColumn + " FROM " + tableName + " WHERE " + whereColumn + " = ?";
         try (PreparedStatement statement = dbConnection.prepareStatement(query)) {
@@ -558,6 +584,15 @@ public class ExpenseController {
 
     }
 
+    /**
+     *
+     * @param tableName name of the table
+     * @param whereColumn the parameter column
+     * @param whereValue the value of the parameter column
+     * @param selectColumn the column that contains the element searched
+     * @return
+     * @throws SQLException error of database exception query
+     */
     public Integer getIntFromTable(String tableName, String whereColumn, Object whereValue, String selectColumn) throws SQLException {
         String query = "SELECT " + selectColumn + " FROM " + tableName + " WHERE " + whereColumn + " = ?";
         try (PreparedStatement statement = dbConnection.prepareStatement(query)) {
@@ -572,6 +607,15 @@ public class ExpenseController {
 
     }
 
+    /**
+     *
+     * @param tableName name of the table
+     * @param whereColumn the parameter column
+     * @param whereValue the value of the parameter column
+     * @param selectColumn the column that contains the element searched
+     * @return
+     * @throws SQLException error of database exception query
+     */
     public Boolean getBooleanFromTable(String tableName, String whereColumn, Object whereValue, String selectColumn) throws SQLException {
         String query = "SELECT " + selectColumn + " FROM " + tableName + " WHERE " + whereColumn + " = ?";
         try (PreparedStatement statement = dbConnection.prepareStatement(query)) {
