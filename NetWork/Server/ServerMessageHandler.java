@@ -9,10 +9,16 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 public class ServerMessageHandler {
-    private ObjectOutputStream output;
-    private ObjectInputStream input;
-    private Socket socket;
+    private final ObjectOutputStream output;
+    private final ObjectInputStream input;
+    private final Socket socket;
     //costruttore
+
+    /**
+     *
+     * @param socket socket used for the client
+     * @throws IOException error of I/O
+     */
     public ServerMessageHandler(Socket socket) throws IOException {
         output = new ObjectOutputStream(socket.getOutputStream());
         input = new ObjectInputStream(socket.getInputStream());
@@ -20,47 +26,32 @@ public class ServerMessageHandler {
     }
 
     //invio del messaggio
+
+    /**
+     *
+     * @param message message to be sent
+     * @throws IOException error of I/O
+     */
     public void send(Message message) throws IOException {
         output.writeObject(message);
     }
 
     //riceve un messaggio
+
+    /**
+     *
+     * @return the message received by client
+     * @throws IOException error of I/O
+     * @throws ClassNotFoundException error of the class used
+     */
     public Message receive() throws IOException, ClassNotFoundException {
         return (Message) input.readObject();
     }
 
-    //elabora il messaggio ricevuto
-    //TODO in futuro posso spostare lo switch qui
-    /*
-    public void handle(Message message) {
-        MessageType type = message.getType();
-        switch (type) {
-
-            case LOGIN_REQUEST:
-                break;
-
-            // handle other message types here
-        }
-    }
-
-    private void handleLoginRequest(ataResponseMessage message) {
-        // handle data reply message
-    }
-    */
-
-
-
-    public ObjectInputStream getInput() {
-        return input;
-    }
-
-    public ObjectOutputStream getOutput() {
-        return output;
-    }
-
-    public Socket getSocket() {
-        return socket;
-    }
+    /**
+     *
+     * @throws IOException error of I/O
+     */
     // add other handler methods here
     public void closeSocket() throws IOException {
         output.close();
