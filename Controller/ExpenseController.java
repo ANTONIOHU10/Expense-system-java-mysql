@@ -81,8 +81,9 @@ public class ExpenseController {
      * @param description information about detail of this expense
      * @throws SQLException error of MySQL connection
      */
+
     //metodo ausiliare:
-    private void insertExpenseRecord(int expenseId, int payerId, int payeeId, double payerAmount, double payeeAmount, int day, int month, int year, String description) throws SQLException {
+    public void insertExpenseRecord(int expenseId, int payerId, int payeeId, double payerAmount, double payeeAmount, int day, int month, int year, String description) throws SQLException {
         String insertSql = "INSERT INTO expense (expense_id, payer_id, payee_id, payer_amount, payee_amount, day, month, year, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement insertStatement = dbConnection.prepareStatement(insertSql);
         insertStatement.setInt(1, expenseId);
@@ -106,7 +107,7 @@ public class ExpenseController {
      * @return unique id of the expense
      * @throws SQLException error of MySQL connection
      */
-    private int getNextExpenseId() throws SQLException {
+    public int getNextExpenseId() throws SQLException {
         //La query seleziona il valore massimo della colonna "expense_id" dalla tabella "expense".
         String querySql = "SELECT MAX(expense_id) FROM expense";
         Statement queryStatement = dbConnection.createStatement();
@@ -129,7 +130,7 @@ public class ExpenseController {
      * @throws SQLException error MySQL connection
      */
     //metodo ausiliare
-    private int getIdByUsername(String username) throws SQLException {
+    public int getIdByUsername(String username) throws SQLException {
         String querySql = "SELECT id FROM users WHERE username = ?";
         PreparedStatement queryStatement = dbConnection.prepareStatement(querySql);
         queryStatement.setString(1, username);
@@ -148,7 +149,7 @@ public class ExpenseController {
      * @throws SQLException error of MySQL connection
      */
     //metodo ausiliare
-    private String getUsernameById(int id) throws SQLException {
+    public String getUsernameById(int id) throws SQLException {
         String querySql = "SELECT username FROM users WHERE id = ?";
         PreparedStatement queryStatement = dbConnection.prepareStatement(querySql);
         //1 = il primo parametro, id = parametro di "?"
@@ -260,7 +261,7 @@ public class ExpenseController {
      * @return value to be paid by the payee
      * @throws SQLException error of the MySQL connection
      */
-    private double getPayeeAmountForExpense(int expenseId) throws SQLException {
+    public double getPayeeAmountForExpense(int expenseId) throws SQLException {
         String query = "SELECT payee_amount FROM expense WHERE expense_id = ? LIMIT 1";
         try (PreparedStatement statement = dbConnection.prepareStatement(query)) {
             statement.setInt(1, expenseId);
@@ -279,7 +280,7 @@ public class ExpenseController {
      * @return total value of the expense inserted by the uploader
      * @throws SQLException error of the MySQL connection
      */
-    private double getPayerAmountForExpense(int expenseId) throws SQLException {
+    public double getPayerAmountForExpense(int expenseId) throws SQLException {
         String query = "SELECT payer_amount FROM expense WHERE expense_id = ? LIMIT 1";
         try (PreparedStatement statement = dbConnection.prepareStatement(query)) {
             statement.setInt(1, expenseId);
@@ -298,7 +299,7 @@ public class ExpenseController {
      * @return the unique id of the uploader of the expense
      * @throws SQLException error of MySQL connection
      */
-    private int getPayerIdForExpense(int expenseId) throws SQLException {
+    public int getPayerIdForExpense(int expenseId) throws SQLException {
         String query = "SELECT payer_id FROM expense WHERE expense_id = ? LIMIT 1";
         try (PreparedStatement statement = dbConnection.prepareStatement(query)) {
             statement.setInt(1, expenseId);
@@ -438,7 +439,7 @@ public class ExpenseController {
      * @return list of expenses filterd
      * @throws SQLException error of MySQL connection
      */
-    private List<Expense> getExpenses(List<Expense> expenses, ResultSet resultSet) throws SQLException {
+    public List<Expense> getExpenses(List<Expense> expenses, ResultSet resultSet) throws SQLException {
         while (resultSet.next()) {
 
             int expenseIdResult = resultSet.getInt("expense_id");
@@ -514,5 +515,74 @@ public class ExpenseController {
         } else {
             return false;
         }
+    }
+
+    //-------------------------------------------metodi ausiliari per test---------------------------------------------
+    public int countRowsInColumn(String tableName, String columnName) throws SQLException {
+        String query = "SELECT COUNT(" + columnName + ") FROM " + tableName;
+        try (PreparedStatement statement = dbConnection.prepareStatement(query)) {
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            } else {
+                return 0;
+            }
+        }
+    }
+
+    public String getStringFromTable(String tableName, String whereColumn, Object whereValue, String selectColumn) throws SQLException {
+        String query = "SELECT " + selectColumn + " FROM " + tableName + " WHERE " + whereColumn + " = ?";
+        try (PreparedStatement statement = dbConnection.prepareStatement(query)) {
+            statement.setObject(1, whereValue);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getString(1);
+            } else {
+                return null;
+            }
+        }
+
+    }
+
+    public Double getDoubleFromTable(String tableName, String whereColumn, Object whereValue, String selectColumn) throws SQLException {
+        String query = "SELECT " + selectColumn + " FROM " + tableName + " WHERE " + whereColumn + " = ?";
+        try (PreparedStatement statement = dbConnection.prepareStatement(query)) {
+            statement.setObject(1, whereValue);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getDouble(1);
+            } else {
+                return null;
+            }
+        }
+
+    }
+
+    public Integer getIntFromTable(String tableName, String whereColumn, Object whereValue, String selectColumn) throws SQLException {
+        String query = "SELECT " + selectColumn + " FROM " + tableName + " WHERE " + whereColumn + " = ?";
+        try (PreparedStatement statement = dbConnection.prepareStatement(query)) {
+            statement.setObject(1, whereValue);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            } else {
+                return null;
+            }
+        }
+
+    }
+
+    public Boolean getBooleanFromTable(String tableName, String whereColumn, Object whereValue, String selectColumn) throws SQLException {
+        String query = "SELECT " + selectColumn + " FROM " + tableName + " WHERE " + whereColumn + " = ?";
+        try (PreparedStatement statement = dbConnection.prepareStatement(query)) {
+            statement.setObject(1, whereValue);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getBoolean(1);
+            } else {
+                return null;
+            }
+        }
+
     }
 }

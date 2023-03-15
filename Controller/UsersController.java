@@ -30,7 +30,7 @@ public class UsersController {
 
         //Il PreparedStatement è utilizzato per inviare una query SQL al database.
             //Questa query inserisce una nuova riga nella tabella "users" del database "test", con i valori "username" e "password" passati come parametri.
-        PreparedStatement preparedStatement = dbConnection.prepareStatement("INSERT INTO test.users (username, password, role) VALUES (?, ?, ?)");
+        PreparedStatement preparedStatement = dbConnection.prepareStatement("INSERT INTO users (username, password, role) VALUES (?, ?, ?)");
 
         //Il metodo "setString" imposta il valore del parametro specificato (in questo caso, "?") con il valore della stringa specificata.
         preparedStatement.setString(1, username);
@@ -126,9 +126,9 @@ public class UsersController {
      * @throws SQLException error of MySQL connection
      */
     public void deleteAllData() throws SQLException {
-        String deleteUsersSql = "DELETE FROM test.users";
-        String deleteBalanceSql = "DELETE FROM test.balance";
-        String deleteExpenseSql = "DELETE FROM test.expense";
+        String deleteUsersSql = "DELETE FROM users";
+        String deleteBalanceSql = "DELETE FROM balance";
+        String deleteExpenseSql = "DELETE FROM expense";
         try (Statement statement = dbConnection.createStatement()) {
             statement.executeUpdate(deleteUsersSql);
             statement.executeUpdate(deleteBalanceSql);
@@ -143,8 +143,8 @@ public class UsersController {
      * @throws SQLException error of MySQL connection
      */
     public void deleteExpensesBalance() throws SQLException {
-        String deleteBalanceSqlNew = "DELETE FROM test.balance";
-        String deleteExpenseSqlNew = "DELETE FROM test.expense";
+        String deleteBalanceSqlNew = "DELETE FROM balance";
+        String deleteExpenseSqlNew = "DELETE FROM expense";
         try (Statement statement = dbConnection.createStatement()) {
             statement.executeUpdate(deleteBalanceSqlNew);
             statement.executeUpdate(deleteExpenseSqlNew);
@@ -160,7 +160,7 @@ public class UsersController {
      */
     public Map<Integer, String> getUsersIdAndUsername() throws SQLException {
         Map<Integer, String> idUsernameMap = new HashMap<>();
-        String querySql = "SELECT id, username FROM test.users";
+        String querySql = "SELECT id, username FROM users";
         try (Statement queryStatement = dbConnection.createStatement()) {
             ResultSet resultSet = queryStatement.executeQuery(querySql);
             while (resultSet.next()) {
@@ -172,6 +172,31 @@ public class UsersController {
             e.printStackTrace();
         }
         return idUsernameMap;
+    }
+    //-------------------------------------------metodi ausiliari per test---------------------------------------------
+
+    public int countRowsInColumn(String tableName, String columnName) throws SQLException {
+        String query = "SELECT COUNT(" + columnName + ") FROM " + tableName;
+        try (PreparedStatement statement = dbConnection.prepareStatement(query)) {
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            } else {
+                return 0;
+            }
+        }
+    }
+
+    public int getFirstUserId() throws SQLException {
+        String query = "SELECT id FROM users ORDER BY id  LIMIT 1";
+        try (PreparedStatement statement = dbConnection.prepareStatement(query)) {
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt("id");
+            } else {
+                throw new SQLException("No users found.");
+            }
+        }
     }
 
 
