@@ -17,7 +17,7 @@ class ClientTest {
         Client.setLoggedIn(true);
 
         //condizione
-        assertEquals(true,Client.getIsLoggedIn());
+        assertTrue(Client.getIsLoggedIn());
     }
 
     @Test
@@ -25,7 +25,7 @@ class ClientTest {
         Client.setAdmin();
 
         //condizione
-        assertEquals(true,Client.getIsAdmin());
+        assertTrue(Client.getIsAdmin());
     }
 
     @Test
@@ -41,7 +41,7 @@ class ClientTest {
         Client.setLoggedIn(true);
 
         //condizione
-        assertEquals(true,Client.getIsLoggedIn());
+        assertTrue(Client.getIsLoggedIn());
     }
 
     @Test
@@ -77,7 +77,7 @@ class ClientTest {
         Client.setAdmin();
 
         //condizione
-        assertEquals(true,Client.getIsAdmin());
+        assertTrue(Client.getIsAdmin());
     }
 
     @Test
@@ -85,7 +85,7 @@ class ClientTest {
         Client.setNotAdmin();
 
         //condizione
-        assertEquals(false,Client.getIsAdmin());
+        assertFalse(Client.getIsAdmin());
     }
 
     @Test

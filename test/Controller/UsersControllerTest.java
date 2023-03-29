@@ -1,11 +1,9 @@
 package test.Controller;
 
-import Controller.ExpenseController;
 import Controller.UsersController;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,7 +13,6 @@ class UsersControllerTest {
     void registerAccount() throws SQLException {
         //database connection
         UsersController usersController = new UsersController("jdbc:mysql://localhost:3306/database_for_test","root","825310894");
-        ExpenseController expenseController = new ExpenseController("jdbc:mysql://localhost:3306/database_for_test", "root", "825310894");
 
         //clear all existed data
         usersController.deleteExpensesBalance();
@@ -34,7 +31,6 @@ class UsersControllerTest {
     void usernameExists() throws SQLException {
         //database connection
         UsersController usersController = new UsersController("jdbc:mysql://localhost:3306/database_for_test","root","825310894");
-        ExpenseController expenseController = new ExpenseController("jdbc:mysql://localhost:3306/database_for_test", "root", "825310894");
 
         //clear all existed data
         usersController.deleteExpensesBalance();
@@ -45,16 +41,15 @@ class UsersControllerTest {
         usersController.registerAccount("NewUser666","polimi123",0);
 
         //condizione
-        assertEquals(usersController.usernameExists("NewUser"),true);
-        assertEquals(usersController.usernameExists("NewUser666"),true);
-        assertEquals(usersController.usernameExists("POP"),false);
+        assertTrue(usersController.usernameExists("NewUser"));
+        assertTrue(usersController.usernameExists("NewUser666"));
+        assertFalse(usersController.usernameExists("POP"));
     }
 
     @Test
     void login() throws SQLException {
         //database connection
         UsersController usersController = new UsersController("jdbc:mysql://localhost:3306/database_for_test","root","825310894");
-        ExpenseController expenseController = new ExpenseController("jdbc:mysql://localhost:3306/database_for_test", "root", "825310894");
 
         //clear all existed data
         usersController.deleteExpensesBalance();
@@ -65,9 +60,9 @@ class UsersControllerTest {
         usersController.registerAccount("NewUser666","polimi123",0);
 
         //condizione
-        assertEquals(true,usersController.login("NewUser","polimi123"));
-        assertEquals(true,usersController.login("NewUser666","polimi123"));
-        assertEquals(false,usersController.login("NewUser99999","polimi123"));
+        assertTrue(usersController.login("NewUser", "polimi123"));
+        assertTrue(usersController.login("NewUser666", "polimi123"));
+        assertFalse(usersController.login("NewUser99999", "polimi123"));
 
     }
 
@@ -75,7 +70,6 @@ class UsersControllerTest {
     void getUserId() throws SQLException {
         //database connection
         UsersController usersController = new UsersController("jdbc:mysql://localhost:3306/database_for_test","root","825310894");
-        ExpenseController expenseController = new ExpenseController("jdbc:mysql://localhost:3306/database_for_test", "root", "825310894");
 
         //clear all existed data
         usersController.deleteExpensesBalance();
@@ -94,7 +88,6 @@ class UsersControllerTest {
     void getUserRoleById() throws SQLException {
         //database connection
         UsersController usersController = new UsersController("jdbc:mysql://localhost:3306/database_for_test","root","825310894");
-        ExpenseController expenseController = new ExpenseController("jdbc:mysql://localhost:3306/database_for_test", "root", "825310894");
 
         //clear all existed data
         usersController.deleteExpensesBalance();
@@ -112,7 +105,6 @@ class UsersControllerTest {
     void deleteAllData() throws SQLException {
         //database connection
         UsersController usersController = new UsersController("jdbc:mysql://localhost:3306/database_for_test","root","825310894");
-        ExpenseController expenseController = new ExpenseController("jdbc:mysql://localhost:3306/database_for_test", "root", "825310894");
 
         //clear all existed data
         usersController.deleteExpensesBalance();
@@ -126,14 +118,13 @@ class UsersControllerTest {
         usersController.deleteAllData();
 
         //condizione
-        assertEquals(true,usersController.isTableEmpty("users"));
+        assertTrue(usersController.isTableEmpty("users"));
     }
 
     @Test
     void deleteExpensesBalance() throws SQLException {
         //database connection
         UsersController usersController = new UsersController("jdbc:mysql://localhost:3306/database_for_test","root","825310894");
-        ExpenseController expenseController = new ExpenseController("jdbc:mysql://localhost:3306/database_for_test", "root", "825310894");
 
         //clear all existed data
         usersController.deleteExpensesBalance();
@@ -147,14 +138,13 @@ class UsersControllerTest {
         usersController.deleteExpensesBalance();
 
         //condizione
-        assertEquals(true,usersController.isTableEmpty("expense"));
+        assertTrue(usersController.isTableEmpty("expense"));
     }
 
     @Test
     void getUsersIdAndUsername() throws SQLException {
         //database connection
         UsersController usersController = new UsersController("jdbc:mysql://localhost:3306/database_for_test","root","825310894");
-        ExpenseController expenseController = new ExpenseController("jdbc:mysql://localhost:3306/database_for_test", "root", "825310894");
 
         //clear all existed data
         usersController.deleteExpensesBalance();
@@ -167,7 +157,7 @@ class UsersControllerTest {
         //condizione
         assertEquals("NewUser",usersController.getUsersIdAndUsername().get(usersController.getFirstUserId()));
         assertEquals("NewUser666",usersController.getUsersIdAndUsername().get(usersController.getFirstUserId()+1));
-        assertEquals(false,usersController.getUsersIdAndUsername().entrySet().contains(999));
+        assertFalse(usersController.getUsersIdAndUsername().entrySet().contains(999));
 
     }
 
@@ -175,7 +165,6 @@ class UsersControllerTest {
     void countRowsInColumn() throws SQLException {
         //database connection
         UsersController usersController = new UsersController("jdbc:mysql://localhost:3306/database_for_test","root","825310894");
-        ExpenseController expenseController = new ExpenseController("jdbc:mysql://localhost:3306/database_for_test", "root", "825310894");
 
         //clear all existed data
         usersController.deleteExpensesBalance();
@@ -193,7 +182,6 @@ class UsersControllerTest {
     void getFirstUserId() throws SQLException {
         //database connection
         UsersController usersController = new UsersController("jdbc:mysql://localhost:3306/database_for_test","root","825310894");
-        ExpenseController expenseController = new ExpenseController("jdbc:mysql://localhost:3306/database_for_test", "root", "825310894");
 
         //clear all existed data
         usersController.deleteExpensesBalance();
@@ -212,13 +200,12 @@ class UsersControllerTest {
     void isTableEmpty() throws SQLException {
 //database connection
         UsersController usersController = new UsersController("jdbc:mysql://localhost:3306/database_for_test","root","825310894");
-        ExpenseController expenseController = new ExpenseController("jdbc:mysql://localhost:3306/database_for_test", "root", "825310894");
 
         //clear all existed data
         usersController.deleteExpensesBalance();
         usersController.deleteAllData();
 
         //condizione
-        assertEquals(true,usersController.isTableEmpty("users"));
+        assertTrue(usersController.isTableEmpty("users"));
     }
 }
