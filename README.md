@@ -23,8 +23,8 @@ poi per esecuzione:
 
 ## Eventuali problemi
 
-* Unsupported JavaFX configuration: classes were loaded from 'unnamed module
-  * chiamata di una classe JavaFX extends Application da un thread che non è specificato per JavaFX 
+* Unsupported View configuration: classes were loaded from 'unnamed module
+  * chiamata di una classe View extends Application da un thread che non è specificato per View 
 
 
 * Graphics Device initialization failed for :  d3d, sw
@@ -51,6 +51,6 @@ poi per esecuzione:
   at com.sun.javafx.application.LauncherImpl.launchApplication1(LauncherImpl.java:679)
   at com.sun.javafx.application.LauncherImpl.lambda$launchApplication$2(LauncherImpl.java:196)
   at java.base/java.lang.Thread.run(Thread.java:833)
-  * usare la seguente istruzione per eseguire il pacchetto jar (Client.jar) includendo le dipendenze di JavaFX:
+  * usare la seguente istruzione per eseguire il pacchetto jar (Client.jar) includendo le dipendenze di View:
   
-    * java --module-path "C:\Program Files\JavaFX\javafx-sdk-VERSION\lib" --add-modules javafx.controls,javafx.fxml -jar Client.jar
+    * java --module-path "C:\Program Files\View\javafx-sdk-VERSION\lib" --add-modules javafx.controls,javafx.fxml -jar Client.jar

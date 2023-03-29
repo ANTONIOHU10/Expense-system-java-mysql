@@ -1,7 +1,7 @@
 package NetWork.Client;
 
-import JavaFX.ClientApplication;
-import JavaFX.ConnectionDialog;
+import View.ClientApplication;
+import View.ConnectionDialog;
 import Model.Balance;
 import Model.Expense;
 
