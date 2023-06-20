@@ -13,7 +13,7 @@ poi per esecuzione:
 
 ### Server:
 
-From root E:-> ***E:\ingegneria_software_progetto_finale\ProgettoSoftware2023\out\artifacts\Server_jar***
+From root E:-> ***cd E:\ingegneria_software_progetto_finale\ProgettoSoftware2023\out\artifacts\Server_jar***
 
 path del pacchetto jar
 
@@ -54,3 +54,5 @@ poi per esecuzione:
   * usare la seguente istruzione per eseguire il pacchetto jar (Client.jar) includendo le dipendenze di View:
   
     * java --module-path "C:\Program Files\View\javafx-sdk-VERSION\lib" --add-modules javafx.controls,javafx.fxml -jar Client.jar
+  ## Istruzione di base
+  Per accedere al disco E da disco C-> "E:" 
