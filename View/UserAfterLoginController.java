@@ -115,30 +115,40 @@ public class UserAfterLoginController {
             LocalDate data = dataPicker.getValue();
             String descrizione = descrizioneField.getText();
 
+            //imposto il valore limite
+            if(importo < 10000){
             // Stampa i valori inseriti dall'utente
-            System.out.println("Importo: " + importo);
-            System.out.println("Data: " + data);
-            System.out.println("Descrizione: " + descrizione);
-            //inviare il messaggio
-            try {
-                //invia un messaggio al Server
-                Client.commandHandler.expenseMessage(Client.getIdClient(),importo,data.getDayOfMonth(),data.getMonthValue(),data.getYear(),descrizione);
+                System.out.println("Importo: " + importo);
+                System.out.println("Data: " + data);
+                System.out.println("Descrizione: " + descrizione);
+                //inviare il messaggio
+                try {
+                    //invia un messaggio al Server
+                    Client.commandHandler.expenseMessage(Client.getIdClient(),importo,data.getDayOfMonth(),data.getMonthValue(),data.getYear(),descrizione);
 
-                //riceve un messaggio dal Server
-                Message replyFromServer = Client.messageHandler.receive();
-                Client.messageHandler.handle(replyFromServer);
+                    //riceve un messaggio dal Server
+                    Message replyFromServer = Client.messageHandler.receive();
+                    Client.messageHandler.handle(replyFromServer);
 
-                //notifica con il messaggio ricevuto
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Messaggio: ");
-                alert.setHeaderText("Inserimento della spesa: ");
-                alert.setContentText(Client.getMessage());
-                //messaggio di default
-                Client.setMessage("");
+                    //notifica con il messaggio ricevuto
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("Messaggio: ");
+                    alert.setHeaderText("Inserimento della spesa: ");
+                    alert.setContentText(Client.getMessage());
+                    //messaggio di default
+                    Client.setMessage("");
 
+                    alert.showAndWait();
+                } catch (IOException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+            else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Errore");
+                alert.setHeaderText("Errore nell'inserimento della spesa");
+                alert.setContentText("L'importo inserito è troppo elevato");
                 alert.showAndWait();
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
             }
 
             // Chiude la finestra di dialogo
